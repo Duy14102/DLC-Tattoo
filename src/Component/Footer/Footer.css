@@ -1,0 +1,116 @@
+.mainFooter {
+    padding: 100px 20%;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: #101010;
+}
+
+.insideMainFooter {
+    display: flex;
+    justify-content: space-between;
+}
+
+.insideMainFooter .children {
+    width: 30%;
+}
+
+.children h3 {
+    font-size: 27px;
+    color: #fff;
+    margin: 0 0 15px 0;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 400;
+}
+
+.children p {
+    color: #999;
+    font-family: 'Oswald', sans-serif;
+}
+
+.timeLimit {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.timeLimit p {
+    margin-bottom: 0 !important;
+}
+
+.social {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.social a {
+    transition: all .4s;
+    text-decoration: none;
+}
+
+.social a:hover p {
+    color: #fff;
+}
+
+.social svg {
+    width: 25px;
+    height: 25px;
+    fill: #fff;
+}
+
+.social p {
+    transition: all .4s;
+    margin: 0;
+}
+
+.emote a svg {
+    width: 30px;
+    height: 30px;
+}
+
+.emote a:hover {
+    opacity: 0.7;
+}
+
+.social .facebook {
+    fill: #4267B2;
+    background: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.social .instagram {
+    background: linear-gradient(45deg, #405de6, #5851db, #833ab4, #c13584, #e1306c, #fd1d1d);
+    fill: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.social .telegram {
+    fill: #229ED9;
+    background: #fff;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.copyright {
+    padding: 32px 20%;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    background: #101010;
+}
+
+.copyright p {
+    font-family: 'Barlow', sans-serif;
+    color: #999;
+}
+
+.copyright p a {
+    text-decoration: none;
+    color: #904d30;
+    transition: all .4s;
+}
+
+.copyright p a:hover {
+    color: #fff;
+}

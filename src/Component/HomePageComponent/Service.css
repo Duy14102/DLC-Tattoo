@@ -1,0 +1,81 @@
+.mainService {
+    padding: 120px 20%;
+    background: #101010;
+}
+
+.insideBox {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    height: 400px;
+}
+
+.insideBox a {
+    overflow: hidden;
+}
+
+.insideBox a img {
+    transition: all .5s;
+}
+
+.insideBox a:hover img {
+    scale: 1.1;
+}
+
+.textInBox {
+    display: grid;
+    width: 48%;
+    height: 100%;
+    place-items: center;
+}
+
+.insideTextInBox {
+    display: flex;
+    gap: 30px;
+}
+
+.insideTextInBox h1 {
+    font-size: 70px;
+    font-weight: 500;
+    margin: 0;
+    color: transparent;
+    -webkit-text-stroke: 1px #904d30;
+    font-family: 'Oswald', sans-serif;
+}
+
+.insideTextInBox h5 {
+    margin: 15px 0;
+    font-size: 27px;
+    color: #fff;
+    font-weight: 400;
+    line-height: 1.5em;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.insideTextInBox p {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75em;
+    color: #999;
+}
+
+.insideTextInBox a {
+    text-decoration: none;
+    padding: 14px 30px;
+    overflow: hidden;
+    color: #fff;
+    background: #904d30;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: 'Barlow', sans-serif;
+    transition: all .4s;
+}
+
+.insideTextInBox a:hover {
+    background: #fff;
+    color: black;
+}

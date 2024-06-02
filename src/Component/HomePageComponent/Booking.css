@@ -1,0 +1,105 @@
+.mainBooking {
+    padding: 120px 20%;
+    background-image: url("../../Assets/Image/Slide-2.jpeg");
+    background-attachment: fixed;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    position: relative;
+    display: grid;
+    place-items: center;
+    height: 67vh;
+}
+
+.mainBooking::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: #000;
+    opacity: 0.3;
+}
+
+.insideMainBooking {
+    z-index: 2;
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    justify-content: space-between;
+}
+
+.phoneClick {
+    text-decoration: none;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    font-size: 27px;
+    color: #fff;
+}
+
+.formBooking {
+    width: 48%;
+    height: auto;
+    background: #101010;
+    padding: 60px 45px;
+}
+
+.formBooking input,
+.formBooking select {
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    color: #fff;
+    padding: 15px;
+    background: #101010;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formBooking select {
+    width: 105%;
+    padding: 17px;
+}
+
+.formBooking select option {
+    color: #fff;
+}
+
+.formBooking input:focus {
+    outline: none;
+}
+
+input[type=date]:invalid::-webkit-datetime-edit,
+input[type=time]:invalid::-webkit-datetime-edit {
+    color: gray;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    filter: invert(0.8);
+}
+
+.formBooking button {
+    margin-top: 20px;
+    text-decoration: none;
+    padding: 14px 30px;
+    overflow: hidden;
+    color: #fff;
+    background: #904d30;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: 'Barlow', sans-serif;
+    transition: all .4s;
+    width: 100%;
+    border: none;
+}
+
+.formBooking button:hover {
+    background: #fff;
+    color: black;
+}

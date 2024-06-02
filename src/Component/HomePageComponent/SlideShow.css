@@ -1,0 +1,88 @@
+.image-wrap {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    overflow: hidden;
+}
+
+.image-wrap img {
+    width: 100%;
+    height: 100%;
+    animation: move 15s ease infinite;
+    object-fit: cover;
+    position: relative;
+}
+
+.image-wrap::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: #000;
+    opacity: 0.3;
+}
+
+@keyframes move {
+    0% {
+        transform-origin: top right;
+        transform: scale(1.2);
+    }
+
+    100% {
+        transform: scale(1.0);
+    }
+}
+
+.image-wrap .textInSlide {
+    z-index: 2;
+    position: absolute;
+    top: 30%;
+    left: 36%;
+    text-align: center;
+}
+
+.image-wrap .textInSlide h6 {
+    font-size: 13px;
+    font-weight: 400;
+    color: #904d30;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+    margin: 0 0 15px 0;
+    font-family: 'Oswald', sans-serif;
+}
+
+.image-wrap .textInSlide h1 {
+    margin: 0;
+    text-transform: uppercase;
+    font-size: 75px;
+    font-family: 'Oswald', sans-serif;
+    color: #fff;
+    font-weight: 500;
+    letter-spacing: 5px;
+}
+
+.image-wrap .textInSlide h1 span {
+    letter-spacing: 2px;
+    color: transparent;
+    -webkit-text-stroke: 1px #fff;
+}
+
+.image-wrap .textInSlide a {
+    text-decoration: none;
+    padding: 14px 30px;
+    overflow: hidden;
+    color: #fff;
+    background: #904d30;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: 'Barlow', sans-serif;
+    transition: all .4s;
+}
+
+.image-wrap .textInSlide a:hover {
+    background: #fff;
+    color: black;
+}

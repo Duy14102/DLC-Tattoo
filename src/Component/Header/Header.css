@@ -1,0 +1,69 @@
+.mainHeader {
+    position: absolute;
+    z-index: 999;
+    width: 100%;
+    transition: all .4s;
+}
+
+.insideMainHeader {
+    padding: 0.6% 20% 0.6% 20%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logoBrand {
+    display: inline-block;
+    width: 135px;
+    text-decoration: none;
+}
+
+.logoBrand img {
+    width: 100%;
+    height: 50px;
+}
+
+.logoBrand p {
+    margin: 0;
+    text-align: end;
+    font-family: "Barlow", sans-serif;
+    color: #904d30;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    font-weight: 450;
+}
+
+.barsNextToBrand {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.barsNextToBrand a {
+    font-weight: 400;
+    font-size: 15px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: #fff;
+    margin: 1px;
+    padding: 8px 12px;
+    font-family: 'Oswald', sans-serif;
+    text-decoration: none;
+    transition: all .4s;
+}
+
+.barsNextToBrand a:hover {
+    color: #904d30;
+}
+
+.barsNextToBrand a:hover svg {
+    fill: #904d30;
+}
+
+.barsNextToBrand a svg {
+    transition: all .4s;
+    width: 25px;
+    height: 25px;
+    fill: #fff;
+}
