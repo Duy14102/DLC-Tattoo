@@ -1,0 +1,67 @@
+.mainHeroBanner {
+    width: 100%;
+    height: 70vh;
+    background-image: url("../../Assets//Image/Slide-1.jpeg");
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    position: relative;
+    display: grid;
+    place-items: center;
+}
+
+.mainHeroBanner::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 1;
+    background: #000;
+    opacity: 0.2;
+}
+
+.textHeroBanner {
+    z-index: 2;
+    width: 35%;
+    margin-left: -25%;
+}
+
+.textHeroBanner .addressBar {
+    font-family: 'Oswald', sans-serif;
+    color: #fff;
+    font-size: 13px;
+    font-weight: 400;
+    margin: 0 0 15px 0;
+    text-transform: uppercase;
+    letter-spacing: 5px;
+}
+
+.textHeroBanner .addressBar a {
+    color: #904d30;
+    text-decoration: none;
+}
+
+.textHeroBanner .titleText {
+    text-wrap: nowrap;
+    display: inline;
+    font-size: 60px;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    color: #fff;
+    padding-bottom: 20px;
+    margin: 0 0 20px 0;
+    line-height: 1.2em;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.textHeroBanner .titleDescription {
+    font-family: "Barlow", sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #fff;
+    margin-top: 10%;
+}

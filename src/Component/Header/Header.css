@@ -53,6 +53,10 @@
     transition: all .4s;
 }
 
+.barsNextToBrand .active {
+    color: #904d30;
+}
+
 .barsNextToBrand a:hover {
     color: #904d30;
 }

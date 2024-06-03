@@ -16,6 +16,10 @@ function HomePage() {
 
             <Service />
 
+            <div style={{ background: "#101010" }}>
+                <hr className="upTimeHr" style={{ margin: "0 auto" }} />
+            </div>
+
             <BlogSmall />
         </>
     )

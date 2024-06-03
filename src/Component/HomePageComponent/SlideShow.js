@@ -2,22 +2,21 @@ import { useEffect } from "react";
 import "./SlideShow.css"
 import { NavLink } from "react-router-dom"
 import Slide1 from "../../Assets/Image/Slide-1.jpeg"
-import Slide2 from "../../Assets/Image/Slide-1.jpeg"
-import Slide3 from "../../Assets/Image/Slide-1.jpeg"
+import Slide2 from "../../Assets/Image/Slide-2.jpeg"
+import Slide3 from "../../Assets/Image/Slide-3.jpg"
 
 function SlideShow() {
-    let images = [Slide1, Slide2, Slide3];
+    let images = [Slide2, Slide3, Slide1];
     useEffect(() => {
-        let index = 0;
         const imgElement = document.querySelector('#mainPhoto');
-
+        let index = 0;
         function change() {
             imgElement.src = images[index];
             index > 1 ? index = 0 : index++;
         }
         setInterval(() => {
             change()
-        }, 7500);
+        }, 15000);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
