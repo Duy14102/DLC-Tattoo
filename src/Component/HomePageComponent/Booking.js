@@ -44,6 +44,7 @@ function Booking() {
                             <option>Lưng</option>
                         </select>
                     </div>
+                    <textarea style={{ marginTop: 20 }} required placeholder="Ghi chú"></textarea>
                     <button type="submit">Book lịch xăm</button>
                 </form>
             </div>

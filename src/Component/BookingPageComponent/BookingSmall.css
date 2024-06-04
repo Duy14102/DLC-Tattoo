@@ -1,0 +1,130 @@
+.mainBookingSmall {
+    padding: 120px 20%;
+    background: #101010;
+    display: flex;
+    justify-content: space-between;
+}
+
+.mainBookingSmall .leftDesc,
+.mainBookingSmall .rightForm {
+    width: 45%;
+    text-align: start;
+}
+
+.mainBookingSmall h5 {
+    color: #fff;
+    font-size: 27px;
+    font-weight: 400;
+    text-transform: uppercase;
+    margin: 0 0 20px 0;
+    letter-spacing: 3px;
+    font-family: 'Oswald', sans-serif;
+}
+
+.mainBookingSmall p {
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75em;
+    color: #999;
+}
+
+.mainBookingSmall .information {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.mainBookingSmall .information:last-child {
+    margin-bottom: 0;
+}
+
+.mainBookingSmall .information svg {
+    fill: #904d30;
+}
+
+.mainBookingSmall .information .svgCover {
+    width: 55px;
+    height: 55px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    padding: 16px
+}
+
+.mainBookingSmall .information h6 {
+    font-family: 'Oswald', sans-serif;
+    color: #fff;
+    margin: 0 0 3px 0;
+    font-size: 15px;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-top: 7px;
+}
+
+.mainBookingSmall .information a {
+    text-decoration: none;
+    color: inherit;
+    transition: all .4s;
+}
+
+.mainBookingSmall .information a:hover {
+    color: #fff;
+}
+
+.rightForm input,
+.rightForm select,
+.rightForm textarea {
+    padding: 15px;
+    background-color: #101010;
+    box-shadow: none;
+    display: block;
+    width: 100%;
+    line-height: 1.5em;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #FFF;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    margin-bottom: 15px;
+}
+
+.rightForm textarea {
+    height: 150px;
+    resize: none;
+}
+
+.rightForm input:focus,
+.rightForm select:focus,
+.rightForm textarea:focus {
+    outline: none;
+}
+
+input[type=date]:invalid::-webkit-datetime-edit,
+input[type=time]:invalid::-webkit-datetime-edit {
+    color: gray;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    filter: invert(0.8);
+}
+
+.rightForm button {
+    font-weight: 400;
+    font-family: 'Barlow', sans-serif;
+    background: #904d30;
+    color: #fff;
+    padding: 12px 24px;
+    margin: 0;
+    font-size: 15px;
+    border: none;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.rightForm button:hover {
+    background: #fff;
+    color: #000;
+}

@@ -8,7 +8,7 @@
     position: relative;
     display: grid;
     place-items: center;
-    height: 67vh;
+    height: 87vh;
 }
 
 .mainBooking::before {
@@ -47,7 +47,9 @@
 }
 
 .formBooking input,
-.formBooking select {
+.formBooking select,
+.formBooking textarea {
+    resize: none;
     display: block;
     width: 100%;
     font-size: 15px;
@@ -60,6 +62,10 @@
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.formBooking textarea {
+    height: 150px;
+}
+
 .formBooking select {
     width: 105%;
     padding: 17px;
@@ -69,7 +75,9 @@
     color: #fff;
 }
 
-.formBooking input:focus {
+.formBooking input:focus,
+.formBooking select:focus,
+.formBooking textarea:focus {
     outline: none;
 }
 
@@ -86,6 +94,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .formBooking button {
     margin-top: 20px;
+    cursor: pointer;
     text-decoration: none;
     padding: 14px 30px;
     overflow: hidden;

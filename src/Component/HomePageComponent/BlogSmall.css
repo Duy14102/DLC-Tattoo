@@ -56,3 +56,19 @@
     margin: 0;
     color: #999;
 }
+
+.blogCarousel .blogImg {
+    width: 100%;
+    height: auto;
+    display: inline-block;
+    overflow: hidden;
+}
+
+
+.blogCarousel img {
+    transition: all .5s;
+}
+
+.blogCarousel img:hover {
+    scale: 1.1;
+}

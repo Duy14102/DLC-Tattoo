@@ -1,7 +1,6 @@
 .mainHeroBanner {
     width: 100%;
     height: 70vh;
-    background-image: url("../../Assets//Image/Slide-1.jpeg");
     background-attachment: fixed;
     background-position: center;
     background-repeat: no-repeat;
@@ -19,7 +18,7 @@
     left: 0;
     z-index: 1;
     background: #000;
-    opacity: 0.2;
+    opacity: 0.4;
 }
 
 .textHeroBanner {

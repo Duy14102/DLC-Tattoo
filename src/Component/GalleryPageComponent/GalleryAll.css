@@ -1,0 +1,71 @@
+.mainGallery {
+    padding: 120px 20% 50px 20%;
+    background: #101010;
+}
+
+.mainGallery .titleImage {
+    font-size: 55px;
+    line-height: 1.2em;
+    font-family: 'Oswald', sans-serif;
+    font-weight: 500;
+    color: #fff;
+    position: relative;
+    text-transform: uppercase;
+    letter-spacing: 3px;
+    margin-bottom: 20px;
+}
+
+.mainGallery .titleImage span {
+    color: transparent;
+    -webkit-text-stroke: 1px #904d30;
+    opacity: .8;
+}
+
+.imageFlex {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.imageFlex .imgInsideFlex {
+    margin-bottom: 25px;
+    height: auto;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.imageFlex .imgInsideFlex:hover img {
+    scale: 1.1;
+}
+
+.imageFlex img {
+    transition: all .5s;
+}
+
+.upTimeHr {
+    margin: -45px auto;
+    border: 0;
+    border-left: 1px solid;
+    border-color: #904d30;
+    width: 1px;
+    height: 90px;
+}
+
+.mainGallery .moreImage {
+    padding: 12px 24px;
+    background: transparent;
+    border: 2px solid #904d30;
+    color: #fff;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.mainGallery .moreImage:hover {
+    background: #904d30;
+}

@@ -20,7 +20,7 @@ function SlideShow() {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     return (
-        <div class="image-wrap">
+        <div className="image-wrap">
             <img id="mainPhoto" alt="" src={Slide1} />
             <div className="textInSlide">
                 <h6 className="firstLine">Chào mừng đến với DLC Tattoo</h6>
