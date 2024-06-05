@@ -1,0 +1,254 @@
+.mainFilter {
+    width: 20%;
+    height: auto;
+}
+
+.mainSample {
+    width: 78%;
+    height: auto;
+}
+
+.mainFilter .titleFilter {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin-bottom: 20px;
+}
+
+.mainFilter .titleFilter svg {
+    fill: #fff;
+    width: 16px;
+    height: 16px;
+}
+
+.mainFilter .filterTitle {
+    font-family: 'Barlow', sans-serif;
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.75em;
+    color: #999;
+    margin: 0 0 10px 0;
+}
+
+.mainFilter .titleFilter h5 {
+    text-transform: uppercase;
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 2px;
+}
+
+.mainFilter .filterByCate {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 0 20px 0;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.filterOptions input {
+    accent-color: #904d03;
+    width: 15px;
+    height: 15px;
+}
+
+.filterOptions label {
+    margin-left: 3px;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    line-height: 1.75em;
+    color: #999;
+}
+
+.mainFilter .filterByStar {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 0 0 20px 0;
+    margin-bottom: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.mainFilter .filterByStar p {
+    margin: 0;
+    color: rgb(255, 167, 39);
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 5px;
+    display: inline-block;
+    cursor: pointer;
+}
+
+.mainFilter .filterByStar p:hover span {
+    color: #fff;
+}
+
+.mainFilter .filterByStar p span {
+    transition: all .4s;
+    color: #999;
+    font-size: 15px;
+    font-family: 'Barlow', sans-serif;
+    letter-spacing: 1px;
+}
+
+.mainFilter .deleteFil {
+    margin-top: 10px;
+    width: 100%;
+    background: tomato;
+    border: none;
+    color: #fff;
+    padding: 10px 0;
+    font-family: "Barlow", sans-serif;
+    text-transform: uppercase;
+    font-weight: 400;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.mainFilter .deleteFil:hover {
+    background: rgba(255, 99, 71, 0.8);
+}
+
+.mainSample select {
+    resize: none;
+    display: block;
+    width: 20%;
+    font-size: 15px;
+    color: #fff;
+    padding: 10px 15px;
+    background: #101010;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mainSample .sampleCover {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.mainSample .sampleCover .insideSample {
+    width: 32%;
+    height: auto;
+}
+
+.insideSample h5 {
+    padding: 5px;
+    text-transform: uppercase;
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    letter-spacing: 2px;
+    font-size: 18px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}
+
+.insideSample .coverImageX {
+    width: 100%;
+    height: 280px;
+    overflow: hidden;
+    display: inline-block;
+    position: relative;
+}
+
+.coverImageX button {
+    position: absolute;
+    opacity: 0;
+    top: 0;
+    right: 0;
+    background: rgba(255, 255, 255, 0.5);
+    padding: 5px 8px;
+    border: none;
+    font-size: 22px;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.insideSample .coverImageX:hover button {
+    opacity: 1;
+}
+
+.insideSample img {
+    cursor: pointer;
+    transition: all .5s;
+}
+
+.insideSample img:hover {
+    scale: 1.1;
+}
+
+.insideSample h5 a {
+    color: #fff;
+    text-decoration: none;
+    transition: all .4s;
+}
+
+.insideSample h5:hover a {
+    color: #904d03;
+}
+
+.insideSample .downSample {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 5px;
+}
+
+.insideSample .downSample p {
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    margin: 0;
+    color: #999;
+}
+
+.insideSample .downSample p a {
+    color: #904d03;
+}
+
+.insideSample .downSample span {
+    color: rgb(255, 167, 39);
+    font-weight: 400;
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+.modal {
+    width: 90vw;
+    height: 90vh;
+    background: #101010;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    position: fixed;
+    left: 5%;
+    top: 5%;
+    z-index: 5555;
+    box-shadow: 5px 15px 30px #000;
+}
+
+.modal .closeModal {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    border: none;
+    background: none;
+    color: #fff;
+    font-weight: bold;
+    font-size: 25px;
+    cursor: pointer;
+}
+
+.modal .closeModal:hover {
+    color: #999;
+}

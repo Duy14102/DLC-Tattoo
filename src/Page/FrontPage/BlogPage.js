@@ -1,6 +1,6 @@
-import BlogNews from "../Component/BlogPageComponent/BlogNewsBothSide/BlogNews"
-import HeroBanner from "../Component/BlogPageComponent/HeroBanner"
-import image from "../Assets/Image/Slide-1.jpeg"
+import BlogNews from "../../Component/BlogPageComponent/BlogNewsBothSide/BlogNews"
+import HeroBanner from "../../Component/BlogPageComponent/HeroBanner"
+import image from "../../Assets/Image/Slide-1.jpeg"
 
 function BlogPage() {
     return (

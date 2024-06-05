@@ -1,6 +1,6 @@
-import HeroBanner from "../Component/BlogPageComponent/HeroBanner"
-import Slide6 from "../Assets/Image/Slide-6.jpg"
-import GalleryAll from "../Component/GalleryPageComponent/GalleryAll"
+import HeroBanner from "../../Component/BlogPageComponent/HeroBanner"
+import Slide6 from "../../Assets/Image/Slide-6.jpg"
+import GalleryAll from "../../Component/GalleryPageComponent/GalleryAll"
 
 function Gallery() {
     return (

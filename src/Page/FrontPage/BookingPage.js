@@ -1,6 +1,6 @@
-import HeroBanner from "../Component/BlogPageComponent/HeroBanner"
-import image from "../Assets/Image/Slide-10.jpg"
-import BookingSmall from "../Component/BookingPageComponent/BookingSmall"
+import HeroBanner from "../../Component/BlogPageComponent/HeroBanner"
+import image from "../../Assets/Image/Slide-10.jpg"
+import BookingSmall from "../../Component/BookingPageComponent/BookingSmall"
 
 function BookingPage() {
     return (
