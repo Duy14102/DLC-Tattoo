@@ -33,3 +33,21 @@ server.listen(3000);
 // Model
 const Accounts = require("./model/Accounts");
 const getAccounts = mongoose.model("Accounts");
+
+// Api
+
+// Register
+app.post("/api/v1/Register", (req, res) => {
+    bcrypt.hash(req.body.password, 10).then((hashedPassword) => {
+        const user = new Accounts({
+            phonenumber: req.body.phone,
+            password: hashedPassword,
+            role: 1,
+        });
+        user.save().then(() => {
+            res.status(201).send("Đăng ký thành công")
+        }).catch(() => {
+            res.status(500).send("Đăng ký thất bại")
+        });
+    })
+})

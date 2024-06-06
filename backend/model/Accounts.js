@@ -12,6 +12,12 @@ const UserSchema = new mongoose.Schema({
         required: [true, "Please provide a password!"],
     },
 
+    favourite: {
+        id: {
+            type: String
+        }
+    },
+
     userimage: {
         default: null,
         type: String

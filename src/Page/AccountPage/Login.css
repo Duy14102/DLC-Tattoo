@@ -173,7 +173,6 @@
 }
 
 .input {
-    padding: 0.9rem 0.9rem;
     margin: 0.5rem 0;
     resize: none;
     display: block;
@@ -182,14 +181,62 @@
     color: #fff;
     padding: 15px;
     background: #101010;
-    border: none;
-    box-shadow: none;
-    border-radius: 0;
     border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.input:focus {
+.inputPassword {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px;
+    background: #101010;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inputPassword input {
+    font-size: 15px;
+    color: #fff;
+    resize: none;
+    background: none;
+    border: none;
+}
+
+.inputPassword button {
+    border: none;
+    background: none;
+    height: 100%;
+    cursor: pointer;
+}
+
+.inputPassword svg {
+    width: 18px;
+    height: 100%;
+    fill: #fff;
+    transition: all .4s;
+}
+
+.inputPassword button:hover svg {
+    opacity: 0.7;
+}
+
+.inputPassword button:active svg {
+    scale: 0.8;
+}
+
+.input:focus,
+.inputPassword input:focus {
     outline: none;
+}
+
+.warningText {
+    margin: 0;
+    color: tomato;
+    font-weight: 400;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 2px;
+    font-size: 14px;
 }
 
 @keyframes show {

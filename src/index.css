@@ -5,3 +5,7 @@
 body {
     margin: 0
 }
+
+.Toastify__toast-container--top-right {
+    top: 10% !important;
+}
