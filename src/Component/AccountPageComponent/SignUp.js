@@ -1,7 +1,4 @@
-import ToastUpdate from "../Toastify/ToastUpdate"
-import { toast } from 'react-toastify';
-
-function SignUp({ useReducer, useRef, axios }) {
+function SignUp({ useReducer, useRef, axios, toast, ToastUpdate }) {
     const toastNow = useRef(null)
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         phone: "",

@@ -1,7 +1,8 @@
 import { NavLink } from "react-router-dom";
-import { toast } from 'react-toastify';
+import Cookies from "universal-cookie";
 
-function SignIn({ useReducer, useRef, axios }) {
+function SignIn({ useReducer, useRef, axios, type, toast, ToastUpdate }) {
+    const cookies = new Cookies()
     const toastNow = useRef(null)
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         phone: "",
@@ -12,7 +13,27 @@ function SignIn({ useReducer, useRef, axios }) {
 
     function submitSignup(e) {
         e.preventDefault()
+        const configuration = {
+            method: "post",
+            url: `${process.env.REACT_APP_apiAddress}/api/v1/${type}`,
+            data: {
+                phone: state.phone,
+                password: state.password
+            }
+        }
         toastNow.current = toast.loading("Chờ một chút...")
+        axios(configuration).then((res) => {
+            ToastUpdate({ type: 1, message: res.data.message, refCur: toastNow.current })
+            if (type === "LoginUser") {
+                cookies.set("TOKEN", res.data.token, { path: "/", });
+                window.location.href = '/';
+            } else {
+                cookies.set("TOKEN", res.data.token, { path: "/AdminPanel", });
+                window.location.href = '/';
+            }
+        }).catch((err) => {
+            ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })
+        })
     }
     return (
         <div className="container__form container--signup">

@@ -45,9 +45,77 @@ app.post("/api/v1/Register", (req, res) => {
             role: 1,
         });
         user.save().then(() => {
-            res.status(201).send("Đăng ký thành công")
+            res.status(201).send("Đăng ký thành công!")
         }).catch(() => {
-            res.status(500).send("Đăng ký thất bại")
+            res.status(500).send("Đăng ký thất bại!")
         });
+    })
+})
+
+// Login
+app.post("/api/v1/LoginUser", (req, res) => {
+    Accounts.findOne({ phonenumber: req.body.phone })
+        .then((user) => {
+            if (user.role !== 1) { return res.status(400).send("Tài khoản không hợp lệ!") }
+            bcrypt.compare(req.body.password, user.password).then((passwordCheck) => {
+                if (!passwordCheck) {
+                    return res.status(400).send("Sai mật khẩu!")
+                }
+                //   create JWT token
+                const token = jwt.sign(
+                    { userId: user._id, },
+                    "RANDOM-TOKEN",
+                    { expiresIn: "24h" }
+                );
+                res.status(200).send({
+                    message: "Đăng nhập thành công!",
+                    token,
+                });
+            }).catch(() => {
+                res.status(400).send("Sai mật khẩu!");
+            });
+        }).catch(() => {
+            res.status(404).send("Số điện thoại không tồn tại!")
+        });
+})
+
+// Login Admin
+app.post("/api/v1/LoginAdmin", (req, res) => {
+    Accounts.findOne({ phonenumber: req.body.phone })
+        .then((user) => {
+            if (user.status === 2) { return res.status(400).send("Tài khoản đã bị khóa!") }
+            if (user.role !== 2) { return res.status(400).send("Tài khoản không hợp lệ!") }
+            bcrypt.compare(req.body.password, user.password).then((passwordCheck) => {
+                if (!passwordCheck) {
+                    return res.status(400).send("Sai mật khẩu!")
+                }
+                //   create JWT token
+                const token = jwt.sign(
+                    {
+                        userId: user._id,
+                        userRole: user.role
+                    },
+                    "RANDOM-TOKEN",
+                    { expiresIn: "24h" }
+                );
+                res.status(200).send({
+                    message: "Đăng nhập thành công!",
+                    token,
+                });
+            }).catch(() => {
+                res.status(400).send("Sai mật khẩu!");
+            });
+        }).catch(() => {
+            res.status(404).send("Số điện thoại không tồn tại!")
+        });
+})
+
+// Get Accounts
+app.get("/api/v1/GetAccounts", async (req, res) => {
+    await getAccounts.findOne({ _id: req.query.id }).then((resa) => {
+        const dataToSend = { phone: resa.phonenumber, image: resa.userImage }
+        res.status(201).send(dataToSend)
+    }).catch((err) => {
+        res.status(404).send(err)
     })
 })

@@ -1,8 +1,10 @@
 import { useEffect, useReducer, useRef } from "react";
-import "./Login.css"
+import { toast } from "react-toastify";
+import axios from "axios";
 import SignIn from "../../Component/AccountPageComponent/SignIn";
 import SignUp from "../../Component/AccountPageComponent/SignUp";
-import axios from "axios";
+import ToastUpdate from "../../Component/Toastify/ToastUpdate";
+import "./Login.css"
 
 function LoginUser() {
     useEffect(() => {
@@ -22,10 +24,10 @@ function LoginUser() {
         <div className="mainLoginUser" style={{ height: "100%" }}>
             <div className="container right-panel-active">
                 {/* <!-- Sign In --> */}
-                <SignIn useReducer={useReducer} useRef={useRef} axios={axios}/>
+                <SignIn useReducer={useReducer} useRef={useRef} axios={axios} type={"LoginUser"} toast={toast} ToastUpdate={ToastUpdate} />
 
                 {/* <!-- Sign Up --> */}
-                <SignUp useReducer={useReducer} useRef={useRef} axios={axios}/>
+                <SignUp useReducer={useReducer} useRef={useRef} axios={axios} toast={toast} ToastUpdate={ToastUpdate} />
 
                 {/* <!-- Overlay --> */}
                 <div className="container__overlay">

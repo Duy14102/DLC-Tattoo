@@ -40,7 +40,8 @@
     gap: 5px;
 }
 
-.barsNextToBrand a {
+.barsNextToBrand a,
+.barsNextToBrand .avatarUser {
     font-weight: 400;
     font-size: 15px;
     letter-spacing: 2px;
@@ -51,6 +52,8 @@
     font-family: 'Oswald', sans-serif;
     text-decoration: none;
     transition: all .4s;
+    position: relative;
+    cursor: pointer;
 }
 
 .barsNextToBrand .active {
@@ -61,13 +64,69 @@
     color: #904d30;
 }
 
-.barsNextToBrand a:hover svg {
+.barsNextToBrand a:hover svg,
+.barsNextToBrand .avatarUser:hover svg {
     fill: #904d30;
 }
 
-.barsNextToBrand a svg {
+.barsNextToBrand a svg,
+.barsNextToBrand .avatarUser svg {
     transition: all .4s;
     width: 25px;
     height: 25px;
     fill: #fff;
+}
+
+.barsNextToBrand .avatarUser img {
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+}
+
+.barsNextToBrand .avatarUser .dropdownAvatar {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.barsNextToBrand .avatarUser .dropdownAvatar a,
+.barsNextToBrand .avatarUser .dropdownAvatar button {
+    color: #000;
+    background: #fff;
+    border: none;
+    font-size: 15px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    padding: 8px 12px;
+    letter-spacing: 1px;
+    text-transform: none;
+    text-wrap: nowrap;
+    margin: 0;
+    width: 100%;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.barsNextToBrand .avatarUser:hover .dropdownAvatar {
+    animation: appearDropdown .4s ease forwards;
+}
+
+@keyframes appearDropdown {
+    from {
+        top: 200%;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+        top: 100%;
+    }
+}
+
+.barsNextToBrand .avatarUser .dropdownAvatar a:hover,
+.barsNextToBrand .avatarUser .dropdownAvatar button:hover {
+    background: #904d30;
 }

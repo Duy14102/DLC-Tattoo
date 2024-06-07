@@ -13,6 +13,8 @@ const TattooSample = React.lazy(() => import("./Page/FrontPage/TattooSamplePage"
 const Favourite = React.lazy(() => import("./Page/FrontPage/FavouritePage"))
 const LoginUser = React.lazy(() => import("./Page/AccountPage/LoginUser"))
 const LoginAdmin = React.lazy(() => import("./Page/AccountPage/LoginAdmin"))
+const AdminPanel = React.lazy(() => import("./Page/PanelPage/AdminPanel"))
+const UserPanel = React.lazy(() => import("./Page/PanelPage/UserPanel"))
 const NotFound = React.lazy(() => import("./Component/NotFound404"))
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
@@ -27,7 +29,9 @@ root.render(
         <Route path="/TattooSamplePage" element={<TattooSample />} />
         <Route path="/FavouritePage" element={<Favourite />} />
         <Route path="/LoginUserPage" element={<LoginUser />} />
+        <Route path="/UserPanel" element={<UserPanel />} />
       </Route>
+      <Route path="/AdminPanel" element={<AdminPanel />} />
       <Route path="/LoginAdminPage" element={<LoginAdmin />} />
       <Route path="*" element={<NotFound />} />
     </Routes>
