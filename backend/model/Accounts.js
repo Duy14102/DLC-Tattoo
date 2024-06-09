@@ -23,6 +23,21 @@ const UserSchema = new mongoose.Schema({
         type: String
     },
 
+    notification: {
+        title: {
+            type: String
+        },
+        message: {
+            type: String
+        },
+        status: {
+            type: Number
+        },
+        time: {
+            type: Date
+        }
+    },
+
     role: {
         type: Number
     },
@@ -31,9 +46,6 @@ const UserSchema = new mongoose.Schema({
         default: 1,
         type: Number
     }
-})
+}, { timestamps: { createdAt: true, updatedAt: false } })
 
 module.exports = mongoose.model.Users || mongoose.model("Accounts", UserSchema);
-const GetUser = mongoose.model("Accounts");
-
-GetUser.create({ phonenumber: "0000000000", password: "$2b$10$USuRNamVHZWFVFpvBwmWZuDcaZgWRzuuWX7UFyoeAyRb35oLu5aFS", role: 2 }).catch(() => { })

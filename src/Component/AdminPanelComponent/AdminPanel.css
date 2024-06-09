@@ -1,0 +1,455 @@
+.mainAdminSideBar {
+    width: 18%;
+    padding: 0 15px;
+    border-right: 1px dashed rgba(255, 255, 255, 0.1);
+    transition: all .4s;
+}
+
+.mainAdminSideBarCollapse {
+    padding: 0;
+    border-right: none;
+    visibility: hidden;
+    opacity: 0;
+    width: 0;
+    transition: all .4s;
+}
+
+.mainAdminMainBar {
+    width: 100%;
+}
+
+.mainAdminMainBar .headerMainBar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 13px 24px;
+    background: #101010;
+    backdrop-filter: blur(7px);
+}
+
+.mainAdminMainBar .headerMainBar .collapseBar {
+    border: none;
+    background: none;
+    cursor: pointer;
+    margin: 15px;
+}
+
+.mainAdminMainBar .headerMainBar .collapseBar svg {
+    width: 40px;
+    height: 40px;
+    fill: #fff;
+    padding: 5px;
+    transition: all .4s;
+    border-radius: 6px;
+}
+
+.mainAdminMainBar .headerMainBar .collapseBar:hover svg {
+    scale: 1.1;
+    background: rgba(144, 77, 48, 0.3);
+}
+
+.mainAdminMainBar .headerMainBar .collapseBar:active svg {
+    scale: 1;
+}
+
+.mainAdminMainBar .avatarMainBar {
+    border-radius: 50%;
+    padding: 0 15px;
+    cursor: pointer;
+    position: relative;
+}
+
+.mainAdminMainBar .avatarMainBar .profileShow,
+.mainAdminMainBar .bellNoti .notiShow {
+    cursor: auto;
+    min-width: 352px;
+    max-width: 100%;
+    height: auto;
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+    right: 0;
+    padding: 15px;
+    border-radius: 6px;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.react-responsive-modal-modal {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #101010 !important;
+}
+
+.react-responsive-modal-closeButton:hover svg {
+    fill: #fff;
+}
+
+.react-responsive-modal-closeButton svg {
+    fill: #999;
+    transition: all .4s;
+}
+
+.modalTitle {
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    font-weight: 400;
+    text-align: center;
+    font-size: 20px;
+}
+
+.bellNoti .notiShow .notiLight {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 20px;
+    transition: all .4s;
+}
+
+.bellNoti .notiShow .notiLight:active {
+    scale: 0.9;
+}
+
+.bellNoti .notiShow .notiLight:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.bellNoti .notiShow .active:hover {
+    background: rgba(144, 77, 48, 0.3);
+}
+
+.bellNoti .notiShow .notiLight .titleNoti {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Oswald", sans-serif;
+    margin-bottom: 5px;
+}
+
+.bellNoti .notiShow .notiLight .titleNoti span:first-child {
+    font-size: 16px;
+    font-weight: bold;
+    color: #904d30;
+}
+
+.bellNoti .notiShow .notiLight .titleNoti span:last-child {
+    font-size: 14px;
+    color: #999;
+}
+
+.bellNoti .notiShow .notiLight .messageNoti span {
+    width: 100%;
+    word-break: break-all;
+    color: #cecece;
+    font-family: "Oswald", sans-serif;
+    font-size: 15px;
+}
+
+.mainAdminMainBar .avatarMainBar:hover .profileShow,
+.mainAdminMainBar .bellNoti:hover .notiShow {
+    animation: appearDropdown .4s ease forwards;
+}
+
+@keyframes appearDropdown {
+    from {
+        top: 200%;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+        top: 100%;
+    }
+}
+
+.mainAdminMainBar .avatarMainBar .profileShow .profileHead,
+.mainAdminMainBar .bellNoti .notiShow .notiHead {
+    padding: 16px 20px 10px 20px;
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    font-size: 16px;
+}
+
+.mainAdminMainBar .avatarMainBar .profileShow .optionsProfile {
+    margin-bottom: 5px;
+    display: flex;
+    padding: 14px 18px;
+    font-family: "Oswald", sans-serif;
+    border-radius: 10px;
+    align-items: center;
+    gap: 15px;
+    transition: all .4s;
+    cursor: pointer;
+    color: #fff;
+}
+
+.profileShow .optionsProfile:active {
+    scale: 0.9;
+}
+
+.profileShow .optionsProfile svg {
+    width: 20px;
+    height: 20px;
+    fill: #fff;
+}
+
+.profileShow .optionsProfile:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.profileShow .faceProfile {
+    padding: 14px 18px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.profileShow .faceProfile svg {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+}
+
+.profileShow .faceProfile p {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    color: #fff;
+}
+
+.profileShow .faceProfile p:last-child {
+    font-weight: 200;
+}
+
+.mainAdminMainBar .avatarMainBar .hoverSvg {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+    transition: all .4s;
+}
+
+.mainAdminMainBar .avatarMainBar:hover .hoverSvg {
+    fill: #904d30;
+}
+
+.mainAdminMainBar .bellNoti {
+    position: relative;
+    padding: 0 15px;
+    cursor: pointer;
+}
+
+.mainAdminMainBar .bellNoti p {
+    margin: 0;
+    position: absolute;
+    top: -8px;
+    right: 5px;
+    border-radius: 50%;
+    background: tomato;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-size: 12px;
+    padding: 0 5px 0 4px;
+}
+
+.mainAdminMainBar .bellNoti svg {
+    width: 30px;
+    height: 30px;
+    fill: #fff;
+    transition: all .4s;
+}
+
+.mainAdminMainBar .bellNoti:hover svg {
+    fill: #904d30;
+}
+
+.findSomething {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    padding: 10px;
+    height: 45px;
+    width: 200px;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.findSomething input{
+    background: transparent;
+    border: none;
+    line-height: 1.5em;
+    font-family: 'Barlow', sans-serif;
+    font-size: 15px;
+    font-weight: 400;
+    color: #FFF;
+    width: 90%;
+}
+
+.findSomething input:focus {
+    outline: none;
+}
+
+.inputPassword {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: 15px;
+    background: #101010;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.inputPassword input {
+    font-size: 15px;
+    color: #fff;
+    resize: none;
+    background: none;
+    border: none;
+}
+
+.inputPassword button {
+    border: none;
+    background: none;
+    height: 100%;
+    cursor: pointer;
+}
+
+.inputPassword svg {
+    width: 18px;
+    height: 100%;
+    fill: #fff;
+    transition: all .4s;
+}
+
+.inputPassword button:hover svg {
+    opacity: 0.7;
+}
+
+.inputPassword button:active svg {
+    scale: 0.8;
+}
+
+.input:focus,
+.inputPassword input:focus {
+    outline: none;
+}
+
+.warningFind {
+    text-align: center;
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: tomato;
+}
+
+.findSomething button {
+    background: transparent;
+    border: none;
+    width: 28px;
+    height: 100%;
+}
+
+.findSomething button svg {
+    fill: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+.mainAdminSideBar .logoA {
+    display: grid;
+    place-items: center;
+    padding: 16px 24px;
+    margin-bottom: 15px;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mainAdminSideBar .logoA a {
+    width: 135px;
+    height: auto;
+    text-decoration: none;
+}
+
+.mainAdminSideBar .logoA a img {
+    width: 100%;
+    height: 50px;
+}
+
+.mainAdminSideBar .logoA a p {
+    margin: 0;
+    text-align: end;
+    font-family: "Barlow", sans-serif;
+    color: #904d30;
+    text-transform: uppercase;
+    text-wrap: nowrap;
+    font-size: 12px;
+    letter-spacing: 1.5px;
+    font-weight: 450;
+}
+
+.navBarA {
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navBarA .captionA {
+    display: block;
+    padding: 14px 20px;
+    text-transform: uppercase;
+    position: relative;
+    line-height: 1.66;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+}
+
+.optionsA {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-family: "Oswald", sans-serif;
+    justify-content: space-between;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all .4s;
+    margin-bottom: 10px;
+}
+
+.optionsA:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.navBarA .active,
+.navBarA .active:hover {
+    background: rgba(144, 77, 48, 0.7);
+}
+
+.optionsA .optionsLeftA {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.optionsA p {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    text-wrap: nowrap;
+    color: #fff;
+}
+
+.optionsA .optionsNotiA {
+    border-radius: 50%;
+    background: tomato;
+    padding: 1px 6px;
+    font-size: 13px;
+}
+
+.optionsA .optionsLeftA svg {
+    width: 22px;
+    height: 22px;
+    fill: #fff;
+}

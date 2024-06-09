@@ -1,8 +1,6 @@
 import { NavLink } from "react-router-dom";
-import Cookies from "universal-cookie";
 
-function SignIn({ useReducer, useRef, axios, type, toast, ToastUpdate }) {
-    const cookies = new Cookies()
+function SignIn({ useReducer, useRef, axios, type, toast, ToastUpdate, cookies }) {
     const toastNow = useRef(null)
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         phone: "",
@@ -15,21 +13,21 @@ function SignIn({ useReducer, useRef, axios, type, toast, ToastUpdate }) {
         e.preventDefault()
         const configuration = {
             method: "post",
-            url: `${process.env.REACT_APP_apiAddress}/api/v1/${type}`,
+            url: `${process.env.REACT_APP_apiAddress}/api/v1/Login`,
             data: {
                 phone: state.phone,
-                password: state.password
+                password: state.password,
+                type: type
             }
         }
         toastNow.current = toast.loading("Chờ một chút...")
         axios(configuration).then((res) => {
             ToastUpdate({ type: 1, message: res.data.message, refCur: toastNow.current })
+            cookies.set("TOKEN", res.data.token, { path: "/", });
             if (type === "LoginUser") {
-                cookies.set("TOKEN", res.data.token, { path: "/", });
                 window.location.href = '/';
             } else {
-                cookies.set("TOKEN", res.data.token, { path: "/AdminPanel", });
-                window.location.href = '/';
+                window.location.href = '/AdminPanel';
             }
         }).catch((err) => {
             ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })

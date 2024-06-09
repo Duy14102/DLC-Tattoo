@@ -53,38 +53,15 @@ app.post("/api/v1/Register", (req, res) => {
 })
 
 // Login
-app.post("/api/v1/LoginUser", (req, res) => {
+app.post("/api/v1/Login", (req, res) => {
     Accounts.findOne({ phonenumber: req.body.phone })
         .then((user) => {
-            if (user.role !== 1) { return res.status(400).send("Tài khoản không hợp lệ!") }
-            bcrypt.compare(req.body.password, user.password).then((passwordCheck) => {
-                if (!passwordCheck) {
-                    return res.status(400).send("Sai mật khẩu!")
-                }
-                //   create JWT token
-                const token = jwt.sign(
-                    { userId: user._id, },
-                    "RANDOM-TOKEN",
-                    { expiresIn: "24h" }
-                );
-                res.status(200).send({
-                    message: "Đăng nhập thành công!",
-                    token,
-                });
-            }).catch(() => {
-                res.status(400).send("Sai mật khẩu!");
-            });
-        }).catch(() => {
-            res.status(404).send("Số điện thoại không tồn tại!")
-        });
-})
-
-// Login Admin
-app.post("/api/v1/LoginAdmin", (req, res) => {
-    Accounts.findOne({ phonenumber: req.body.phone })
-        .then((user) => {
-            if (user.status === 2) { return res.status(400).send("Tài khoản đã bị khóa!") }
-            if (user.role !== 2) { return res.status(400).send("Tài khoản không hợp lệ!") }
+            if (req.body.type === "LoginUser") {
+                if (user.role !== 1) { return res.status(400).send("Tài khoản không hợp lệ!") }
+                if (user.status === 2) { return res.status(400).send("Tài khoản đã bị khóa!") }
+            } else {
+                if (user.role !== 2) { return res.status(400).send("Tài khoản không hợp lệ!") }
+            }
             bcrypt.compare(req.body.password, user.password).then((passwordCheck) => {
                 if (!passwordCheck) {
                     return res.status(400).send("Sai mật khẩu!")
@@ -117,5 +94,39 @@ app.get("/api/v1/GetAccounts", async (req, res) => {
         res.status(201).send(dataToSend)
     }).catch((err) => {
         res.status(404).send(err)
+    })
+})
+
+// Update phone
+app.post("/api/v1/UpdatePhone", async (req, res) => {
+    const find = await getAccounts.findOne({ phonenumber: req.body.phone })
+    if (find) {
+        res.status(404).send("Số điện thoại đã tồn tại!")
+    } else {
+        getAccounts.updateOne({ _id: req.body.id }, {
+            phonenumber: req.body.phone
+        }).then(() => {
+            res.status(201).send("Thay đổi thành công!")
+        }).catch((err) => console.log(err))
+    }
+})
+
+// Update password
+app.post("/api/v1/UpdatePassword", (req, res) => {
+    Accounts.findOne({ _id: req.body.id }).then((user) => {
+        bcrypt.compare(req.body.oldPassword, user.password).then((passwordCheck) => {
+            if (!passwordCheck) {
+                return res.status(400).send("Sai mật khẩu!")
+            }
+            bcrypt.hash(req.body.password, 10).then((hashedPassword) => {
+                getAccounts.updateOne({ _id: req.body.id }, {
+                    password: hashedPassword
+                }).then(() => {
+                    res.status(201).send("Đổi mật khẩu thành công!")
+                })
+            })
+        }).catch(() => {
+            res.status(400).send("Sai mật khẩu!");
+        });
     })
 })

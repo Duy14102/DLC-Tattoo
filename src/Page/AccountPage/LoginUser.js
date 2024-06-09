@@ -5,26 +5,35 @@ import SignIn from "../../Component/AccountPageComponent/SignIn";
 import SignUp from "../../Component/AccountPageComponent/SignUp";
 import ToastUpdate from "../../Component/Toastify/ToastUpdate";
 import "./Login.css"
+import Cookies from "universal-cookie";
+import NotFound404 from "../../Component/NotFound404"
 
 function LoginUser() {
+    const cookies = new Cookies()
+    const token = cookies.get("TOKEN")
     useEffect(() => {
-        const signInBtn = document.getElementById("signIn");
-        const signUpBtn = document.getElementById("signUp");
-        const container = document.querySelector(".container");
+        if (!token) {
+            const signInBtn = document.getElementById("signIn");
+            const signUpBtn = document.getElementById("signUp");
+            const container = document.querySelector(".container");
 
-        signInBtn.addEventListener("click", () => {
-            container.classList.remove("right-panel-active");
-        });
+            signInBtn.addEventListener("click", () => {
+                container.classList.remove("right-panel-active");
+            });
 
-        signUpBtn.addEventListener("click", () => {
-            container.classList.add("right-panel-active");
-        });
-    }, [])
+            signUpBtn.addEventListener("click", () => {
+                container.classList.add("right-panel-active");
+            });
+        }
+    }, [token])
+    if (token) {
+        return NotFound404()
+    }
     return (
         <div className="mainLoginUser" style={{ height: "100%" }}>
             <div className="container right-panel-active">
                 {/* <!-- Sign In --> */}
-                <SignIn useReducer={useReducer} useRef={useRef} axios={axios} type={"LoginUser"} toast={toast} ToastUpdate={ToastUpdate} />
+                <SignIn useReducer={useReducer} useRef={useRef} axios={axios} type={"LoginUser"} toast={toast} ToastUpdate={ToastUpdate} cookies={cookies} />
 
                 {/* <!-- Sign Up --> */}
                 <SignUp useReducer={useReducer} useRef={useRef} axios={axios} toast={toast} ToastUpdate={ToastUpdate} />
