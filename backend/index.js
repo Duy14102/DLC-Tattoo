@@ -20,6 +20,15 @@ app.use((req, res, next) => {
     );
     next();
 });
+
+//Cloudinary
+const cloudinary = require('cloudinary').v2
+cloudinary.config({
+    cloud_name: process.env.REACT_APP_cloudName_Cloudinary,
+    api_key: process.env.REACT_APP_apiKey_Cloudinary,
+    api_secret: process.env.REACT_APP_apiSecret_Cloudinary
+});
+
 const cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb', extended: true }));
@@ -33,6 +42,8 @@ server.listen(3000);
 // Model
 const Accounts = require("./model/Accounts");
 const getAccounts = mongoose.model("Accounts");
+const Blogs = require("./model/Blogs");
+const getBlogs = mongoose.model("Blogs");
 
 // Api
 
@@ -90,7 +101,7 @@ app.post("/api/v1/Login", (req, res) => {
 // Get Accounts
 app.get("/api/v1/GetAccounts", async (req, res) => {
     await getAccounts.findOne({ _id: req.query.id }).then((resa) => {
-        const dataToSend = { phone: resa.phonenumber, image: resa.userImage }
+        const dataToSend = { phone: resa.phonenumber, image: resa.userimage }
         res.status(201).send(dataToSend)
     }).catch((err) => {
         res.status(404).send(err)
@@ -128,5 +139,44 @@ app.post("/api/v1/UpdatePassword", (req, res) => {
         }).catch(() => {
             res.status(400).send("Sai mật khẩu!");
         });
+    })
+})
+
+// Change Avatar
+app.post("/api/v1/ChangeAvatar", async (req, res) => {
+    const { base64 } = req.body
+    await cloudinary.uploader.destroy(`Avatar/${req.body.id}`).then(() => {
+        cloudinary.uploader.upload(base64, {
+            public_id: req.body.id, folder: "Avatar"
+        }).then((result) => {
+            getAccounts.updateOne({ _id: req.body.id }, {
+                userimage: result.url
+            }).then(() => {
+                res.status(201).send("Thay avatar thành công!")
+            })
+        }).catch(() => {
+            res.status(500).send("Thay avatar thất bại!")
+        })
+    })
+})
+
+// Add blog
+app.post("/api/v1/AddBlog", (req, res) => {
+    cloudinary.uploader.upload(req.body.thumbnail, {
+        public_id: req.body.title, folder: "Blog"
+    }).then((result) => {
+        const blog = new Blogs({
+            title: req.body.title,
+            subtitle: req.body.subtitle,
+            content: req.body.content,
+            thumbnail: result.url
+        });
+        blog.save().then(() => {
+            res.status(201).send("Tạo blog thành công!")
+        }).catch(() => {
+            res.status(500).send("Tạo blog thất bại!")
+        })
+    }).catch(() => {
+        res.status(500).send("Tạo blog thất bại!")
     })
 })

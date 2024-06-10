@@ -19,11 +19,7 @@ function GetAccounts({ token, useEffect, NavLink, cookies }) {
     }, [decode.userId])
 
     const logoutUser = () => {
-        if (decode.userRole === 1) {
-            cookies.remove("TOKEN", { path: '/' });
-        } else {
-            cookies.remove("TOKEN", { path: '/AdminPanel' });
-        }
+        cookies.remove("TOKEN", { path: '/' });
         window.location.href = "/"
     }
     return (

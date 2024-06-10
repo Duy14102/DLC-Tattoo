@@ -29,8 +29,8 @@ function AdminPanel() {
         }
     }
     return (
-        <div style={{ display: "flex", background: "#101010", width: "100%", height: "100vh" }}>
-            <AdminSideBar cookies={cookies} />
+        <div style={{ display: "flex", background: "#101010", width: "100%", height: "auto" }}>
+            <AdminSideBar />
 
             <AdminMainBar useState={useState} token={jwtDecode(token)} useEffect={useEffect} />
         </div>

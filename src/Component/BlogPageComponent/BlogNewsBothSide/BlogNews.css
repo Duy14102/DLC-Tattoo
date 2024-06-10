@@ -31,6 +31,40 @@
     height: auto;
     display: inline-block;
     overflow: hidden;
+    position: relative;
+}
+
+.news .newsImage .dateNews {
+    display: inline-block;
+    position: absolute;
+    bottom: 15px;
+    left: 15px;
+    background: #904d30;
+    border: 1px solid #904d30;
+    color: #fff;
+    padding: 10px 15px;
+    font-family: "Barlow", sans-serif;
+    text-align: center;
+}
+
+.news .newsImage .dateNews span {
+    display: block;
+    font-size: 13px;
+    text-transform: uppercase;
+    line-height: 15px;
+    color: #fff;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.news .newsImage .dateNews i {
+    display: block;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 1px;
+    margin-top: 0px;
 }
 
 .news .newsImage img {
@@ -50,6 +84,7 @@
     letter-spacing: 5px;
     text-transform: uppercase;
     margin-bottom: 5px;
+    width: 50px;
 }
 
 .post .downLink {

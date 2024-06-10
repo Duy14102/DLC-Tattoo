@@ -18,38 +18,46 @@
     width: 100%;
 }
 
+.contentMainBar {
+    padding: 26px 24px;
+    height: 150vh;
+}
+
 .mainAdminMainBar .headerMainBar {
     display: flex;
     align-items: center;
+    padding: 13px 0;
     justify-content: space-between;
-    padding: 13px 24px;
-    background: #101010;
-    backdrop-filter: blur(7px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.mainAdminMainBar .headerMainBar .sayHi {
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    color: #fff;
+    font-size: 20px;
 }
 
 .mainAdminMainBar .headerMainBar .collapseBar {
     border: none;
     background: none;
     cursor: pointer;
-    margin: 15px;
+    padding: 0;
 }
 
 .mainAdminMainBar .headerMainBar .collapseBar svg {
-    width: 40px;
-    height: 40px;
+    width: 30px;
+    height: 30px;
     fill: #fff;
-    padding: 5px;
     transition: all .4s;
-    border-radius: 6px;
 }
 
 .mainAdminMainBar .headerMainBar .collapseBar:hover svg {
-    scale: 1.1;
-    background: rgba(144, 77, 48, 0.3);
+    fill: #904d30;
 }
 
 .mainAdminMainBar .headerMainBar .collapseBar:active svg {
-    scale: 1;
+    scale: 0.9;
 }
 
 .mainAdminMainBar .avatarMainBar {
@@ -73,6 +81,8 @@
     border-radius: 6px;
     visibility: hidden;
     opacity: 0;
+    z-index: 1;
+    background: #101010;
 }
 
 .react-responsive-modal-modal {
@@ -205,10 +215,42 @@
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.profileShow .faceProfile .avatarInput {
+    width: 45px;
+    height: 45px;
+    overflow: hidden;
+    position: relative;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+}
+
+.profileShow .faceProfile .avatarInput img {
+    transition: all .4s;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profileShow .faceProfile .avatarInput:hover img {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+.profileShow .faceProfile .avatarInput input {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+}
+
 .profileShow .faceProfile svg {
     width: 30px;
     height: 30px;
     fill: #fff;
+    transition: all .4s;
 }
 
 .profileShow .faceProfile p {
@@ -222,6 +264,16 @@
     font-weight: 200;
 }
 
+.mainAdminMainBar .avatarMainBar .hoverImg {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+}
+
+.mainAdminMainBar .avatarMainBar:hover .hoverImg {
+    outline: 2px solid #904d30;
+}
+
 .mainAdminMainBar .avatarMainBar .hoverSvg {
     width: 30px;
     height: 30px;
@@ -229,7 +281,8 @@
     transition: all .4s;
 }
 
-.mainAdminMainBar .avatarMainBar:hover .hoverSvg {
+.mainAdminMainBar .avatarMainBar:hover .hoverSvg,
+.profileShow .faceProfile .avatarInput:hover svg {
     fill: #904d30;
 }
 
@@ -275,7 +328,7 @@
     justify-content: space-between;
 }
 
-.findSomething input{
+.findSomething input {
     background: transparent;
     border: none;
     line-height: 1.5em;
@@ -283,10 +336,12 @@
     font-size: 15px;
     font-weight: 400;
     color: #FFF;
-    width: 90%;
+    width: 100%;
 }
 
-.findSomething input:focus {
+.findSomething input:focus,
+.formNewBlogs input:focus,
+.formNewBlogs textarea:focus {
     outline: none;
 }
 
@@ -341,19 +396,6 @@
     margin: 0;
     font-family: "Oswald", sans-serif;
     color: tomato;
-}
-
-.findSomething button {
-    background: transparent;
-    border: none;
-    width: 28px;
-    height: 100%;
-}
-
-.findSomething button svg {
-    fill: #fff;
-    width: 100%;
-    height: 100%;
 }
 
 .mainAdminSideBar .logoA {
@@ -424,6 +466,7 @@
 
 .navBarA .active,
 .navBarA .active:hover {
+    transition: all .4s;
     background: rgba(144, 77, 48, 0.7);
 }
 
@@ -452,4 +495,189 @@
     width: 22px;
     height: 22px;
     fill: #fff;
+}
+
+.topBlobTaps {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+}
+
+.topBlobTaps .addNewBlog {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #101010;
+    font-weight: 400;
+    font-size: 17px;
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    width: 125px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    transition: all .4s;
+    cursor: pointer;
+    letter-spacing: 1px;
+}
+
+.topBlobTaps .addNewBlog:active {
+    scale: 0.9;
+}
+
+.topBlobTaps .addNewBlog:hover {
+    background: #904d30;
+    border-color: #904d30;
+}
+
+.topBlobTaps .addNewBlog svg {
+    width: 25px;
+    height: 25px;
+    fill: #fff;
+}
+
+.formNewBlogs {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 15px;
+    width: 100%;
+    margin-top: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.formNewBlogs textarea,
+.formNewBlogs input {
+    font-family: "Oswald", sans-serif;
+    resize: none;
+    vertical-align: top;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    padding: 10px;
+    height: 65px;
+    width: 100%;
+    border-radius: 6px;
+    font-size: 25px;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.formNewBlogs .separateUp {
+    display: flex;
+    justify-content: space-between;
+    gap: 25px;
+}
+
+.formNewBlogs .separateUp .titlePlace {
+    width: 100%;
+}
+
+.formNewBlogs .separateUp .thumbPlace {
+    width: 230px;
+    height: 200px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    display: grid;
+    place-items: center;
+    position: relative;
+}
+
+.formNewBlogs .separateUp .thumbPlace img {
+    width: 100%;
+    height: 100%;
+    transition: all .4s;
+}
+
+.formNewBlogs .separateUp .thumbPlace input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.formNewBlogs .separateUp .thumbPlace .appearAfterImg {
+    opacity: 0;
+    transition: all .4s;
+}
+
+.formNewBlogs .separateUp .thumbPlace:hover .appearAfterImg {
+    opacity: 1;
+}
+
+.formNewBlogs .separateUp .thumbPlace:hover img {
+    opacity: 0.7;
+}
+
+.formNewBlogs .separateUp .thumbPlace svg {
+    fill: #fff;
+    width: 65px;
+    height: 65px;
+    position: absolute;
+}
+
+.formNewBlogs .yesForm {
+    background: #904d30;
+}
+
+.formNewBlogs .noForm {
+    background: #999;
+}
+
+.formNewBlogs button {
+    transition: all .4s;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.formNewBlogs button:hover {
+    opacity: 0.7;
+}
+
+.jodit-container {
+    font-family: "Oswald", sans-serif !important;
+    border: none !important;
+}
+
+.jodit-container svg {
+    fill: #fff !important;
+}
+
+.jodit-container .jodit-toolbar__box {
+    background: #101010 !important;
+    border-bottom: none !important;
+}
+
+.jodit-container .jodit-wysiwyg p {
+    color: #fff !important;
+}
+
+.jodit-container .jodit-workplace {
+    height: 500px !important;
+    word-break: break-all !important;
+    background: #101010 !important;
+}
+
+.jodit-container .jodit-status-bar {
+    background: #101010 !important;
+    color: #fff !important;
+}
+
+.jodit-toolbar-button__button:hover,
+.jodit-toolbar-button__trigger:hover {
+    background: rgba(144, 77, 48, 0.7) !important;
+}
+
+.jodit-status-bar a.jodit-status-bar-link {
+    color: #fff !important;
 }

@@ -7,6 +7,10 @@ function BlogLeftSide() {
             <div className="news">
                 <NavLink reloadDocument className="newsImage">
                     <img alt="" src={newsImage1} width={"100%"} height={500} />
+                    <div className="dateNews">
+                        <span>T2</span>
+                        <i>14</i>
+                    </div>
                 </NavLink>
                 <div className="post">
                     <NavLink className="upLink" reloadDocument to={"/BlogPage"}>Blog</NavLink>

@@ -27,6 +27,7 @@ function SignIn({ useReducer, useRef, axios, type, toast, ToastUpdate, cookies }
             if (type === "LoginUser") {
                 window.location.href = '/';
             } else {
+                localStorage.setItem("tabs", "Dashboard")
                 window.location.href = '/AdminPanel';
             }
         }).catch((err) => {

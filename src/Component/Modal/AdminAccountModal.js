@@ -1,10 +1,8 @@
 import 'react-responsive-modal/styles.css';
 import { Modal } from 'react-responsive-modal';
-import { useReducer, useRef } from 'react';
-import { toast } from 'react-toastify';
-import ToastUpdate from '../Toastify/ToastUpdate';
+import { useReducer } from 'react';
 
-function AdminAccountModal({ open, setOpen, axios, token, type }) {
+function AdminAccountModal({ open, setOpen, axios, token, type, getAccounts, toast, ToastUpdate, useRef }) {
     const toastNow = useRef(null)
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         phone: "",
@@ -27,6 +25,7 @@ function AdminAccountModal({ open, setOpen, axios, token, type }) {
         toastNow.current = toast.loading("Chờ một chút...")
         axios(configuration).then((res) => {
             setOpen(false)
+            getAccounts()
             ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
         }).catch((err) => {
             ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })
