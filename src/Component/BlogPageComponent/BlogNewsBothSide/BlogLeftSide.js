@@ -1,35 +1,51 @@
 import { NavLink } from "react-router-dom"
-import newsImage1 from "../../../Assets/Image/Service-1.jpeg"
+import ReactPaginate from "react-paginate"
 
-function BlogLeftSide() {
+function BlogLeftSide({ getBlogs, currentPage, blog, pageCount }) {
+    function handlePageClick(e) {
+        currentPage.current = e.selected + 1
+        getBlogs();
+    }
     return (
         <div className="mainLeft">
-            <div className="news">
-                <NavLink reloadDocument className="newsImage">
-                    <img alt="" src={newsImage1} width={"100%"} height={500} />
-                    <div className="dateNews">
-                        <span>T2</span>
-                        <i>14</i>
+            {blog?.map((i) => {
+                return (
+                    <div key={i._id} className="news">
+                        <NavLink reloadDocument className="newsImage">
+                            <img alt="" src={i.thumbnail} width={"100%"} height={500} />
+                            <div className="dateNews">
+                                <span>T{new Date(i.createdAt).getMonth()}</span>
+                                <i>{new Date(i.createdAt).getDate()}</i>
+                            </div>
+                        </NavLink>
+                        <div className="post">
+                            <NavLink className="upLink" reloadDocument to={"/BlogPage"}>Blog</NavLink>
+                            <h5 className="downLink"><NavLink reloadDocument>{i.title}</NavLink></h5>
+                            <p className="postDescription">{i.subtitle}</p>
+                            <NavLink reloadDocument className="readMore">Xem thêm</NavLink>
+                        </div>
                     </div>
-                </NavLink>
-                <div className="post">
-                    <NavLink className="upLink" reloadDocument to={"/BlogPage"}>Blog</NavLink>
-                    <h5 className="downLink"><NavLink reloadDocument>Top 10 hình xăm cực chất</NavLink></h5>
-                    <p className="postDescription">Đây là top 10 hình xăm cực chất dành cho bạn. Được chúng tôi chọn lựa từ hàng trăm, hàng nghìn kết quả cũng như tinh hoa của nghệ thuật xăm hình. Nếu cảm thấy 1 trong số chúng hợp với bạn thì đừng chần chừ liên hệ với chúng tôi và xăm ngay nào!</p>
-                    <NavLink reloadDocument className="readMore">Xem thêm</NavLink>
-                </div>
-            </div>
-            <div className="news">
-                <NavLink reloadDocument className="newsImage">
-                    <img alt="" src={newsImage1} width={"100%"} height={500} />
-                </NavLink>
-                <div className="post">
-                    <NavLink className="upLink" reloadDocument to={"/BlogPage"}>Blog</NavLink>
-                    <h5 className="downLink"><NavLink reloadDocument>Top 10 hình xăm cực chất</NavLink></h5>
-                    <p className="postDescription">Đây là top 10 hình xăm cực chất dành cho bạn. Được chúng tôi chọn lựa từ hàng trăm, hàng nghìn kết quả cũng như tinh hoa của nghệ thuật xăm hình. Nếu cảm thấy 1 trong số chúng hợp với bạn thì đừng chần chừ liên hệ với chúng tôi và xăm ngay nào!</p>
-                    <NavLink reloadDocument className="readMore">Xem thêm</NavLink>
-                </div>
-            </div>
+                )
+            })}
+            <ReactPaginate
+                breakLabel="..."
+                nextLabel=">"
+                onPageChange={handlePageClick}
+                pageRangeDisplayed={5}
+                pageCount={pageCount}
+                previousLabel="<"
+                renderOnZeroPageCount={null}
+                marginPagesDisplayed={2}
+                containerClassName="pagination justify-content-center text-nowrap"
+                pageClassName="page-item"
+                pageLinkClassName="page-link"
+                previousClassName="page-item"
+                previousLinkClassName="page-link"
+                nextClassName="page-item"
+                nextLinkClassName="page-link"
+                activeClassName="active"
+                forcePage={currentPage.current - 1}
+            />
         </div>
     )
 }

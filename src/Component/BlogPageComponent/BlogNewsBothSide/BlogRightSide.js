@@ -1,7 +1,6 @@
 import { NavLink } from "react-router-dom"
-import ServiceImage1 from "../../../Assets/Image/Service-1.jpeg"
 
-function BlogRightSide() {
+function BlogRightSide({ blog }) {
     return (
         <div className="mainRight">
             <div className="findPost">
@@ -14,24 +13,16 @@ function BlogRightSide() {
             </div>
             <div className="recentPost">
                 <h6>Bài đăng gần đây</h6>
-                <div className="recentPostPosts">
-                    <NavLink reloadDocument>
-                        <img src={ServiceImage1} alt="" width={"100%"} height={"100%"} />
-                    </NavLink>
-                    <NavLink reloadDocument>Top 10 hình xăm cực chất</NavLink>
-                </div>
-                <div className="recentPostPosts">
-                    <NavLink reloadDocument>
-                        <img src={ServiceImage1} alt="" width={"100%"} height={"100%"} />
-                    </NavLink>
-                    <NavLink reloadDocument>Top 10 hình xăm cực chất</NavLink>
-                </div>
-                <div className="recentPostPosts">
-                    <NavLink reloadDocument>
-                        <img src={ServiceImage1} alt="" width={"100%"} height={"100%"} />
-                    </NavLink>
-                    <NavLink reloadDocument>Top 10 hình xăm cực chất</NavLink>
-                </div>
+                {blog?.map((i) => {
+                    return (
+                        <div className="recentPostPosts" key={i._id}>
+                            <NavLink reloadDocument>
+                                <img src={i.thumbnail} alt="" width={"100%"} height={"100%"} />
+                            </NavLink>
+                            <NavLink reloadDocument>{i.title}</NavLink>
+                        </div>
+                    )
+                })}
             </div>
             <div className="tagPost">
                 <h6>Tags</h6>

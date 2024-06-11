@@ -29,7 +29,7 @@ function AdminPanel() {
         }
     }
     return (
-        <div style={{ display: "flex", background: "#101010", width: "100%", height: "auto" }}>
+        <div style={{ display: "flex", background: "#101010", width: "100%", minHeight: "inherit" }}>
             <AdminSideBar />
 
             <AdminMainBar useState={useState} token={jwtDecode(token)} useEffect={useEffect} />

@@ -2,10 +2,58 @@
     box-sizing: border-box;
 }
 
-body {
-    margin: 0
+html,
+body,
+#root {
+    min-height: 100vh;
+    margin: 0;
 }
 
 .Toastify__toast-container--top-right {
     top: 10% !important;
+}
+
+.pagination {
+    display: flex;
+    list-style-type: none;
+    justify-content: center;
+    gap: 5px;
+    padding: 0 5rem;
+    font-family: "Oswald", sans-serif;
+    margin-top: 35px;
+}
+
+.pagination li a {
+    border-radius: 50%;
+    padding: 4px 14px 4px 13px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    font-weight: 400;
+    transition: all .4s;
+    color: #fff;
+    font-size: 18px;
+}
+
+.pagination li a:hover {
+    border-color: #904d03;
+    color: #904d03 !important;
+}
+
+.pagination li.disabled a:hover {
+    border-color: rgba(255, 255, 255, 0.1);
+    color: #999 !important;
+}
+
+.pagination li.active a {
+    border-color: #904d03;
+    color: #904d03 !important;
+}
+
+.pagination li.disabled a {
+    color: #999;
+}
+
+.pagination li.disabled,
+.pagination li.disabled a {
+    cursor: default;
 }

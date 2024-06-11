@@ -162,21 +162,95 @@ app.post("/api/v1/ChangeAvatar", async (req, res) => {
 
 // Add blog
 app.post("/api/v1/AddBlog", (req, res) => {
-    cloudinary.uploader.upload(req.body.thumbnail, {
-        public_id: req.body.title, folder: "Blog"
-    }).then((result) => {
-        const blog = new Blogs({
-            title: req.body.title,
-            subtitle: req.body.subtitle,
-            content: req.body.content,
-            thumbnail: result.url
-        });
-        blog.save().then(() => {
-            res.status(201).send("Tạo blog thành công!")
+    const blog = new Blogs({
+        title: req.body.title,
+        subtitle: req.body.subtitle,
+        content: req.body.content,
+    });
+    blog.save().then((resa) => {
+        cloudinary.uploader.upload(req.body.thumbnail, {
+            public_id: resa._id, folder: "Blog"
+        }).then((result) => {
+            getBlogs.updateOne({ _id: resa._id }, {
+                thumbnail: result.url
+            }).then(() => {
+                res.status(201).send("Tạo blog thành công!")
+            })
         }).catch(() => {
             res.status(500).send("Tạo blog thất bại!")
         })
     }).catch(() => {
         res.status(500).send("Tạo blog thất bại!")
     })
+})
+
+// Get blogs
+app.get("/api/v1/GetBlogs", async (req, res) => {
+    const getOrder = await getBlogs.find({})
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+
+    const start = (page - 1) * limit
+    const end = page * limit
+
+    const results = {}
+    results.total = getOrder.length
+    results.pageCount = Math.ceil(getOrder.length / limit)
+
+    if (end < getOrder.length) {
+        results.next = {
+            page: page + 1
+        }
+    }
+    if (start > 0) {
+        results.prev = {
+            page: page - 1
+        }
+    }
+
+    results.result = getOrder.slice(start, end)
+    res.send({ results });
+})
+
+// Delete Blog
+app.post("/api/v1/DeleteBlog", async (req, res) => {
+    await cloudinary.uploader.destroy(`Blog/${req.body.id}`).then(() => {
+        getBlogs.deleteOne({ _id: req.body.id }).then(() => {
+            res.status(201).send("Xóa blog thành công!")
+        }).catch(() => {
+            res.status(500).send("Xóa blog thất bại!")
+        })
+    }).catch(() => {
+        res.status(500).send("Xóa blog thất bại!")
+    })
+})
+
+// Update Blog
+app.post("/api/v1/UpdateBlog", async (req, res) => {
+    function updateThis(updateWhat) {
+        getBlogs.updateOne({ _id: req.body.id }, updateWhat).exec()
+    }
+    if (req.body.title !== "") {
+        updateThis({ title: req.body.title })
+    }
+    if (req.body.subtitle !== "") {
+        updateThis({ subtitle: req.body.subtitle })
+    }
+    if (req.body.content !== "") {
+        updateThis({ content: req.body.content })
+    }
+    if (req.body.thumbnail !== "") {
+        await cloudinary.uploader.destroy(`Blog/${req.body.id}`).then(() => {
+            cloudinary.uploader.upload(req.body.thumbnail, {
+                public_id: req.body.id, folder: "Blog"
+            }).then((result) => {
+                updateThis({ thumbnail: result.url })
+            }).catch(() => {
+                return res.status(500).send("Cập nhật blog thất bại!")
+            })
+        }).catch(() => {
+            return res.status(500).send("Cập nhật blog thất bại!")
+        })
+    }
+    res.status(201).send("Cập nhật blog thành công!")
 })

@@ -16,11 +16,12 @@
 
 .mainAdminMainBar {
     width: 100%;
+    height: 100%;
 }
 
 .contentMainBar {
+    height: 100%;
     padding: 26px 24px;
-    height: 150vh;
 }
 
 .mainAdminMainBar .headerMainBar {
@@ -81,7 +82,7 @@
     border-radius: 6px;
     visibility: hidden;
     opacity: 0;
-    z-index: 1;
+    z-index: 6;
     background: #101010;
 }
 
@@ -339,9 +340,23 @@
     width: 100%;
 }
 
+input[type=date]:invalid::-webkit-datetime-edit,
+input[type=time]:invalid::-webkit-datetime-edit {
+    color: gray;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    filter: invert(0.8);
+}
+
 .findSomething input:focus,
 .formNewBlogs input:focus,
-.formNewBlogs textarea:focus {
+.formNewBlogs textarea:focus,
+.blogAllContent .upperContent .blogAllContentTitle input:focus,
+.blogAllContent .upperContent .blogAllContentSubTitle textarea:focus,
+.blogAllContent .downContent textarea:focus {
     outline: none;
 }
 
@@ -645,6 +660,7 @@
 }
 
 .jodit-container {
+    height: 100%;
     font-family: "Oswald", sans-serif !important;
     border: none !important;
 }
@@ -662,8 +678,11 @@
     color: #fff !important;
 }
 
-.jodit-container .jodit-workplace {
-    height: 500px !important;
+.jodit_fullsize-box_true .jodit-workplace {
+    height: 90% !important;
+}
+
+.jodit-workplace {
     word-break: break-all !important;
     background: #101010 !important;
 }
@@ -680,4 +699,179 @@
 
 .jodit-status-bar a.jodit-status-bar-link {
     color: #fff !important;
+}
+
+.blogAllWrap {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.blogAllWrap .blogAllContent {
+    width: 48%;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 15px;
+    margin-top: 25px;
+}
+
+.blogAllContent .upperContent {
+    display: flex;
+    justify-content: space-between;
+}
+
+.blogAllContent .upperContent .blogAllContentTitle,
+.blogAllContent .upperContent .blogAllContentSubTitle {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    padding: 10px;
+    width: 95%;
+    height: 55px;
+    border-radius: 6px;
+    position: relative;
+    transition: all .4s;
+    cursor: pointer;
+    z-index: 5;
+}
+
+.blogAllContent .upperContent .wantChange:hover {
+    background: #000 !important;
+}
+
+.blogAllContent .upperContent .blogAllContentSubTitle {
+    margin-top: 15px !important;
+    height: 80px !important;
+}
+
+.blogAllContent .upperContent .blogAllContentSubTitle textarea {
+    font-size: 18px !important;
+    color: #999 !important;
+}
+
+.blogAllContent .upperContent .upperContentImg {
+    border-radius: 6px;
+    width: 20%;
+    height: 150px;
+    position: relative;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.blogAllContent .upperContent .upperContentImg img {
+    transition: all .4s;
+    width: 100%;
+    height: 100%;
+}
+
+.blogAllContent .downContent {
+    position: relative;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    padding: 10px;
+    margin-top: 15px;
+    width: 100%;
+    height: 200px;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.blogAllContent .upperContent .blogAllContentTitle input,
+.blogAllContent .upperContent .blogAllContentSubTitle textarea,
+.blogAllContent .downContent textarea {
+    border: none;
+    background: transparent;
+    color: #fff;
+    width: 100%;
+    height: 100%;
+    font-family: 'Oswald', sans-serif;
+    letter-spacing: 1px;
+    font-size: 20px;
+    font-weight: 400;
+    resize: none;
+}
+
+.blogAllContent .downContent textarea {
+    font-size: 16px !important;
+}
+
+.blogAllContent .downContent svg {
+    width: 45px;
+    height: 45px;
+}
+
+.blogAllContent .upperContent .blogAllContentTitle svg {
+    top: 25%;
+    left: 50%;
+}
+
+.blogAllContent .upperContent .blogAllContentSubTitle svg {
+    left: 50%;
+}
+
+.blogAllContent .svgAppear {
+    position: absolute;
+    fill: #fff;
+    width: 25px;
+    height: 25px;
+    top: 37%;
+    left: 47%;
+    opacity: 0;
+    transition: all .4s;
+}
+
+.blogAllContent .upperContent .blogAllContentTitle:hover,
+.blogAllContent .upperContent .blogAllContentSubTitle:hover,
+.blogAllContent .downContent:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.blogAllContent .upperContent .upperContentImg:hover img {
+    opacity: 0.5;
+}
+
+.blogAllContent .upperContent .blogAllContentTitle:hover svg,
+.blogAllContent .upperContent .blogAllContentSubTitle:hover svg,
+.blogAllContent .upperContent .upperContentImg:hover svg,
+.blogAllContent .downContent:hover svg {
+    opacity: 1;
+}
+
+.blogAllContent .botContent .textDate {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: #999;
+    text-align: end;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.blogAllContent .botContent {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+
+.blogAllContent .botContent button {
+    padding: 6px 14px;
+    font-family: "Oswald", sans-serif;
+    background: tomato;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    letter-spacing: 1px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.blogAllContent .botContent button:active {
+    scale: 0.9;
+}
+
+.blogAllContent .botContent button:hover {
+    opacity: 0.7;
 }
