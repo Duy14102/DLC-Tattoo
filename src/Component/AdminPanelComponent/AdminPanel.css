@@ -530,12 +530,13 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     align-items: center;
     justify-content: center;
     gap: 5px;
-    width: 125px;
+    width: 135px;
     padding: 8px 14px;
     border-radius: 6px;
     transition: all .4s;
     cursor: pointer;
     letter-spacing: 1px;
+
 }
 
 .topBlobTaps .addNewBlog:active {
@@ -636,15 +637,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     position: absolute;
 }
 
-.formNewBlogs .yesForm {
-    background: #904d30;
-}
-
-.formNewBlogs .noForm {
-    background: #999;
-}
-
-.formNewBlogs button {
+.yesNoButton {
     transition: all .4s;
     color: #fff;
     border: none;
@@ -655,8 +648,20 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     cursor: pointer;
 }
 
-.formNewBlogs button:hover {
+.yesForm {
+    background: #904d30;
+}
+
+.noForm {
+    background: #999;
+}
+
+.yesNoButton button:hover {
     opacity: 0.7;
+}
+
+.yesNoButton:active {
+    scale: 0.9;
 }
 
 .jodit-container {
@@ -874,4 +879,123 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 
 .blogAllContent .botContent button:hover {
     opacity: 0.7;
+}
+
+.overlayThis {
+    background: #000;
+    margin: 0;
+    padding: 0 10px;
+    border-radius: 6px;
+}
+
+.overlayThis .accountInput {
+    font-size: 18px;
+    border: none;
+    padding: 0;
+    height: 55px;
+}
+
+.accountTable {
+    width: 100%;
+    margin-top: 15px;
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    border-collapse: collapse;
+}
+
+.accountTable thead {
+    border-bottom: 2px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+}
+
+.accountTable tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.accountTable thead tr th,
+.accountTable tbody tr td {
+    padding: 10px 15px;
+}
+
+.accountTable thead tr th .flexInThead {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    text-transform: uppercase;
+    transition: all .4s;
+    letter-spacing: 1px;
+    cursor: pointer;
+}
+
+.accountTable thead tr th .flexInThead:hover {
+    color: #904d30;
+}
+
+.accountTable thead tr th .flexInThead .sortInThead {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.accountTable thead tr th .flexInThead .sortInThead span {
+    font-size: 11px;
+    color: #999;
+    text-align: center;
+}
+
+.accountTable thead tr th .flexInThead .sortInThead span:last-child {
+    scale: -1;
+    margin-right: 1px;
+}
+
+.accountTable td {
+    font-weight: 400;
+}
+
+.accountTable td .buttonFlexInTd {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.accountTable td .buttonFlexInTd button {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    padding: 10px;
+    transition: all .4s;
+    cursor: pointer;
+}
+
+.accountTable td .buttonFlexInTd button:active {
+    scale: 0.8;
+}
+
+.accountTable td .buttonFlexInTd button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.accountTable td .buttonFlexInTd button svg {
+    width: 100%;
+    height: 100%;
+    fill: #fff;
+}
+
+.accountTable .coverInTd {
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+    gap: 10px;
+}
+
+.accountTable .coverInTd .tableUserImage {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
 }

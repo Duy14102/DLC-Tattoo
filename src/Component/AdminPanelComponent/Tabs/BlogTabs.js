@@ -176,8 +176,8 @@ function BlogTabs({ axios, toast, ToastUpdate, useRef, useEffect }) {
                         />
                     </div>
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
-                        <button type='submit' className='yesForm'>Xong</button>
-                        <button type='button' onClick={() => setState({ wantAddBlog: false })} className='noForm'>Hủy</button>
+                        <button type='submit' className='yesForm yesNoButton'>Xong</button>
+                        <button type='button' onClick={() => setState({ wantAddBlog: false })} className='noForm yesNoButton'>Hủy</button>
                     </div>
                 </form>
             ) : null}

@@ -13,9 +13,8 @@ const UserSchema = new mongoose.Schema({
     },
 
     favourite: {
-        id: {
-            type: String
-        }
+        type: Array,
+        default: null
     },
 
     userimage: {
@@ -24,18 +23,8 @@ const UserSchema = new mongoose.Schema({
     },
 
     notification: {
-        title: {
-            type: String
-        },
-        message: {
-            type: String
-        },
-        status: {
-            type: Number
-        },
-        time: {
-            type: Date
-        }
+        type: Array,
+        default: null
     },
 
     role: {
@@ -43,8 +32,14 @@ const UserSchema = new mongoose.Schema({
     },
 
     status: {
-        default: 1,
-        type: Number
+        state: {
+            default: 1,
+            type: Number
+        },
+        reason: {
+            type: String,
+            default: null
+        }
     }
 }, { timestamps: { createdAt: true, updatedAt: false } })
 

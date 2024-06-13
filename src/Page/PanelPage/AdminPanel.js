@@ -6,24 +6,29 @@ import AdminMainBar from "../../Component/AdminPanelComponent/AdminMainBar"
 import { useEffect, useState } from "react"
 
 function AdminPanel() {
+    var decode = null
     const cookies = new Cookies()
     const token = cookies.get("TOKEN")
+    if (token) {
+        decode = jwtDecode(token)
+    }
     useEffect(() => {
-        const collapseBtn = document.getElementById("collapseBtn");
-        const container = document.querySelector(".mainAdminSideBar");
-        collapseBtn.addEventListener("click", () => {
-            const container2 = document.querySelector(".mainAdminSideBarCollapse");
-            if (container2) {
-                container.classList.remove("mainAdminSideBarCollapse");
-            } else {
-                container.classList.add("mainAdminSideBarCollapse");
-            }
-        });
-    }, [])
+        if (decode && decode.userRole === 2) {
+            const collapseBtn = document.getElementById("collapseBtn");
+            const container = document.querySelector(".mainAdminSideBar");
+            collapseBtn.addEventListener("click", () => {
+                const container2 = document.querySelector(".mainAdminSideBarCollapse");
+                if (container2) {
+                    container.classList.remove("mainAdminSideBarCollapse");
+                } else {
+                    container.classList.add("mainAdminSideBarCollapse");
+                }
+            });
+        }
+    }, [decode])
     if (!token) {
         return NotFound404()
     } else {
-        const decode = jwtDecode(token)
         if (decode.userRole !== 2) {
             return NotFound404()
         }

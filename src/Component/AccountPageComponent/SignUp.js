@@ -17,7 +17,8 @@ function SignUp({ useReducer, useRef, axios, toast, ToastUpdate }) {
                 url: `${process.env.REACT_APP_apiAddress}/api/v1/Register`,
                 data: {
                     phone: state.phone,
-                    password: state.password
+                    password: state.password,
+                    role: 1
                 }
             }
             toastNow.current = toast.loading("Chờ một chút...")

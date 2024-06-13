@@ -53,9 +53,20 @@ app.post("/api/v1/Register", (req, res) => {
         const user = new Accounts({
             phonenumber: req.body.phone,
             password: hashedPassword,
-            role: 1,
+            role: parseInt(req.body.role),
         });
-        user.save().then(() => {
+        user.save().then((resa) => {
+            if (req.body.avatar) {
+                cloudinary.uploader.upload(req.body.avatar, {
+                    public_id: resa._id, folder: "Avatar"
+                }).then((result) => {
+                    getAccounts.updateOne({ _id: resa._id }, {
+                        userimage: result.url
+                    }).exec()
+                }).catch(() => {
+                    return res.status(500).send("Đăng ký thất bại!")
+                })
+            }
             res.status(201).send("Đăng ký thành công!")
         }).catch(() => {
             res.status(500).send("Đăng ký thất bại!")
@@ -69,7 +80,7 @@ app.post("/api/v1/Login", (req, res) => {
         .then((user) => {
             if (req.body.type === "LoginUser") {
                 if (user.role !== 1) { return res.status(400).send("Tài khoản không hợp lệ!") }
-                if (user.status === 2) { return res.status(400).send("Tài khoản đã bị khóa!") }
+                if (user.status.state === 2) { return res.status(400).send("Tài khoản đã bị khóa!", user.status.reason) }
             } else {
                 if (user.role !== 2) { return res.status(400).send("Tài khoản không hợp lệ!") }
             }
@@ -105,6 +116,77 @@ app.get("/api/v1/GetAccounts", async (req, res) => {
         res.status(201).send(dataToSend)
     }).catch((err) => {
         res.status(404).send(err)
+    })
+})
+
+// Get All Accounts
+app.get("/api/v1/GetAllAccounts", async (req, res) => {
+    var getOrder = null
+    if (req.query.search) {
+        const regex = new RegExp(req.query.search, 'i')
+        getOrder = await getAccounts.find({ phonenumber: regex }).sort({ "status.state": 1, role: -1, createdAt: -1 })
+    } else {
+        getOrder = await getAccounts.find({}).sort({ "status.state": 1, role: -1, createdAt: -1 })
+    }
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+
+    const start = (page - 1) * limit
+    const end = page * limit
+
+    const results = {}
+    results.total = getOrder.length
+    results.pageCount = Math.ceil(getOrder.length / limit)
+
+    if (end < getOrder.length) {
+        results.next = {
+            page: page + 1
+        }
+    }
+    if (start > 0) {
+        results.prev = {
+            page: page - 1
+        }
+    }
+
+    results.result = getOrder.slice(start, end)
+    res.send({ results });
+})
+
+// Delete Account
+app.post("/api/v1/DeleteAccount", (req, res) => {
+    getAccounts.deleteOne({ _id: req.body.id }).then(async () => {
+        await cloudinary.uploader.destroy(`Avatar/${req.body.id}`).then(() => {
+            res.status(201).send("Xóa tài khoản thành công!")
+        }).catch(() => {
+            res.status(500).send("Xóa tài khoản thất bại!")
+        })
+    }).catch(() => {
+        res.status(500).send("Xóa tài khoản thất bại!")
+    })
+})
+
+// Ban Account
+app.post("/api/v1/BanAccount", (req, res) => {
+    getAccounts.updateOne({ _id: req.body.id }, {
+        "status.state": 2,
+        "status.reason": req.body.reason
+    }).then(() => {
+        res.status(201).send("Khóa tài khoản thành công!")
+    }).catch(() => {
+        res.status(500).send("Khóa tài khoản thất bại!")
+    })
+})
+
+// Unban Account
+app.post("/api/v1/UnbanAccount", (req, res) => {
+    getAccounts.updateOne({ _id: req.body.id }, {
+        "status.state": 1,
+        "status.reason": null
+    }).then(() => {
+        res.status(201).send("Mở tài khoản thành công!")
+    }).catch(() => {
+        res.status(500).send("Mở tài khoản thất bại!")
     })
 })
 
@@ -186,7 +268,7 @@ app.post("/api/v1/AddBlog", (req, res) => {
 
 // Get blogs
 app.get("/api/v1/GetBlogs", async (req, res) => {
-    const getOrder = await getBlogs.find({})
+    const getOrder = await getBlogs.find({}).sort({ createdAt: -1 })
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 

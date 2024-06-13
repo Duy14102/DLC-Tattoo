@@ -11,6 +11,7 @@ import AccountsTabs from "./Tabs/AccountsTabs"
 import { toast } from 'react-toastify';
 import ToastUpdate from '../Toastify/ToastUpdate';
 import { useRef } from "react"
+import GalleryTabs from "./Tabs/GalleryTabs"
 
 function AdminMainBar({ useState, token, useEffect }) {
     const [open, setOpen] = useState(false)
@@ -45,9 +46,11 @@ function AdminMainBar({ useState, token, useEffect }) {
                 ) : localStorage.getItem("tabs") === "Sample" ? (
                     <SampleTabs />
                 ) : localStorage.getItem("tabs") === "Blog" ? (
-                    <BlogTabs axios={axios} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} useEffect={useEffect}/>
+                    <BlogTabs axios={axios} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} useEffect={useEffect} />
                 ) : localStorage.getItem("tabs") === "Accounts" ? (
-                    <AccountsTabs />
+                    <AccountsTabs toast={toast} useRef={useRef} axios={axios} ToastUpdate={ToastUpdate} useEffect={useEffect} />
+                ) : localStorage.getItem("tabs") === "Gallery" ? (
+                    <GalleryTabs />
                 ) : null}
             </div>
             <AdminAccountModal open={open} setOpen={setOpen} axios={axios} token={token} type={type} getAccounts={getAccounts} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} />
