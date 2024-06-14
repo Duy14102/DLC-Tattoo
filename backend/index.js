@@ -36,6 +36,11 @@ app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 5
 app.use(bodyParser.text({ limit: '200mb' }));
 app.use(express.json());
 app.use(cors());
+const socketIo = require("socket.io")(server, {
+    cors: {
+        origin: "*",
+    }
+});
 
 server.listen(3000);
 
@@ -88,6 +93,9 @@ app.post("/api/v1/Login", (req, res) => {
                 if (!passwordCheck) {
                     return res.status(400).send("Sai mật khẩu!")
                 }
+                getAccounts.updateOne({ _id: user._id }, {
+                    lastLogin: Date.now()
+                }).exec()
                 //   create JWT token
                 const token = jwt.sign(
                     {
@@ -335,4 +343,21 @@ app.post("/api/v1/UpdateBlog", async (req, res) => {
         })
     }
     res.status(201).send("Cập nhật blog thành công!")
+})
+
+
+
+//                                              SOCKET IO
+
+socketIo.on("connection", (socket) => {
+    socket.on("BanAccount", function (data) {
+        getAccounts.updateOne({ _id: data.id }, {
+            "status.state": 2,
+            "status.reason": data.reason
+        }).then(() => {
+            socketIo.emit("BanAccountSuccess", { id: data.id, Tokenid: data.Tokenid });
+        }).catch(() => {
+            socketIo.emit("BanAccountFail", { Tokenid: data.Tokenid });
+        })
+    })
 })

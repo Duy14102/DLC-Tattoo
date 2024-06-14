@@ -1,11 +1,14 @@
 import axios from "axios"
 import { jwtDecode } from "jwt-decode"
-import { useState } from "react"
+import { useState, useRef } from "react"
+import socketIOClient from "socket.io-client";
 
 function GetAccounts({ token, useEffect, NavLink, cookies }) {
+    const socketRef = useRef();
     const [accounts, setAccounts] = useState(null)
     const decode = jwtDecode(token)
     useEffect(() => {
+        socketRef.current = socketIOClient.connect("http://localhost:3000")
         const configuration = {
             method: "get",
             url: `${process.env.REACT_APP_apiAddress}/api/v1/GetAccounts`,
@@ -16,6 +19,17 @@ function GetAccounts({ token, useEffect, NavLink, cookies }) {
         axios(configuration).then((res) => {
             setAccounts(res.data)
         })
+
+        socketRef.current.on('BanAccountSuccess', data => {
+            if (decode.userId === data.id) {
+                cookies.remove("TOKEN", { path: '/' });
+                window.location.href = "/"
+            }
+        })
+        return () => {
+            socketRef.current.disconnect();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [decode.userId])
 
     const logoutUser = () => {

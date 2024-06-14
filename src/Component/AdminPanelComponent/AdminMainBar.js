@@ -48,7 +48,7 @@ function AdminMainBar({ useState, token, useEffect }) {
                 ) : localStorage.getItem("tabs") === "Blog" ? (
                     <BlogTabs axios={axios} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} useEffect={useEffect} />
                 ) : localStorage.getItem("tabs") === "Accounts" ? (
-                    <AccountsTabs toast={toast} useRef={useRef} axios={axios} ToastUpdate={ToastUpdate} useEffect={useEffect} />
+                    <AccountsTabs toast={toast} useRef={useRef} axios={axios} ToastUpdate={ToastUpdate} useEffect={useEffect} id={token.userId} />
                 ) : localStorage.getItem("tabs") === "Gallery" ? (
                     <GalleryTabs />
                 ) : null}

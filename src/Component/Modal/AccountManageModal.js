@@ -1,7 +1,31 @@
 import Modal from "react-responsive-modal"
+import socketIOClient from "socket.io-client";
 
-function AccountManageModal({ open, setOpen, axios, getAccounts, toast, ToastUpdate, id, useRef }) {
+function AccountManageModal({ open, setOpen, axios, getAccounts, toast, ToastUpdate, id, useRef, useEffect, Tokenid }) {
     const toastNow = useRef(null)
+    const socketRef = useRef();
+    useEffect(() => {
+        socketRef.current = socketIOClient.connect("http://localhost:3000")
+
+        socketRef.current.on('BanAccountSuccess', data => {
+            if (data.Tokenid === Tokenid) {
+                setOpen({ modal: false, type: null, dataModalPass: null, reasonBan: "" })
+                getAccounts()
+                ToastUpdate({ type: 1, message: "Khóa tài khoản thành công!", refCur: toastNow.current })
+            }
+        })
+
+        socketRef.current.on('BanAccountFail', data => {
+            if (data.Tokenid === Tokenid) {
+                ToastUpdate({ type: 2, message: "Khóa tài khoản thất bại", refCur: toastNow.current })
+            }
+        })
+
+        return () => {
+            socketRef.current.disconnect();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
     function deleteAccounts() {
         const configuration = {
             method: "post",
@@ -22,22 +46,9 @@ function AccountManageModal({ open, setOpen, axios, getAccounts, toast, ToastUpd
 
     function banAccounts(e) {
         e.preventDefault()
-        const configuration = {
-            method: "post",
-            url: `${process.env.REACT_APP_apiAddress}/api/v1/BanAccount`,
-            data: {
-                id: id,
-                reason: open.reasonBan
-            }
-        }
         toastNow.current = toast.loading("Chờ một chút...")
-        axios(configuration).then((res) => {
-            setOpen({ modal: false, type: null, dataModalPass: null, reasonBan: "" })
-            getAccounts()
-            ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
-        }).catch((err) => {
-            ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })
-        })
+        const data = { id: id, reason: open.reasonBan, Tokenid: Tokenid }
+        socketRef.current.emit('BanAccount', data)
     }
 
     function UnbanAccounts() {

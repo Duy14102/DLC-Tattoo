@@ -40,6 +40,10 @@ const UserSchema = new mongoose.Schema({
             type: String,
             default: null
         }
+    },
+
+    lastLogin: {
+        type: Date
     }
 }, { timestamps: { createdAt: true, updatedAt: false } })
 
