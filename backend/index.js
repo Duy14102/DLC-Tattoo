@@ -49,6 +49,8 @@ const Accounts = require("./model/Accounts");
 const getAccounts = mongoose.model("Accounts");
 const Blogs = require("./model/Blogs");
 const getBlogs = mongoose.model("Blogs");
+const Samples = require("./model/Samples");
+const getSamples = mongoose.model("Samples");
 
 // Api
 
@@ -129,13 +131,8 @@ app.get("/api/v1/GetAccounts", async (req, res) => {
 
 // Get All Accounts
 app.get("/api/v1/GetAllAccounts", async (req, res) => {
-    var getOrder = null
-    if (req.query.search) {
-        const regex = new RegExp(req.query.search, 'i')
-        getOrder = await getAccounts.find({ phonenumber: regex }).sort({ "status.state": 1, role: -1, createdAt: -1 })
-    } else {
-        getOrder = await getAccounts.find({}).sort({ "status.state": 1, role: -1, createdAt: -1 })
-    }
+    const sortedSwitch = parseInt(req.query.sorted)
+    const getOrder = await getAccounts.find(req.query.search ? { phonenumber: new RegExp(req.query.search, 'i') } : {}).sort(sortedSwitch === 1 ? { phonenumber: -1 } : sortedSwitch === -1 ? { phonenumber: 1 } : sortedSwitch === 2 ? { createdAt: -1 } : sortedSwitch === -2 ? { createdAt: 1 } : sortedSwitch === 3 ? { lastLogin: -1 } : sortedSwitch === -3 ? { lastLogin: 1 } : sortedSwitch === 4 ? { role: -1 } : sortedSwitch === -4 ? { role: 1 } : sortedSwitch === 5 ? { "status.state": -1 } : sortedSwitch === -5 ? { "status.state": 1 } : { "status.state": 1, role: -1, createdAt: -1 })
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
@@ -276,7 +273,7 @@ app.post("/api/v1/AddBlog", (req, res) => {
 
 // Get blogs
 app.get("/api/v1/GetBlogs", async (req, res) => {
-    const getOrder = await getBlogs.find({}).sort({ createdAt: -1 })
+    const getOrder = await getBlogs.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
@@ -345,6 +342,72 @@ app.post("/api/v1/UpdateBlog", async (req, res) => {
     res.status(201).send("Cập nhật blog thành công!")
 })
 
+// add sample
+app.post("/api/v1/AddSample", (req, res) => {
+    const blog = new Samples({
+        title: req.body.title,
+        content: req.body.content,
+        price: req.body.price,
+        categories: req.body.categories,
+        session: req.body.session
+    });
+    blog.save().then((resa) => {
+        cloudinary.uploader.upload(req.body.thumbnail, {
+            public_id: resa._id, folder: "Sample"
+        }).then((result) => {
+            getSamples.updateOne({ _id: resa._id }, {
+                thumbnail: result.url
+            }).then(() => {
+                res.status(201).send("Tạo hình thành công!")
+            })
+        }).catch(() => {
+            res.status(500).send("Tạo hình thất bại!")
+        })
+    }).catch(() => {
+        res.status(500).send("Tạo hình thất bại!")
+    })
+})
+
+// Get all samples
+app.get("/api/v1/GetAllSample", async (req, res) => {
+    const getOrder = await getSamples.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+
+    const start = (page - 1) * limit
+    const end = page * limit
+
+    const results = {}
+    results.total = getOrder.length
+    results.pageCount = Math.ceil(getOrder.length / limit)
+
+    if (end < getOrder.length) {
+        results.next = {
+            page: page + 1
+        }
+    }
+    if (start > 0) {
+        results.prev = {
+            page: page - 1
+        }
+    }
+
+    results.result = getOrder.slice(start, end)
+    res.send({ results });
+})
+
+// Delete Sample
+app.post("/api/v1/DeleteSample", async (req, res) => {
+    await cloudinary.uploader.destroy(`Sample/${req.body.id}`).then(() => {
+        getSamples.deleteOne({ _id: req.body.id }).then(() => {
+            res.status(201).send("Xóa hình thành công!")
+        }).catch(() => {
+            res.status(500).send("Xóa hình thất bại!")
+        })
+    }).catch(() => {
+        res.status(500).send("Xóa hình thất bại!")
+    })
+})
 
 
 //                                              SOCKET IO

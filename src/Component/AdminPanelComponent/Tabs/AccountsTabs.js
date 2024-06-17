@@ -1,10 +1,12 @@
 import { useReducer } from "react"
 import ReactPaginate from "react-paginate";
 import AccountManageModal from "../../Modal/AccountManageModal";
+import SearchBar from "./SearchBar";
 
 function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
     const toastNow = useRef(null)
     const currentPage = useRef();
+    const sortPlace = [{ title: "Thông tin cá nhân", x: 1, y: -1 }, { title: "Ngày gia nhập", x: 2, y: -2 }, { title: "Lần cuối truy cập", x: 3, y: -3 }, { title: "Vai trò", x: 4, y: -4 }, { title: "Trạng thái", x: 5, y: -5 },]
     const limit = 8
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         phone: "",
@@ -12,6 +14,7 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
         repeatPassword: "",
         reasonBan: "",
         search: "",
+        sorted: null,
         contentSearch: null,
         avatar: null,
         accounts: null,
@@ -30,19 +33,6 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.contentSearch])
 
-    useEffect(() => {
-        if (state.search !== "") {
-            const debounceResult = setTimeout(() => {
-                setState({ contentSearch: state.search })
-            }, 750);
-            return () => clearTimeout(debounceResult)
-        } else {
-            setTimeout(() => {
-                setState({ contentSearch: null })
-            }, 750);
-        }
-    }, [state.search])
-
     function getAccounts() {
         const configuration = {
             method: "get",
@@ -50,10 +40,12 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
             params: {
                 page: currentPage.current,
                 limit: limit,
-                search: state.contentSearch
+                search: state.contentSearch,
+                sorted: state.sorted
             }
         }
         axios(configuration).then((res) => {
+            console.log(res.data.results.result);
             setState({ accounts: res.data.results.result, pageCount: res.data.results.pageCount });
         })
     }
@@ -61,6 +53,15 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
     function handlePageClick(e) {
         currentPage.current = e.selected + 1
         getAccounts();
+    }
+
+    function handleSorted(x, y) {
+        if (state.sorted) {
+            state.sorted === x ? setState({ sorted: y }) : setState({ sorted: x })
+        } else {
+            setState({ sorted: x })
+        }
+        getAccounts()
     }
 
     function convertToBase64(e) {
@@ -103,9 +104,7 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
     return (
         <>
             <div className="topBlobTaps">
-                <form className="findSomething">
-                    <input onChange={(e) => setState({ search: e.target.value })} type="text" placeholder="Tìm kiếm..." required />
-                </form>
+                <SearchBar state={state} setState={setState} useEffect={useEffect} />
                 <button onClick={() => state.wantAddAdmin ? setState({ wantAddAdmin: false }) : setState({ wantAddAdmin: true })} className="addNewBlog">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d={state.wantAddAdmin ? "M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM471 143c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" : "M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"} /></svg> {state.wantAddAdmin ? "Bỏ tạo" : "Tạo admin"}
                 </button>
@@ -113,6 +112,7 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
             {state.wantAddAdmin ? (
                 <div style={{ display: "flex", justifyContent: "center" }}>
                     <form onSubmit={(e) => submitSignup(e)} className="formNewBlogs" style={{ width: "60%" }}>
+                        <p style={{ color: "#fff", fontFamily: "Oswald", margin: 0, textAlign: "end" }}>* Lưu ý : Ảnh nên dưới <b style={{ color: "#904d03" }}>1mb</b> để tối ưu website</p>
                         <div className='separateUp'>
                             <div className="titlePlace" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
                                 <input style={{ fontSize: 18, height: 55 }} type="tel" className="accountInput" value={state.phone} onChange={(e) => setState({ phone: e.target.value })} placeholder="Số điện thoại..." required />
@@ -157,38 +157,20 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
             ) : null}
             <table className="accountTable">
                 <thead>
-                    <tr><th><div className="flexInThead">
-                        Thông tin cá nhân
-                        <div className="sortInThead">
-                            <span>▲</span>
-                            <span>▲</span>
-                        </div>
-                    </div>
-                    </th><th><div className="flexInThead">
-                        Ngày gia nhập
-                        <div className="sortInThead">
-                            <span>▲</span>
-                            <span>▲</span>
-                        </div>
-                    </div></th><th><div className="flexInThead">
-                        Lần cuối xuất hiện
-                        <div className="sortInThead">
-                            <span>▲</span>
-                            <span>▲</span>
-                        </div>
-                    </div></th><th><div className="flexInThead">
-                        Vai trò
-                        <div className="sortInThead">
-                            <span>▲</span>
-                            <span>▲</span>
-                        </div>
-                    </div></th><th><div className="flexInThead">
-                        Trạng thái
-                        <div className="sortInThead">
-                            <span>▲</span>
-                            <span>▲</span>
-                        </div>
-                    </div></th>
+                    <tr>
+                        {sortPlace.map((u, index) => {
+                            return (
+                                <th key={index}>
+                                    <div onClick={() => handleSorted(u.x, u.y)} className="flexInThead">
+                                        {u.title}
+                                        <div className="sortInThead">
+                                            <span style={{ color: state.sorted === u.x ? "#904d03" : null }}>▲</span>
+                                            <span style={{ color: state.sorted === u.y ? "#904d03" : null }}>▲</span>
+                                        </div>
+                                    </div>
+                                </th>
+                            )
+                        })}
                         <th>&nbsp;</th>
                     </tr>
                 </thead>

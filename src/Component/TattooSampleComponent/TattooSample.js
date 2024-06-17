@@ -12,8 +12,10 @@ function TattooSample() {
                         <option value={null} hidden>Sắp xếp</option>
                         <option value={null}>Mới nhất trước</option>
                         <option value={null}>Cũ nhất trước</option>
-                        <option value={null}>Giá cao tới thấp</option>
+                        <option value={null}>Ít buổi nhất</option>
+                        <option value={null}>Nhiều buổi nhất</option>
                         <option value={null}>Giá thấp tới cao</option>
+                        <option value={null}>Giá cao tới thấp</option>
                     </select>
                 </div>
                 <div className="sampleCover">

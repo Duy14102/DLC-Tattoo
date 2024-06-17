@@ -44,7 +44,7 @@ function AdminMainBar({ useState, token, useEffect }) {
                 ) : localStorage.getItem("tabs") === "Booking" ? (
                     <BookingTabs />
                 ) : localStorage.getItem("tabs") === "Sample" ? (
-                    <SampleTabs />
+                    <SampleTabs useEffect={useEffect} axios={axios} useRef={useRef} toast={toast} ToastUpdate={ToastUpdate} />
                 ) : localStorage.getItem("tabs") === "Blog" ? (
                     <BlogTabs axios={axios} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} useEffect={useEffect} />
                 ) : localStorage.getItem("tabs") === "Accounts" ? (
