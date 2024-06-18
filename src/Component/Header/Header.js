@@ -24,7 +24,7 @@ function Header() {
                 </NavLink>
                 <div className="barsNextToBrand">
                     <NavLink reloadDocument to={"/"}>Trang chủ</NavLink>
-                    <NavLink reloadDocument to={"/TattooSamplePage"}>Hình Mẫu</NavLink>
+                    <NavLink reloadDocument to={"/TattooSamplePage/Newtoold/All/All"}>Hình Mẫu</NavLink>
                     <NavLink reloadDocument to={"/GalleryPage"}>Hậu trường</NavLink>
                     <NavLink reloadDocument to={"/BookingPage"}>Booking</NavLink>
                     <NavLink reloadDocument to={"/BlogPage"}>Blog</NavLink>

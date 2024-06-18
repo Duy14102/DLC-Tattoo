@@ -10,11 +10,21 @@ const SampleSchema = new mongoose.Schema({
     },
 
     categories: {
-        type: Array
+        data: {
+            type: Array
+        },
+        count: {
+            type: Number
+        }
     },
 
     rate: {
-        type: Array
+        data: {
+            type: Array
+        },
+        count: {
+            type: Number
+        }
     },
 
     price: {
@@ -26,7 +36,12 @@ const SampleSchema = new mongoose.Schema({
     },
 
     session: {
-        type: Array
+        data: {
+            type: Array
+        },
+        count: {
+            type: Number
+        }
     },
 
     lastUpdate: {

@@ -9,34 +9,24 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
     const limit = 4
     const AllCate = ["Bắp tay", "Cẳng tay", "Bàn tay", "Bắp chân", "Cẳng chân", "Bàn chân", "Cổ", "Sườn", "Ngực", "Bụng", "Mông", "Vai", "Lưng"]
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
-        search: "", title: "", content: "", thumbnail: "", openCateChooseInput: "", openCateChooseInput2: "", updateTitle: "", updateContent: "", updateThumbnail: "",
-        price: undefined,
+        search: "", title: "", content: "", thumbnail: "", openCateChooseInput: "", openCateChooseInput2: "", updateTitle: "", updateContent: "", updateThumbnail: "", updatePrice: undefined,
+        updateCateChoose: [],
+        updateSessionAdd: [],
         cateChoose: [],
         sessionAdd: [],
+        price: undefined,
         allSamples: null,
-        openCateChooseInputResult: null,
-        openCateChooseInputResult2: null,
+        openCateChooseInputResult: null, openCateChooseInputResult2: null,
         indexChange: null,
         contentSearch: null,
-        sessionTitle: undefined,
-        sessionPrice: undefined,
-        sessionTime: undefined,
-        sessionContent: undefined,
-        modalOpen: false,
-        modalType: null,
-        modalData: null,
-        modalIndex: null,
+        sessionTitle: undefined, sessionPrice: undefined, sessionTime: undefined, sessionContent: undefined,
+        modalOpen: false, modalType: null, modalData: null, modalData2: null, modalIndex: null,
         warningCate: false,
-        openCateChooseButton: false,
-        openCateChooseButton2: false,
-        wantDelete: false,
-        wantChangeTitle: false,
-        wantChangeContent: false,
-        wantChangeCate: false,
-        wantChangeSession: false,
-        warningAddSession: null,
-        warningUpdateSession: null,
+        openCateChooseButton: false, openCateChooseButton2: false,
+        wantDelete: false, wantChangeTitle: false, wantChangeContent: false, wantChangeCate: false, wantChangeSession: false, wantChangePrice: false,
+        warningAddSession: null, warningUpdateSession2: null, warningUpdateSession: null,
         wantAddSample: false,
+        appearWarning: false,
         pageCount: 6
     })
 
@@ -82,7 +72,8 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
             params: {
                 page: currentPage.current,
                 limit: limit,
-                search: state.contentSearch
+                search: state.contentSearch,
+                type: 2,
             }
         }
         axios(configuration).then((res) => {
@@ -107,6 +98,8 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         }
     }
 
+    const rating = stars => '★★★★★☆☆☆☆☆'.slice(5 - stars, 10 - stars);
+
     function addNewSample(e) {
         e.preventDefault()
         if (state.cateChoose.length < 1) {
@@ -116,6 +109,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         if (parseInt(state.sessionAdd.reduce((acc, o) => { return acc + parseInt(o.price) }, 0)) > parseInt(state.price)) {
             return false
         }
+        const cateNamed = state.cateChoose.map(z => { return { cate: z } })
         const configuration = {
             method: "post",
             url: `${process.env.REACT_APP_apiAddress}/api/v1/AddSample`,
@@ -124,7 +118,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                 content: state.content,
                 price: state.price,
                 thumbnail: state.thumbnail,
-                categories: state.cateChoose,
+                categories: cateNamed,
                 session: state.sessionAdd
             }
         }
@@ -138,16 +132,22 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         })
     }
 
-    function wrapCateChoose(e) {
-        const chooseThis = state.cateChoose
-        chooseThis.push(e)
-        setState({ cateChoose: chooseThis })
+    function wrapCateChoose(e, type) {
+        var chooseThis = type === 1 ? state.cateChoose : state.updateCateChoose
+        chooseThis.push(e);
+        setState(type === 1 ? { cateChoose: chooseThis } : { updateCateChoose: chooseThis })
     }
 
     function deleteItem(e, type) {
         const chooseThis = type === 1 ? state.cateChoose : state.sessionAdd
         chooseThis.splice(e, 1)
         setState(type === 1 ? { cateChoose: chooseThis } : { sessionAdd: chooseThis })
+    }
+
+    function deleteItem2(e, type) {
+        const chooseThis = type === 1 ? state.updateCateChoose : state.updateSessionAdd
+        chooseThis.splice(e, 1)
+        setState(type === 1 ? { updateCateChoose: chooseThis } : { updateSessionAdd: chooseThis })
     }
 
     function deleteSamples(e) {
@@ -168,30 +168,40 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         })
     }
 
-    // function updateSamples(e) {
-    //     const configuration = {
-    //         method: "post",
-    //         url: `${process.env.REACT_APP_apiAddress}/api/v1/UpdateBlog`,
-    //         data: {
-    //             id: e,
-    //             title: state.updateTitle,
-    //             subtitle: state.updateSubtitle,
-    //             thumbnail: state.updateThumbnail,
-    //             content: state.updateContent
-    //         }
-    //     }
-    //     toastNow.current = toast.loading("Chờ một chút...")
-    //     axios(configuration).then((res) => {
-    //         setState({ indexChange: null, wantChangeContent: false, wantChangeSubtitle: false, wantChangeTitle: false, updateContent: "", updateSubtitle: "", updateThumbnail: "", updateTitle: "", appearWarning: true })
-    //         getBlogs()
-    //         ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
-    //         setTimeout(() => {
-    //             setState({ appearWarning: false })
-    //         }, 5000);
-    //     }).catch((err) => {
-    //         ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })
-    //     })
-    // }
+    function updateSamples(e) {
+        const renamedCate = []
+        state.updateCateChoose.some(t => {
+            if (!Object.hasOwn(t, 'cate')) {
+                t = { cate: t }
+            }
+            renamedCate.push(t)
+            return null
+        })
+        const configuration = {
+            method: "post",
+            url: `${process.env.REACT_APP_apiAddress}/api/v1/UpdateSample`,
+            data: {
+                id: e,
+                title: state.updateTitle,
+                thumbnail: state.updateThumbnail,
+                content: state.updateContent,
+                price: state.updatePrice,
+                categories: renamedCate,
+                session: state.updateSessionAdd
+            }
+        }
+        toastNow.current = toast.loading("Chờ một chút...")
+        axios(configuration).then((res) => {
+            setState({ indexChange: null, wantChangeContent: false, wantChangeCate: false, wantChangeSession: false, wantChangePrice: false, wantChangeTitle: false, updateContent: "", updateThumbnail: "", updateTitle: "", updateCateChoose: [], updateSessionAdd: [], updatePrice: undefined, appearWarning: true })
+            getSamples()
+            ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
+            setTimeout(() => {
+                setState({ appearWarning: false })
+            }, 5000);
+        }).catch((err) => {
+            ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })
+        })
+    }
     return (
         <>
             <div className="topBlobTaps">
@@ -250,7 +260,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                                     {AllCate.filter((word) => state.openCateChooseInputResult ? word.includes(state.openCateChooseInputResult) : word).map((i) => {
                                         return (
                                             state.cateChoose.includes(i) ? null : (
-                                                <div onClick={() => state.cateChoose.length === 6 ? null : wrapCateChoose(i)} key={i} className="autoCompleteResult">{i}</div>
+                                                <div onClick={() => state.cateChoose.length === 6 ? null : wrapCateChoose(i, 1)} key={i} className="autoCompleteResult">{i}</div>
                                             )
                                         )
                                     })}
@@ -282,6 +292,9 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                     </form>
                 </div>
             ) : null}
+            {state.appearWarning ? (
+                <p style={{ margin: 0, textAlign: "end", fontFamily: "Oswald,sans serif", letterSpacing: 1, color: "#999", fontSize: 14 }}>Lưu ý : Sau khi update ảnh hoặc nội dung hãy F5 để cập nhật!</p>
+            ) : null}
             <div className='blogAllWrap'>
                 {state.allSamples?.map((i, index) => {
                     return (
@@ -307,59 +320,91 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                                     <input onChange={(e) => convertToBase64(e, 2, index)} type='file' style={{ opacity: 0, width: "100%", height: "100%", position: "absolute", left: 0, top: 0, cursor: "pointer" }} />
                                 </div>
                             </div>
-                            <div style={{ cursor: state.wantChangeCate ? null : "pointer", marginTop: 15 }} onClick={() => setState({ wantChangeCate: true, indexChange: index })} className={state.wantChangeCate ? 'chooseCateSample wantChange' : 'chooseCateSample'}>
-                                {state.wantChangeCate ? null : (
+                            <div className="upperContent">
+                                <div style={{ width: "100%", marginTop: 15 }} onClick={() => setState({ wantChangePrice: true, indexChange: index })} className={state.wantChangePrice ? 'blogAllContentTitle wantChange' : 'blogAllContentTitle'}>
+                                    <input placeholder={i.price || state.updatePrice ? null : "Giá cả..."} type="number" onChange={(e) => setState({ updatePrice: e.target.value })} style={{ pointerEvents: state.wantChangePrice && state.indexChange === index ? "auto" : "none" }} defaultValue={i.price} />
+                                    {state.wantChangePrice ? null : (
+                                        <svg className='svgAppear' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" /></svg>
+                                    )}
+                                </div>
+                            </div>
+                            <div style={{ cursor: state.wantChangeCate ? null : "pointer", marginTop: 15 }} onClick={() => setState({ wantChangeCate: true, indexChange: index, updateCateChoose: i.categories.data })} className={state.wantChangeCate ? 'chooseCateSample wantChange' : 'chooseCateSample'}>
+                                {state.wantChangeCate && state.indexChange === index ? null : (
                                     <svg className='svgAppear' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" /></svg>
                                 )}
                                 <div className="sonChooseCateSample">
-                                    {i.categories.length > 0 ? (
+                                    {i.categories.data.length > 0 && (!state.wantChangeCate || (state.wantChangeCate && state.indexChange !== index)) ? (
                                         <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: "100%" }}>
-                                            {i.categories.map((u, indexU) => {
+                                            {i.categories.data.map((u) => {
                                                 return (
-                                                    <div key={u} className="squareChoose">
-                                                        <button type="button">x</button>
-                                                        <p>{u}</p>
+                                                    <div key={u.cate} className="squareChoose">
+                                                        <p>{u.cate}</p>
                                                     </div>
                                                 )
                                             })}
                                         </div>
+                                    ) : state.wantChangeCate && state.indexChange === index ? (
+                                        <>
+                                            <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: "100%" }}>
+                                                {state.updateCateChoose.map((u, indexU) => {
+                                                    return (
+                                                        <div key={indexU} className="squareChoose">
+                                                            <button onClick={() => deleteItem2(indexU, 1)} type="button">x</button>
+                                                            <p>{u.cate || u}</p>
+                                                        </div>
+                                                    )
+                                                })}
+                                            </div>
+                                            <div className="findChooseFather" style={{ width: state.updateCateChoose.length < 1 ? "100%" : "60%" }}>
+                                                <input style={{ pointerEvents: state.wantChangeCate ? null : "none" }} value={state.openCateChooseInput2} onChange={(e) => setState({ openCateChooseInput2: e.target.value })} type="text" className="findChoose" placeholder="Danh mục..." />
+                                            </div>
+                                        </>
                                     ) : null}
-                                    <div className="findChooseFather" style={{ width: i.categories.length < 1 ? "100%" : "60%" }}>
-                                        <input style={{ pointerEvents: state.wantChangeCate ? null : "none" }} value={state.openCateChooseInput2} onChange={(e) => setState({ openCateChooseInput2: e.target.value })} type="text" className="findChoose" placeholder="Danh mục..." />
-                                    </div>
                                 </div>
-                                <span onClick={() => state.openCateChooseButton2 ? setState({ openCateChooseButton2: false }) : setState({ openCateChooseButton2: true })}>{state.openCateChooseButton2 ? "▲" : "▼"}</span>
-                                {state.openCateChooseButton2 || state.openCateChooseInputResult2 ? (
+                                <span onClick={() => state.openCateChooseButton2 ? setState({ openCateChooseButton2: false }) : setState({ openCateChooseButton2: true, indexChange: index })}>{state.openCateChooseButton2 && state.indexChange === index ? "▲" : "▼"}</span>
+                                {(state.openCateChooseButton2 || state.openCateChooseInputResult2) && state.indexChange === index ? (
                                     <div className="autoCompleteChooseCate">
-                                        {i.categories.length === 6 ? (
+                                        {state.updateCateChoose.length === 6 ? (
                                             <p style={{ margin: 0, fontFamily: "Oswald", color: "tomato", paddingLeft: 15 }}>Đã đạt tối đa 6 danh mục!</p>
                                         ) : null}
                                         {AllCate.filter((word) => state.openCateChooseInputResult2 ? word.includes(state.openCateChooseInputResult2) : word).map((z) => {
                                             return (
-                                                i.categories.includes(z) ? null : (
-                                                    <div onClick={() => i.categories.length === 6 ? null : wrapCateChoose(z)} key={z} className="autoCompleteResult">{z}</div>
+                                                state.updateCateChoose.some(item => item.cate === z || item === z) ? null : (
+                                                    <div onClick={() => state.updateCateChoose.length === 6 ? null : wrapCateChoose(z, 2)} key={z} className="autoCompleteResult">{z}</div>
                                                 )
                                             )
                                         })}
                                     </div>
                                 ) : null}
                             </div>
-                            <div style={{ cursor: state.wantChangeSession ? null : "pointer" }} onClick={() => setState({ wantChangeSession: true, indexChange: index })} className={state.wantChangeSession ? 'sessionUnderAdd wantChange' : 'sessionUnderAdd'}>
+                            <div style={{ cursor: state.wantChangeSession ? null : "pointer" }} onClick={() => setState({ wantChangeSession: true, indexChange: index, updateSessionAdd: i.session.data })} className={state.wantChangeSession ? 'sessionUnderAdd wantChange' : 'sessionUnderAdd'}>
                                 {state.wantChangeSession ? null : (
                                     <svg className='svgAppear' xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d="M402.6 83.2l90.2 90.2c3.8 3.8 3.8 10 0 13.8L274.4 405.6l-92.8 10.3c-12.4 1.4-22.9-9.1-21.5-21.5l10.3-92.8L388.8 83.2c3.8-3.8 10-3.8 13.8 0zm162-22.9l-48.8-48.8c-15.2-15.2-39.9-15.2-55.2 0l-35.4 35.4c-3.8 3.8-3.8 10 0 13.8l90.2 90.2c3.8 3.8 10 3.8 13.8 0l35.4-35.4c15.2-15.3 15.2-40 0-55.2zM384 346.2V448H64V128h229.8c3.2 0 6.2-1.3 8.5-3.5l40-40c7.6-7.6 2.2-20.5-8.5-20.5H48C21.5 64 0 85.5 0 112v352c0 26.5 21.5 48 48 48h352c26.5 0 48-21.5 48-48V306.2c0-10.7-12.9-16-20.5-8.5l-40 40c-2.2 2.3-3.5 5.3-3.5 8.5z" /></svg>
                                 )}
-                                <button style={state.wantChangeSession ? null : { pointerEvents: "none" }} type="button" className="plusSession">+ Buổi</button>
-                                {i.session.length > 0 ? (
+                                {i.session.data?.length > 0 && (!state.wantChangeSession || (state.wantChangeSession && state.indexChange !== index)) ? (
                                     <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: "100%", pointerEvents: state.wantChangeSession ? null : "none" }}>
-                                        {i.session.map((y, indexY) => {
+                                        {i.session.data.map((y, indexY) => {
                                             return (
                                                 <div key={indexY} className="squareChoose plusSessionChooseButton">
-                                                    <button>x</button>
                                                     <p>{y.title}</p>
                                                 </div>
                                             )
                                         })}
                                     </div>
+                                ) : state.wantChangeSession && state.indexChange === index ? (
+                                    <>
+                                        <button onClick={() => setState({ modalOpen: true, modalType: 3, modalData: i })} style={state.wantChangeSession ? null : { pointerEvents: "none" }} type="button" className="plusSession">+ Buổi</button>
+                                        <div style={{ display: "flex", gap: 10, alignItems: "center", flexWrap: "wrap", maxWidth: "100%", pointerEvents: state.wantChangeSession ? null : "none" }}>
+                                            {state.updateSessionAdd.map((y, indexY) => {
+                                                return (
+                                                    <div key={indexY} className="squareChoose plusSessionChooseButton">
+                                                        <button onClick={() => deleteItem2(indexY, 2)}>x</button>
+                                                        <p onClick={() => setState({ modalOpen: true, modalType: 4, modalData: y, modalData2: i, modalIndex: indexY })}>{y.title}</p>
+                                                    </div>
+                                                )
+                                            })}
+                                        </div>
+                                    </>
                                 ) : null}
                             </div>
                             <div className='botContent'>
@@ -369,17 +414,26 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                                         <button onClick={() => deleteSamples(i._id)}>Xóa</button>
                                         <button onClick={() => setState({ wantDelete: false, indexChange: null })} style={{ background: "#999" }}>Hủy</button>
                                     </div>
-                                ) : state.wantChangeTitle || state.updateThumbnail !== "" || state.wantChangeContent || state.wantChangeSession || state.wantChangeCate ? (
+                                ) : state.wantChangeTitle || state.updateThumbnail !== "" || state.wantChangeContent || state.wantChangeSession || state.wantChangeCate || state.wantChangePrice ? (
                                     state.indexChange === index ? (
                                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                            <button style={{ background: "#904d03" }}>Cập nhật</button>
-                                            <button onClick={() => setState({ wantChangeTitle: false, updateThumbnail: "", wantChangeContent: false, wantChangeSession: false, wantChangeCate: false, indexChange: null })} style={{ background: "#999" }}>Hủy</button>
+                                            <button onClick={() => updateSamples(i._id)} style={{ background: "#904d03" }}>Cập nhật</button>
+                                            <button onClick={() => setState({ wantChangeTitle: false, updateThumbnail: "", wantChangeContent: false, wantChangeSession: false, wantChangePrice: false, wantChangeCate: false, indexChange: null, updateCateChoose: [], updateSessionAdd: [], updatePrice: undefined })} style={{ background: "#999" }}>Hủy</button>
                                         </div>
                                     ) : null
                                 ) : (
                                     <button onClick={() => setState({ wantDelete: true, indexChange: index })} className='yesDelete'>Xóa hình</button>
                                 )}
-                                <p className='textDate'>{new Date(i.createdAt).toLocaleString()}</p>
+                                <p className='textDate'>{new Date(i.createdAt).toLocaleString()} - {i.rate.length > 0 ? (
+                                    i.rate.map((s, indexS) => {
+                                        return (
+                                            <span className="starRate" key={indexS}>{rating(s.star)}</span>
+                                        )
+                                    })
+                                ) : (
+                                    <span className="starRate">{rating(5)}</span>
+                                )}
+                                </p>
                             </div>
                         </div>
                     )

@@ -348,8 +348,11 @@ app.post("/api/v1/AddSample", (req, res) => {
         title: req.body.title,
         content: req.body.content,
         price: req.body.price,
-        categories: req.body.categories,
-        session: req.body.session
+        "rate.count": 0,
+        "categories.data": req.body.categories,
+        "categories.count": req.body.categories.length,
+        "session.data": req.body.session,
+        "session.count": req.body.session.length
     });
     blog.save().then((resa) => {
         cloudinary.uploader.upload(req.body.thumbnail, {
@@ -370,7 +373,13 @@ app.post("/api/v1/AddSample", (req, res) => {
 
 // Get all samples
 app.get("/api/v1/GetAllSample", async (req, res) => {
-    const getOrder = await getSamples.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
+    var getOrder = null
+    if (parseInt(req.query.type) === 2) {
+        getOrder = await getSamples.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
+    } else {
+        const forSort = req.query.sorted === "Newtoold" ? { createdAt: -1 } : req.query.sorted === "Oldtonew" ? { createdAt: 1 } : req.query.sorted === "Bigsession" ? { "session.count": -1 } : req.query.sorted === "Smallsession" ? { "session.count": 1 } : req.query.sorted === "Highprice" ? { price: -1 } : req.query.sorted === "Lowprice" ? { price: 1 } : null
+        getOrder = await getSamples.find(req.query.cate !== "All" ? { "categories.data.cate": { $in: req.query.cate.split(",").slice(1) } } : {}).sort(forSort)
+    }
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
@@ -407,6 +416,44 @@ app.post("/api/v1/DeleteSample", async (req, res) => {
     }).catch(() => {
         res.status(500).send("Xóa hình thất bại!")
     })
+})
+
+// Update Sample
+app.post("/api/v1/UpdateSample", async (req, res) => {
+    function updateThis(updateWhat) {
+        getSamples.updateOne({ _id: req.body.id }, updateWhat).exec()
+    }
+    if (req.body.title !== "") {
+        updateThis({ title: req.body.title })
+    }
+    if (req.body.categories.length > 0) {
+        updateThis({ "categories.data": req.body.categories, "categories.count": req.body.categories.length })
+    }
+    if (req.body.session.length > 0) {
+        updateThis({ "session.data": req.body.session, "session.count": req.body.session.length })
+    }
+    if (req.body.content !== "") {
+        updateThis({ content: req.body.content })
+    }
+    if (req.body.price && req.body.price !== "") {
+        updateThis({ price: req.body.price })
+    } else {
+        updateThis({ price: null })
+    }
+    if (req.body.thumbnail !== "") {
+        await cloudinary.uploader.destroy(`Sample/${req.body.id}`).then(() => {
+            cloudinary.uploader.upload(req.body.thumbnail, {
+                public_id: req.body.id, folder: "Sample"
+            }).then((result) => {
+                updateThis({ thumbnail: result.url })
+            }).catch(() => {
+                return res.status(500).send("Cập nhật hình thất bại!")
+            })
+        }).catch(() => {
+            return res.status(500).send("Cập nhật hình thất bại!")
+        })
+    }
+    res.status(201).send("Cập nhật hình thành công!")
 })
 
 

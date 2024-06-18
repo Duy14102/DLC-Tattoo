@@ -25,7 +25,7 @@ root.render(
         <Route path="/BlogPage" element={<Blog />} />
         <Route path="/GalleryPage" element={<Gallery />} />
         <Route path="/BookingPage" element={<Booking />} />
-        <Route path="/TattooSamplePage" element={<TattooSample />} />
+        <Route path="/TattooSamplePage/:sorted/:cate/:star" element={<TattooSample />} />
         <Route path="/FavouritePage" element={<Favourite />} />
         <Route path="/LoginUserPage" element={<LoginUser />} />
         <Route path="/UserPanel" element={<UserPanel />} />

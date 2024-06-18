@@ -1,7 +1,22 @@
 import "./TattooSample.css"
 
-function Filter() {
+function Filter({ params }) {
     const filter = ["Bắp tay", "Cẳng tay", "Bàn tay", "Bắp chân", "Cẳng chân", "Bàn chân", "Cổ", "Sườn", "Ngực", "Bụng", "Vai", "Lưng"]
+
+    function changeCate(e, cate) {
+        if (!e.target.checked) {
+            params.cate = params.cate.replace(cate, "")
+            if (params.cate === "") {
+                params.cate = "All"
+            }
+        } else if (e.target.checked) {
+            params.cate += cate
+            if (params.cate.includes("All")) {
+                params.cate = params.cate.replace("All", "")
+            }
+        }
+        window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/${params.star}`
+    }
     return (
         <div className="mainFilter">
             <div className="titleFilter">
@@ -13,7 +28,7 @@ function Filter() {
                 {filter.map((i, index) => {
                     return (
                         <div key={index} className="filterOptions">
-                            <input type="checkbox" id="box1" />
+                            <input onClick={(e) => changeCate(e, `,${i}`)} defaultChecked={params.cate.includes(i) ? "checked" : null} type="checkbox" id="box1" />
                             <label htmlFor="box1">{i}</label>
                         </div>
                     )
@@ -21,13 +36,13 @@ function Filter() {
             </div>
             <p className="filterTitle">Theo đánh giá</p>
             <div className="filterByStar">
-                <p>★★★★★<span> (5 sao)</span></p>
-                <p>★★★★☆<span> (4 sao)</span></p>
-                <p>★★★☆☆<span> (3 sao)</span></p>
-                <p>★★☆☆☆<span> (2 sao)</span></p>
-                <p>★☆☆☆☆<span> (1 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/5` }}>★★★★★<span> (5 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/4` }}>★★★★☆<span> (4 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/3` }}>★★★☆☆<span> (3 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/2` }}>★★☆☆☆<span> (2 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/1` }}>★☆☆☆☆<span> (1 sao)</span></p>
             </div>
-            <button className="deleteFil">Bỏ tất cả lọc</button>
+            <button onClick={() => { window.location.href = "/TattooSamplePage/Newtoold/All/All" }} className="deleteFil">Bỏ tất cả lọc</button>
         </div>
     )
 }
