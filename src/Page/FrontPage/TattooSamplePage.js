@@ -10,6 +10,10 @@ function TattooSamplePage() {
     const limit = 9
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         allSamples: null,
+        modalOpen: false,
+        modalData: null,
+        indexRateStar: null,
+        wantRateStar: false,
         pageCount: 6
     })
 
@@ -39,7 +43,7 @@ function TattooSamplePage() {
         <div style={{ display: "flex", justifyContent: "space-between", padding: "120px 20%", background: "#101010" }}>
             <Filter params={params} />
 
-            <TattooSample state={state} setState={setState} params={params} />
+            <TattooSample state={state} setState={setState} params={params} useEffect={useEffect} getSamples={getSamples} useRef={useRef} axios={axios}/>
         </div>
     )
 }

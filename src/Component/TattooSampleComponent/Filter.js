@@ -36,11 +36,12 @@ function Filter({ params }) {
             </div>
             <p className="filterTitle">Theo đánh giá</p>
             <div className="filterByStar">
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/5` }}>★★★★★<span> (5 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/4` }}>★★★★☆<span> (4 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/3` }}>★★★☆☆<span> (3 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/2` }}>★★☆☆☆<span> (2 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/1` }}>★☆☆☆☆<span> (1 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/5` }}>★★★★★<span style={{ color: params.star === "5" ? "#fff" : null }}> (5 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/4` }}>★★★★☆<span style={{ color: params.star === "4" ? "#fff" : null }}> (4 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/3` }}>★★★☆☆<span style={{ color: params.star === "3" ? "#fff" : null }}> (3 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/2` }}>★★☆☆☆<span style={{ color: params.star === "2" ? "#fff" : null }}> (2 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/1` }}>★☆☆☆☆<span style={{ color: params.star === "1" ? "#fff" : null }}> (1 sao)</span></p>
+                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/All` }}>☆☆☆☆☆<span style={{ color: params.star === "All" ? "#fff" : null }}> (Tất cả)</span></p>
             </div>
             <button onClick={() => { window.location.href = "/TattooSamplePage/Newtoold/All/All" }} className="deleteFil">Bỏ tất cả lọc</button>
         </div>

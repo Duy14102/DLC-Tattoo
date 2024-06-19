@@ -169,7 +169,7 @@
     opacity: 0;
     top: 0;
     right: 0;
-    background: rgba(255, 255, 255, 0.5);
+    background: rgba(0, 0, 0, 0.3);
     padding: 5px 8px;
     border: none;
     font-size: 22px;
@@ -219,10 +219,10 @@
 }
 
 .insideSample .downSample span {
-    color: rgb(255, 167, 39);
+    color: #ffc700;
     font-weight: 400;
-    font-size: 18px;
-    letter-spacing: 2px;
+    font-size: 20px;
+    line-height: 20px;
 }
 
 .modal {
@@ -251,4 +251,68 @@
 
 .modal .closeModal:hover {
     color: #999;
+}
+
+.downSample .clickViewSession {
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.downSample .clickViewSession:hover {
+    color: #fff;
+}
+
+.detailSession {
+    background: #000;
+    padding: 10px;
+    font-family: "Oswald", sans-serif;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    width: 500px;
+    height: auto;
+}
+
+.detailSession p {
+    color: #999;
+    margin: 0;
+    font-weight: 400;
+    word-break: break-all;
+}
+
+.detailSession b {
+    font-size: 17px;
+}
+
+.rate:not(:checked)>label {
+    float: right;
+    width: 15px;
+    overflow: hidden;
+    white-space: nowrap;
+    cursor: pointer;
+    font-size: 20px;
+    font-weight: 400;
+    margin-right: 1.65px;
+    color: #ccc;
+    line-height: 20px;
+}
+
+.rate:not(:checked)>label:before {
+    content: '\2605';
+}
+
+.rate input:checked~label {
+    color: #ffc700;
+}
+
+.rate:not(:checked)>label:hover,
+.rate:not(:checked)>label:hover~label {
+    color: #deb217;
+}
+
+.rate>input:checked+label:hover,
+.rate>input:checked+label:hover~label,
+.rate>input:checked~label:hover,
+.rate>input:checked~label:hover~label {
+    color: #c59b08;
 }

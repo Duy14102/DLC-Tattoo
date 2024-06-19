@@ -1,4 +1,5 @@
 import Modal from "react-responsive-modal"
+import 'react-responsive-modal/styles.css';
 
 function PlusSessionModal({ state, setState }) {
     const dataArray = state.modalType === 2 ? state.sessionAdd : state.modalType === 4 ? state.updateSessionAdd : null

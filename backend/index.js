@@ -424,28 +424,28 @@ app.post("/api/v1/UpdateSample", async (req, res) => {
         getSamples.updateOne({ _id: req.body.id }, updateWhat).exec()
     }
     if (req.body.title !== "") {
-        updateThis({ title: req.body.title })
+        updateThis({ title: req.body.title, lastUpdate: Date.now() })
     }
     if (req.body.categories.length > 0) {
-        updateThis({ "categories.data": req.body.categories, "categories.count": req.body.categories.length })
+        updateThis({ "categories.data": req.body.categories, "categories.count": req.body.categories.length, lastUpdate: Date.now() })
     }
     if (req.body.session.length > 0) {
-        updateThis({ "session.data": req.body.session, "session.count": req.body.session.length })
+        updateThis({ "session.data": req.body.session, "session.count": req.body.session.length, lastUpdate: Date.now() })
     }
     if (req.body.content !== "") {
-        updateThis({ content: req.body.content })
+        updateThis({ content: req.body.conten, lastUpdate: Date.now() })
     }
     if (req.body.price && req.body.price !== "") {
-        updateThis({ price: req.body.price })
+        updateThis({ price: req.body.price, lastUpdate: Date.now() })
     } else {
-        updateThis({ price: null })
+        updateThis({ price: null, lastUpdate: Date.now() })
     }
     if (req.body.thumbnail !== "") {
         await cloudinary.uploader.destroy(`Sample/${req.body.id}`).then(() => {
             cloudinary.uploader.upload(req.body.thumbnail, {
                 public_id: req.body.id, folder: "Sample"
             }).then((result) => {
-                updateThis({ thumbnail: result.url })
+                updateThis({ thumbnail: result.url, lastUpdate: Date.now() })
             }).catch(() => {
                 return res.status(500).send("Cập nhật hình thất bại!")
             })
@@ -454,6 +454,21 @@ app.post("/api/v1/UpdateSample", async (req, res) => {
         })
     }
     res.status(201).send("Cập nhật hình thành công!")
+})
+
+app.post("/api/v1/RateStar", (req, res) => {
+    getSamples.updateOne({ _id: req.body.id }, {
+        $push: {
+            "rate.data": req.body.dataSend
+        },
+        $inc: {
+            "rate.count": req.body.dataSend.star
+        }
+    }).then(() => {
+        res.status(201).send("Đánh giá sao thành công!")
+    }).catch(() => {
+        res.status(500).send("Đánh giá sao thất bại!")
+    })
 })
 
 
