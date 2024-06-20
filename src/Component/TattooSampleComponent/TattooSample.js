@@ -8,7 +8,7 @@ import ToastSuccess from "../Toastify/ToastSuccess";
 import ToastError from "../Toastify/ToastError";
 import { jwtDecode } from "jwt-decode";
 
-function TattooSample({ state, setState, params, useEffect, getSamples, useRef, axios }) {
+function TattooSample({ state, setState, params, useEffect, getSamples, useRef, axios, type }) {
     const toastNow = useRef(null)
     const cookies = new Cookies()
     const token = cookies.get("TOKEN")
@@ -23,12 +23,12 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
     const get2 = localStorage.getItem("successDelFav")
     useEffect(() => {
         if (get1) {
-            ToastSuccess({ message: get1 })
             localStorage.removeItem("successAddFav")
+            ToastSuccess({ message: get1 })
         }
         if (get2) {
-            ToastSuccess({ message: get2 })
             localStorage.removeItem("successDelFav")
+            ToastSuccess({ message: get2 })
         }
     }, [get1, get2])
 
@@ -111,7 +111,7 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
         <>
             <div className="mainSample">
                 <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
-                    <select defaultValue={params.sorted} onChange={(e) => { window.location.href = `/TattooSamplePage/${e.target.value}/${params.cate}/${params.star}` }}>
+                    <select defaultValue={params.sorted} onChange={(e) => { window.location.href = `/${type === 1 ? "TattooSamplePage" : "FavouritePage"}/${e.target.value}/${params.cate}/${params.star}` }}>
                         <option value={"Newtoold"}>Mới nhất trước</option>
                         <option value={"Oldtonew"}>Cũ nhất trước</option>
                         <option value={"Bigsession"}>Nhiều buổi trước</option>

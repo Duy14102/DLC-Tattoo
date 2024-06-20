@@ -1,6 +1,6 @@
 import "./TattooSample.css"
 
-function Filter({ params }) {
+function Filter({ params, type }) {
     const filter = ["Bắp tay", "Cẳng tay", "Bàn tay", "Bắp chân", "Cẳng chân", "Bàn chân", "Cổ", "Sườn", "Ngực", "Bụng", "Vai", "Lưng"]
 
     function changeCate(e, cate) {
@@ -15,7 +15,11 @@ function Filter({ params }) {
                 params.cate = params.cate.replace("All", "")
             }
         }
-        window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/${params.star}`
+        window.location.href = type === 1 ? `/TattooSamplePage/${params.sorted}/${params.cate}/${params.star}` : `/FavouritePage/${params.sorted}/${params.cate}/${params.star}`
+    }
+
+    function hrefStar(e) {
+        window.location.href = type === 1 ? `/TattooSamplePage/${params.sorted}/${params.cate}/${e}` : `/FavouritePage/${params.sorted}/${params.cate}/${e}`
     }
     return (
         <div className="mainFilter">
@@ -36,14 +40,14 @@ function Filter({ params }) {
             </div>
             <p className="filterTitle">Theo đánh giá</p>
             <div className="filterByStar">
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/5` }}>★★★★★<span style={{ color: params.star === "5" ? "#fff" : null }}> (5 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/4` }}>★★★★☆<span style={{ color: params.star === "4" ? "#fff" : null }}> (4 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/3` }}>★★★☆☆<span style={{ color: params.star === "3" ? "#fff" : null }}> (3 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/2` }}>★★☆☆☆<span style={{ color: params.star === "2" ? "#fff" : null }}> (2 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/1` }}>★☆☆☆☆<span style={{ color: params.star === "1" ? "#fff" : null }}> (1 sao)</span></p>
-                <p onClick={() => { window.location.href = `/TattooSamplePage/${params.sorted}/${params.cate}/All` }}>☆☆☆☆☆<span style={{ color: params.star === "All" ? "#fff" : null }}> (Tất cả)</span></p>
+                <p onClick={() => hrefStar('5')}>★★★★★<span style={{ color: params.star === "5" ? "#fff" : null }}> (5 sao)</span></p>
+                <p onClick={() => hrefStar('4')}>★★★★☆<span style={{ color: params.star === "4" ? "#fff" : null }}> (4 sao)</span></p>
+                <p onClick={() => hrefStar('3')}>★★★☆☆<span style={{ color: params.star === "3" ? "#fff" : null }}> (3 sao)</span></p>
+                <p onClick={() => hrefStar('2')}>★★☆☆☆<span style={{ color: params.star === "2" ? "#fff" : null }}> (2 sao)</span></p>
+                <p onClick={() => hrefStar('1')}>★☆☆☆☆<span style={{ color: params.star === "1" ? "#fff" : null }}> (1 sao)</span></p>
+                <p onClick={() => hrefStar('All')}>☆☆☆☆☆<span style={{ color: params.star === "All" ? "#fff" : null }}> (Tất cả)</span></p>
             </div>
-            <button onClick={() => { window.location.href = "/TattooSamplePage/Newtoold/All/All" }} className="deleteFil">Bỏ tất cả lọc</button>
+            <button onClick={() => { window.location.href = `/${type === 1 ? "TattooSamplePage" : "FavouritePage"}/Newtoold/All/All` }} className="deleteFil">Bỏ tất cả lọc</button>
         </div>
     )
 }

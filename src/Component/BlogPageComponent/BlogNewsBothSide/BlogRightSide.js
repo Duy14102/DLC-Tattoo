@@ -16,24 +16,13 @@ function BlogRightSide({ blog }) {
                 {blog?.map((i) => {
                     return (
                         <div className="recentPostPosts" key={i._id}>
-                            <NavLink reloadDocument>
+                            <NavLink to={`/ReadBlogPage/${i._id}`} reloadDocument>
                                 <img src={i.thumbnail} alt="" width={"100%"} height={"100%"} />
                             </NavLink>
-                            <NavLink reloadDocument>{i.title}</NavLink>
+                            <NavLink to={`/ReadBlogPage/${i._id}`} reloadDocument>{i.title}</NavLink>
                         </div>
                     )
                 })}
-            </div>
-            <div className="tagPost">
-                <h6>Tags</h6>
-                <div className="allTags">
-                    <NavLink reloadDocument>Xăm hình</NavLink>
-                    <NavLink reloadDocument>Sửa xăm</NavLink>
-                    <NavLink reloadDocument>Tattoo</NavLink>
-                    <NavLink reloadDocument>Kín lưng</NavLink>
-                    <NavLink reloadDocument>Cá chép</NavLink>
-                    <NavLink reloadDocument>Phong thủy</NavLink>
-                </div>
             </div>
         </div>
     )

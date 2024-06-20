@@ -11,7 +11,7 @@ function BlogLeftSide({ getBlogs, currentPage, blog, pageCount }) {
             {blog?.map((i) => {
                 return (
                     <div key={i._id} className="news">
-                        <NavLink reloadDocument className="newsImage">
+                        <NavLink to={`/ReadBlogPage/${i._id}`} reloadDocument className="newsImage">
                             <img alt="" src={i.thumbnail} width={"100%"} height={500} />
                             <div className="dateNews">
                                 <span>T{new Date(i.createdAt).getMonth()}</span>
@@ -20,9 +20,9 @@ function BlogLeftSide({ getBlogs, currentPage, blog, pageCount }) {
                         </NavLink>
                         <div className="post">
                             <NavLink className="upLink" reloadDocument to={"/BlogPage"}>Blog</NavLink>
-                            <h5 className="downLink"><NavLink reloadDocument>{i.title}</NavLink></h5>
+                            <h5 className="downLink"><NavLink to={`/ReadBlogPage/${i._id}`} reloadDocument>{i.title}</NavLink></h5>
                             <p className="postDescription">{i.subtitle}</p>
-                            <NavLink reloadDocument className="readMore">Xem thêm</NavLink>
+                            <NavLink to={`/ReadBlogPage/${i._id}`} reloadDocument className="readMore">Xem thêm</NavLink>
                         </div>
                     </div>
                 )

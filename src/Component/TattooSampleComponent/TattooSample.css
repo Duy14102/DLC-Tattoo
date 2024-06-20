@@ -1,6 +1,8 @@
 .mainFilter {
     width: 20%;
-    height: auto;
+    height: 100%;
+    position: sticky;
+    top: 10%;
 }
 
 .mainSample {

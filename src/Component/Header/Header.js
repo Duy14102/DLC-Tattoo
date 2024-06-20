@@ -28,7 +28,7 @@ function Header() {
                     <NavLink reloadDocument to={"/GalleryPage"}>Hậu trường</NavLink>
                     <NavLink reloadDocument to={"/BookingPage"}>Booking</NavLink>
                     <NavLink reloadDocument to={"/BlogPage"}>Blog</NavLink>
-                    <NavLink reloadDocument to={"/FavouritePage"}>Yêu thích</NavLink>
+                    <NavLink reloadDocument to={"/FavouritePage/Newtoold/All/All"}>Yêu thích</NavLink>
                     {token ? (
                         <GetAccounts token={token} useEffect={useEffect} NavLink={NavLink} cookies={cookies} />
                     ) : (

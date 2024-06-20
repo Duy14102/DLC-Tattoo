@@ -64,3 +64,24 @@
     color: #fff;
     margin-top: 10%;
 }
+
+.specialAdd {
+    color: #fff !important;
+    transition: all.4s;
+}
+
+.specialAdd:hover {
+    color: #904d30 !important;
+}
+
+.mainReadBlog {
+    padding: 120px 20%;
+    background: #101010;
+    color: #999;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    word-break: break-all;
+    font-size: 19px;
+    width: 100%;
+}

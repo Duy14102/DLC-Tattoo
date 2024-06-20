@@ -41,9 +41,9 @@ function TattooSamplePage() {
     }
     return (
         <div style={{ display: "flex", justifyContent: "space-between", padding: "120px 20%", background: "#101010" }}>
-            <Filter params={params} />
+            <Filter params={params} type={1} />
 
-            <TattooSample state={state} setState={setState} params={params} useEffect={useEffect} getSamples={getSamples} useRef={useRef} axios={axios}/>
+            <TattooSample state={state} setState={setState} params={params} useEffect={useEffect} getSamples={getSamples} useRef={useRef} axios={axios} type={1} />
         </div>
     )
 }

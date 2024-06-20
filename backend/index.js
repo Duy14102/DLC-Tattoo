@@ -299,6 +299,13 @@ app.get("/api/v1/GetBlogs", async (req, res) => {
     res.send({ results });
 })
 
+// Get specific blog
+app.get("/api/v1/GetSpecificBlog", async (req, res) => {
+    await getBlogs.findOne({ _id: req.query.id }).then((resa) => {
+        res.status(201).send(resa)
+    })
+})
+
 // Delete Blog
 app.post("/api/v1/DeleteBlog", async (req, res) => {
     await cloudinary.uploader.destroy(`Blog/${req.body.id}`).then(() => {
@@ -380,6 +387,35 @@ app.get("/api/v1/GetAllSample", async (req, res) => {
         const forSort = req.query.sorted === "Newtoold" ? { createdAt: -1 } : req.query.sorted === "Oldtonew" ? { createdAt: 1 } : req.query.sorted === "Bigsession" ? { "session.count": -1 } : req.query.sorted === "Smallsession" ? { "session.count": 1 } : req.query.sorted === "Highprice" ? { price: -1 } : req.query.sorted === "Lowprice" ? { price: 1 } : null
         getOrder = await getSamples.find(req.query.cate !== "All" ? { "categories.data.cate": { $in: req.query.cate.split(",").slice(1) } } : {}).sort(forSort)
     }
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+
+    const start = (page - 1) * limit
+    const end = page * limit
+
+    const results = {}
+    results.total = getOrder.length
+    results.pageCount = Math.ceil(getOrder.length / limit)
+
+    if (end < getOrder.length) {
+        results.next = {
+            page: page + 1
+        }
+    }
+    if (start > 0) {
+        results.prev = {
+            page: page - 1
+        }
+    }
+
+    results.result = getOrder.slice(start, end)
+    res.send({ results });
+})
+
+// Get Favourite
+app.get("/api/v1/GetFavourites", async (req, res) => {
+    const forSort = req.query.sorted === "Newtoold" ? { createdAt: -1 } : req.query.sorted === "Oldtonew" ? { createdAt: 1 } : req.query.sorted === "Bigsession" ? { "session.count": -1 } : req.query.sorted === "Smallsession" ? { "session.count": 1 } : req.query.sorted === "Highprice" ? { price: -1 } : req.query.sorted === "Lowprice" ? { price: 1 } : null
+    const getOrder = await getSamples.find(req.query.cate !== "All" ? { "categories.data.cate": { $in: req.query.cate.split(",").slice(1), _id: { $in: JSON.parse(req.query.id) } } } : { _id: { $in: JSON.parse(req.query.id) } }).sort(forSort)
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
