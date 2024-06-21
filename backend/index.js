@@ -51,6 +51,8 @@ const Blogs = require("./model/Blogs");
 const getBlogs = mongoose.model("Blogs");
 const Samples = require("./model/Samples");
 const getSamples = mongoose.model("Samples");
+const Gallerys = require("./model/Gallerys");
+const getGallerys = mongoose.model("Gallerys");
 
 // Api
 
@@ -506,6 +508,98 @@ app.post("/api/v1/RateStar", (req, res) => {
         res.status(500).send("Đánh giá sao thất bại!")
     })
 })
+
+// Add video gallery
+app.post("/api/v1/AddVideoGallery", (req, res) => {
+    const gallery = new Gallerys({
+        title: "video",
+        data: req.body.video
+    });
+    gallery.save().then(() => {
+        res.status(201).send("Thêm video thành công!")
+    }).catch(() => {
+        res.status(500).send("Thêm video thất bại!")
+    })
+})
+
+// Update video gallery
+app.post("/api/v1/UpdateVideoGallery", (req, res) => {
+    getGallerys.updateOne({ _id: req.body.id }, {
+        data: req.body.video
+    }).then(() => {
+        res.status(201).send("Cập nhật video thành công!")
+    }).catch(() => {
+        res.status(500).send("Cập nhật video thất bại!")
+    })
+})
+
+// Get all gallerys
+app.get("/api/v1/GetGallerys", async (req, res) => {
+    await getGallerys.find({}).then((resa) => {
+        res.status(201).send(resa)
+    })
+})
+
+// Add image gallery
+app.post("/api/v1/AddImageGallery", (req, res) => {
+    const gallery = new Gallerys({
+        title: "image",
+        data: req.body.image
+    });
+    gallery.save().then((resa) => {
+        cloudinary.uploader.upload(req.body.image, {
+            public_id: resa._id, folder: "Gallery"
+        }).then((result) => {
+            getGallerys.updateOne({ _id: resa._id }, {
+                data: result.url
+            }).exec()
+            res.status(201).send("Thêm ảnh thành công!")
+        }).catch(() => {
+            res.status(500).send("Thêm ảnh thất bại!")
+        })
+    }).catch(() => {
+        res.status(500).send("Thêm ảnh thất bại!")
+    })
+})
+
+// Update image gallery
+app.post("/api/v1/UpdateImageGallery", async (req, res) => {
+    await cloudinary.uploader.destroy(`Gallery/${req.body.id}`).then(() => {
+        cloudinary.uploader.upload(req.body.image, {
+            public_id: req.body.id, folder: "Gallery"
+        }).then((result) => {
+            getGallerys.updateOne({ _id: req.body.id }, {
+                data: result.url
+            }).exec()
+            res.status(201).send("Cập nhật ảnh thành công!")
+        }).catch(() => {
+            return res.status(500).send("Cập nhật ảnh thất bại!")
+        })
+    }).catch(() => {
+        return res.status(500).send("Cập nhật ảnh thất bại!")
+    })
+})
+
+//Delete image gallery
+app.post("/api/v1/DeleteGallery", async (req, res) => {
+    if (req.body.type === 1) {
+        await cloudinary.uploader.destroy(`Gallery/${req.body.id}`).then(() => {
+            getGallerys.deleteOne({ _id: req.body.id }).exec()
+            res.status(201).send("Xóa ảnh thành công!")
+        }).catch(() => {
+            return res.status(500).send("Xóa ảnh thất bại!")
+        })
+    }
+    else {
+        getGallerys.deleteOne({ _id: req.body.id }).then(() => {
+            res.status(201).send("Xóa video thành công!")
+        }).catch(() => {
+            return res.status(500).send("Xóa video thất bại!")
+        })
+    }
+})
+
+
 
 
 //                                              SOCKET IO

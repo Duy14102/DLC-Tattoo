@@ -338,7 +338,8 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .blogAllContent .upperContent .blogAllContentTitle input:focus,
 .blogAllContent .upperContent .blogAllContentSubTitle textarea:focus,
 .blogAllContent .downContent textarea:focus,
-.chooseCateSample .sonChooseCateSample input:focus {
+.chooseCateSample .sonChooseCateSample input:focus,
+.coverGalleryVideo input:focus {
     outline: none;
 }
 
@@ -1161,4 +1162,230 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     color: orange;
     font-weight: 400;
     font-size: 20px;
+}
+
+.coverGallery {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+    padding: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.coverGalleryVideo {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    width: 100%;
+    height: auto;
+    margin-top: 15px;
+    padding: 15px;
+}
+
+.coverGalleryVideo .topGalleryVideo {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Oswald", sans-serif;
+    width: 100%;
+}
+
+.coverGalleryVideo input {
+    background: none;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 10px;
+    height: auto;
+    width: 92%;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 400;
+}
+
+.coverGalleryVideo .topGalleryVideo button {
+    background: #904d30;
+    border-radius: 6px;
+    border: none;
+    padding: 10px 15px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.coverGalleryVideo .topGalleryVideo button:hover {
+    opacity: 0.7;
+}
+
+.coverGalleryVideo .topGalleryVideo button:active,
+.videoElement .buttonVideoElement button:active {
+    scale: 0.9;
+}
+
+.coverGalleryVideo .videoShowUp {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.coverGalleryVideo .videoShowUp .videoElement {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+}
+
+.coverGalleryVideo .videoShowUp .videoElement p {
+    text-wrap: nowrap;
+    width: 5%;
+}
+
+.coverGalleryVideo .videoShowUp .videoElement input {
+    width: 85%;
+}
+
+.videoElement .buttonVideoElement {
+    display: flex;
+    align-items: center;
+    width: 10%;
+    gap: 5px;
+}
+
+.videoElement .buttonVideoElement button {
+    background: none;
+    border-radius: 50%;
+    border: none;
+    width: 40px;
+    height: 40px;
+    padding: 10px 5px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.videoElement .buttonVideoElement .specialNow {
+    padding: 10px 5px 10px 10px;
+}
+
+.videoElement .buttonVideoElement button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.videoElement .buttonVideoElement button svg {
+    fill: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+.coverGallery .inputImageXY {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    width: 23%;
+    height: 250px;
+    overflow: hidden;
+    position: relative;
+    transition: all .4s;
+}
+
+.coverGallery .inputImageXY .haveImage {
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    position: relative;
+}
+
+.coverGallery .inputImageXY .haveImage .trashImage {
+    opacity: 0;
+    transition: all .4s;
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 40px;
+    height: 40px;
+    padding: 11px;
+    background: rgba(0, 0, 0, 0.3);
+    border: none;
+    cursor: pointer;
+}
+
+.coverGallery .inputImageXY .haveImage:hover .trashImage {
+    opacity: 1;
+}
+
+.coverGallery .inputImageXY .haveImage .trashImage:hover svg {
+    fill: tomato;
+}
+
+.coverGallery .inputImageXY .haveImage .trashImage svg {
+    transition: all .4s;
+    fill: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+.coverGallery .inputImageXY .haventImage {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    text-align: center;
+    top: 20%;
+}
+
+.coverGallery .inputImageXY img {
+    width: 100%;
+    height: 100%;
+}
+
+.coverGallery .inputImageXY:has(.haventImage:hover) {
+    border-color: #fff;
+}
+
+.coverGallery .inputImageXY svg.wantAddSvg {
+    fill: #fff;
+    width: 40%;
+    height: 40%;
+}
+
+.coverGallery .inputImageXY svg.wantEditSvg {
+    opacity: 0;
+    transition: all .4s;
+    position: absolute;
+    fill: #fff;
+    top: 25%;
+    left: 30%;
+    width: 40%;
+    height: 40%;
+}
+
+.coverGallery .inputImageXY .haveImage:hover img {
+    filter: brightness(0.5);
+}
+
+.coverGallery .inputImageXY .haveImage:hover svg.wantEditSvg {
+    opacity: 1;
+}
+
+.coverGallery .inputImageXY p,
+.coverGalleryVideo .videoShowUp .videoElement p {
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #fff;
+    margin: 0;
+    font-size: 18px;
+}
+
+.coverGallery .inputImageXY input {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
 }

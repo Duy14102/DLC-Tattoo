@@ -50,7 +50,7 @@ function AdminMainBar({ useState, token, useEffect }) {
                 ) : localStorage.getItem("tabs") === "Accounts" ? (
                     <AccountsTabs toast={toast} useRef={useRef} axios={axios} ToastUpdate={ToastUpdate} useEffect={useEffect} id={token.userId} />
                 ) : localStorage.getItem("tabs") === "Gallery" ? (
-                    <GalleryTabs />
+                    <GalleryTabs axios={axios} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} useEffect={useEffect} />
                 ) : null}
             </div>
             <AdminAccountModal open={open} setOpen={setOpen} axios={axios} token={token} type={type} getAccounts={getAccounts} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} />

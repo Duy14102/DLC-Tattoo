@@ -36,6 +36,10 @@
     cursor: pointer;
 }
 
+.imageFlex .imgInsideFlex iframe {
+    border: none;
+}
+
 .imageFlex .imgInsideFlex:hover img {
     scale: 1.1;
 }
