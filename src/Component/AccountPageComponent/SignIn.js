@@ -25,6 +25,7 @@ function SignIn({ useReducer, useRef, axios, type, toast, ToastUpdate, cookies }
             ToastUpdate({ type: 1, message: res.data.message, refCur: toastNow.current })
             cookies.set("TOKEN", res.data.token, { path: "/", });
             if (type === "LoginUser") {
+                localStorage.setItem("tabs", "Booking")
                 window.location.href = '/';
             } else {
                 localStorage.setItem("tabs", "Dashboard")

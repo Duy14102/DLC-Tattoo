@@ -10,4 +10,4 @@ const GallerySchema = new mongoose.Schema({
     }
 }, { timestamps: { createdAt: true, updatedAt: false } })
 
-module.exports = mongoose.model.Blogs || mongoose.model("Gallerys", GallerySchema);
+module.exports = mongoose.model.Gallerys || mongoose.model("Gallerys", GallerySchema);

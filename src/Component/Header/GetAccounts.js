@@ -8,7 +8,7 @@ function GetAccounts({ token, useEffect, NavLink, cookies }) {
     const [accounts, setAccounts] = useState(null)
     const decode = jwtDecode(token)
     useEffect(() => {
-        socketRef.current = socketIOClient.connect("http://localhost:3000")
+        socketRef.current = socketIOClient.connect(`${process.env.REACT_APP_apiAddress}`)
         const configuration = {
             method: "get",
             url: `${process.env.REACT_APP_apiAddress}/api/v1/GetAccounts`,
@@ -34,6 +34,7 @@ function GetAccounts({ token, useEffect, NavLink, cookies }) {
 
     const logoutUser = () => {
         cookies.remove("TOKEN", { path: '/' });
+        localStorage.removeItem("tabs")
         window.location.href = "/"
     }
     return (

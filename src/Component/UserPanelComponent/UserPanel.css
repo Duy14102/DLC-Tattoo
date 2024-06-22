@@ -1,0 +1,431 @@
+input:focus {
+    outline: none;
+}
+
+.mainAdminMainBar {
+    width: 100%;
+    height: 100%;
+}
+
+.mainAdminSideBar {
+    width: 22%;
+    padding: 0 15px;
+    border-right: 1px dashed rgba(255, 255, 255, 0.1);
+    transition: all .4s;
+}
+
+.contentMainBar {
+    height: 100%;
+    padding: 26px 24px;
+}
+
+.mainAdminSideBar .logoA {
+    padding: 16px 24px;
+    margin-bottom: 15px;
+    width: 100%;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+}
+
+.mainAdminSideBar .logoA .pictureCollect {
+    width: 50px;
+    height: 50px;
+    overflow: hidden;
+    border-radius: 50%;
+    position: relative;
+}
+
+.mainAdminSideBar .logoA .pictureCollect:hover svg,
+.mainAdminSideBar .logoA .pictureCollect:hover img {
+    filter: brightness(0.7);
+}
+
+.mainAdminSideBar .logoA .pictureCollect input {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+    opacity: 0;
+    cursor: pointer;
+}
+
+.mainAdminSideBar .logoA .pictureCollect img {
+    width: 100%;
+    height: 100%;
+    transition: all .4s;
+}
+
+.mainAdminSideBar .logoA .pictureCollect svg {
+    transition: all .4s;
+    padding: 10px;
+    width: 100%;
+    height: 100%;
+    fill: #fff;
+}
+
+.mainAdminSideBar .logoA p {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    color: #fff;
+}
+
+.navBarA {
+    margin-bottom: 10px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.navBarA .captionA {
+    display: block;
+    padding: 14px 20px;
+    text-transform: uppercase;
+    position: relative;
+    line-height: 1.66;
+    font-size: 14px;
+    font-weight: 600;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+}
+
+.optionsA {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    font-family: "Oswald", sans-serif;
+    justify-content: space-between;
+    padding: 14px 20px;
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all .4s;
+    margin-bottom: 10px;
+}
+
+.optionsA:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.navBarA .active,
+.navBarA .active:hover {
+    transition: all .4s;
+    background: rgba(144, 77, 48, 0.7);
+}
+
+.optionsA .optionsLeftA {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.optionsA p {
+    font-size: 16px;
+    font-weight: 400;
+    margin: 0;
+    text-wrap: nowrap;
+    color: #fff;
+}
+
+.optionsA .optionsNotiA {
+    border-radius: 50%;
+    background: tomato;
+    padding: 1px 6px;
+    font-size: 13px;
+}
+
+.optionsA .optionsLeftA svg {
+    width: 22px;
+    height: 22px;
+    fill: #fff;
+}
+
+.mainUserHeaderTabs {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 26px;
+}
+
+.mainUserHeaderTabs span {
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: 20px;
+}
+
+.coverChangePhoneUnder {
+    margin-top: 25px;
+}
+
+.changePhoneUnder {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 45px;
+}
+
+.changePhoneUnder input {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    color: #fff;
+    font-weight: 400;
+    padding: 10px;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-size: 18px;
+    height: 100%;
+    width: 50%;
+}
+
+button.buttonSelfish {
+    cursor: pointer;
+    transition: all .4s;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    padding: 0 10px;
+    height: 100%;
+    font-size: 16px;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+button.buttonSelfish:hover {
+    opacity: 0.7;
+}
+
+button.buttonSelfish:active {
+    scale: 0.9;
+}
+
+button.buttonA {
+    background: #904d30;
+}
+
+button.buttonB {
+    background: gray;
+}
+
+.warningText {
+    color: tomato;
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin-top: 5px;
+}
+
+.coverChangePasswordUnder {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 25px;
+}
+
+.inputPassword {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 50%;
+    height: 45px;
+    background: #101010;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+}
+
+.inputPassword input {
+    width: 90%;
+    padding: 10px;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-size: 18px;
+    border: none;
+    background: none;
+    font-weight: 400;
+    color: #fff;
+}
+
+.inputPassword button {
+    width: 10%;
+    border: none;
+    background: none;
+    height: 100%;
+    cursor: pointer;
+}
+
+.inputPassword svg {
+    width: 18px;
+    height: 100%;
+    fill: #fff;
+    transition: all .4s;
+}
+
+.inputPassword button:hover svg {
+    opacity: 0.7;
+}
+
+.inputPassword button:active svg {
+    scale: 0.8;
+}
+
+.chatRoom {
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    height: 555px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chatRoom .chatPlace {
+    padding: 0 10px 0 0;
+    width: 100%;
+    height: 88%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.chatRoom .chatPlace::-webkit-scrollbar {
+    background: none;
+    width: 10px;
+}
+
+.chatRoom .chatPlace::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+}
+
+.chatRoom .inputChatPlace {
+    width: 100%;
+    height: 10%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.chatRoom .inputChatPlace input {
+    height: 100%;
+    width: 88%;
+    border: none;
+    background: none;
+    color: #fff;
+    font-size: 18px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    word-break: break-all;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chatRoom .inputChatPlace .emojiButton,
+.chatRoom .inputChatPlace .sendButton {
+    position: relative;
+    width: 5%;
+    height: 100%;
+    padding: 0 2px;
+}
+
+.chatRoom .inputChatPlace .emojiButton .emojiPickerShow {
+    position: absolute;
+    bottom: 125%;
+    right: 100%;
+}
+
+.chatRoom .inputChatPlace .emojiButton button,
+.chatRoom .inputChatPlace .sendButton button {
+    font-size: 20px;
+    background: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transition: all .4s;
+}
+
+.chatRoom .inputChatPlace .emojiButton button:hover,
+.chatRoom .inputChatPlace .sendButton button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chatRoom .inputChatPlace .sendButton button svg {
+    padding: 2px;
+    width: 80%;
+    height: 80%;
+    fill: #fff;
+}
+
+.chatPlace .abbortTime {
+    margin: 0;
+    color: #999;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.chatPlace span {
+    padding: 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 18px;
+    position: relative;
+}
+
+.chatPlace .leftSideChat {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.chatPlace .leftSideChat span {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chatPlace .rightSideChat {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chatPlace .rightSideChat span p,
+.chatPlace .leftSideChat span p {
+    margin: 0;
+    position: absolute;
+    font-family: "Oswald", sans-serif;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: 1px;
+    top: 20%;
+    font-size: 15px;
+    right: 110%;
+    opacity: 0;
+    transition: all .4s;
+}
+
+.chatPlace .leftSideChat span p {
+    left: 110%;
+}
+
+.chatPlace .rightSideChat span:hover p,
+.chatPlace .leftSideChat span:hover p {
+    opacity: 1;
+}
+
+.chatPlace .rightSideChat span {
+    background: rgba(144, 77, 48, 0.5);
+}

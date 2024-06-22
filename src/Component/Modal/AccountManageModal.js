@@ -6,7 +6,7 @@ function AccountManageModal({ open, setOpen, axios, getAccounts, toast, ToastUpd
     const toastNow = useRef(null)
     const socketRef = useRef();
     useEffect(() => {
-        socketRef.current = socketIOClient.connect("http://localhost:3000")
+        socketRef.current = socketIOClient.connect(`${process.env.REACT_APP_apiAddress}`)
 
         socketRef.current.on('BanAccountSuccess', data => {
             if (data.Tokenid === Tokenid) {

@@ -42,6 +42,10 @@ const UserSchema = new mongoose.Schema({
         }
     },
 
+    chatId: {
+        type: String
+    },
+
     lastLogin: {
         type: Date
     }

@@ -49,4 +49,4 @@ const SampleSchema = new mongoose.Schema({
     }
 }, { timestamps: { createdAt: true, updatedAt: false } })
 
-module.exports = mongoose.model.Blogs || mongoose.model("Samples", SampleSchema);
+module.exports = mongoose.model.Samples || mongoose.model("Samples", SampleSchema);

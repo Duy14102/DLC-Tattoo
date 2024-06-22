@@ -53,6 +53,8 @@ const Samples = require("./model/Samples");
 const getSamples = mongoose.model("Samples");
 const Gallerys = require("./model/Gallerys");
 const getGallerys = mongoose.model("Gallerys");
+const Chats = require("./model/Chats");
+const getChats = mongoose.model("Chats");
 
 // Api
 
@@ -599,6 +601,12 @@ app.post("/api/v1/DeleteGallery", async (req, res) => {
     }
 })
 
+// Get Chat Room
+app.get("/api/v1/GetChatRoom", async (req, res) => {
+    await getChats.findOne({ createdBy: req.query.userId }).then((resa) => {
+        res.status(201).send(resa)
+    })
+})
 
 
 
@@ -613,6 +621,34 @@ socketIo.on("connection", (socket) => {
             socketIo.emit("BanAccountSuccess", { id: data.id, Tokenid: data.Tokenid });
         }).catch(() => {
             socketIo.emit("BanAccountFail", { Tokenid: data.Tokenid });
+        })
+    })
+
+    socket.on("ChatStart", function (data) {
+        const chats = new Chats({
+            createdBy: data.userId
+        })
+        chats.save().then(() => {
+            const dated = { title: "Bạn đã tạo 1 phòng chat", place: "Chat", time: Date.now(), status: 1 }
+            getAccounts.updateOne({ _id: data.userId }, {
+                $push: {
+                    notification: dated
+                }
+            }).exec()
+            socketIo.emit("ChatStartSuccess", { id: data.userId });
+        }).catch(() => {
+            socketIo.emit("ChatStartFail", { id: data.userId });
+        })
+    })
+
+    socket.on("ChatSend", function (data) {
+        const dated = { id: data.userId, chat: data.chat, time: Date.now() }
+        getChats.updateOne({ _id: data.roomId }, {
+            $push: {
+                data: dated
+            }
+        }).then(() => {
+            socketIo.emit("ChatSendSuccess", { id: data.userId });
         })
     })
 })
