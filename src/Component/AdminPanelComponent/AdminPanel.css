@@ -20,8 +20,8 @@
 }
 
 .contentMainBar {
-    height: 100%;
     padding: 26px 24px;
+    height: 100%;
 }
 
 .mainAdminMainBar .headerMainBar {
@@ -73,17 +73,54 @@
     cursor: auto;
     min-width: 352px;
     max-width: 100%;
-    height: auto;
+    max-height: 50vh;
     position: absolute;
     border: 1px solid rgba(255, 255, 255, 0.1);
     box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
     right: 0;
     padding: 15px;
     border-radius: 6px;
-    visibility: hidden;
-    opacity: 0;
     z-index: 6;
     background: #101010;
+    animation: appearDropdown .4s ease forwards;
+    overflow: hidden;
+}
+
+.mainAdminMainBar .bellNoti .notiShow {
+    padding: 0;
+    overflow-y: auto;
+}
+
+@keyframes appearDropdown {
+    from {
+        top: 200%;
+        visibility: hidden;
+        opacity: 0;
+    }
+
+    to {
+        visibility: visible;
+        opacity: 1;
+        top: 100%;
+    }
+}
+
+.mainAdminMainBar .bellNoti .notiShow .moreNotiButton {
+    margin: 0;
+    text-align: center;
+    color: #999;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    padding: 5px;
+    letter-spacing: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.mainAdminMainBar .bellNoti .notiShow .moreNotiButton:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
 }
 
 .bellNoti .notiShow .notiLight {
@@ -92,6 +129,15 @@
     cursor: pointer;
     padding: 20px;
     transition: all .4s;
+}
+
+.bellNoti .notiShow .notiLightActive {
+    transition: all .4s;
+    background: rgba(144, 77, 48, 0.3);
+}
+
+.bellNoti .notiShow .notiLightActive:hover {
+    background: rgba(144, 77, 48, 0.5) !important;
 }
 
 .bellNoti .notiShow .notiLight:active {
@@ -133,23 +179,6 @@
     font-size: 15px;
 }
 
-.mainAdminMainBar .avatarMainBar:hover .profileShow,
-.mainAdminMainBar .bellNoti:hover .notiShow {
-    animation: appearDropdown .4s ease forwards;
-}
-
-@keyframes appearDropdown {
-    from {
-        top: 200%;
-    }
-
-    to {
-        visibility: visible;
-        opacity: 1;
-        top: 100%;
-    }
-}
-
 .mainAdminMainBar .avatarMainBar .profileShow .profileHead,
 .mainAdminMainBar .bellNoti .notiShow .notiHead {
     padding: 16px 20px 10px 20px;
@@ -157,6 +186,15 @@
     font-family: "Oswald", sans-serif;
     color: #fff;
     font-size: 16px;
+}
+
+.mainAdminMainBar .bellNoti .notiShow .noNoti {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-align: center;
 }
 
 .mainAdminMainBar .avatarMainBar .profileShow .optionsProfile {
@@ -329,17 +367,7 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     filter: invert(0.8);
 }
 
-.findSomething input:focus,
-.formNewBlogs input:focus,
-.inputPassword textarea,
-.formNewBlogs textarea:focus,
-.input:focus,
-.inputPassword input:focus,
-.blogAllContent .upperContent .blogAllContentTitle input:focus,
-.blogAllContent .upperContent .blogAllContentSubTitle textarea:focus,
-.blogAllContent .downContent textarea:focus,
-.chooseCateSample .sonChooseCateSample input:focus,
-.coverGalleryVideo input:focus {
+input:focus {
     outline: none;
 }
 
@@ -1388,4 +1416,311 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     top: 0;
     opacity: 0;
     cursor: pointer;
+}
+
+.coverChatAll {
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    display: flex;
+    margin-top: 15px;
+    height: 80vh;
+}
+
+.chatSide {
+    width: 20%;
+    padding: 15px;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    overflow-y: auto;
+}
+
+.chatSideChild {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px;
+    width: 100%;
+    border-radius: 6px;
+    cursor: pointer;
+    position: relative;
+    transition: all .4s;
+}
+
+.chatSideChild button.deleteChat {
+    position: absolute;
+    top: 33%;
+    right: 15%;
+    background: rgba(255, 255, 255, 0.3);
+    border: none;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    padding: 0;
+    cursor: pointer;
+    transition: all .4s;
+    visibility: hidden;
+    opacity: 0;
+}
+
+.chatSideChild:hover button.deleteChat {
+    opacity: 1;
+    visibility: visible;
+}
+
+.chatSideChild button.deleteChat:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.chatSideChild button.deleteChat svg {
+    padding: 8px;
+    fill: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+.chatSideChild:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chatSideChildActive {
+    background: rgba(144, 77, 48, 0.5);
+}
+
+.chatSideChildActive:hover {
+    background: rgba(144, 77, 48, 0.7);
+}
+
+.chatSideChild .chatSideChildLeft {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    width: 90%;
+}
+
+.chatSideChild .chatSideChildLeft .avatarCoverChild {
+    width: 65px;
+    height: 55px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.chatSideChild .chatSideChildLeft svg {
+    padding: 8px;
+    fill: #fff;
+    width: 100%;
+    height: 100%;
+}
+
+.chatSideChild .chatSideChildLeft .nameChatSide {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 18px;
+    color: #fff;
+}
+
+.chatSideChild .chatSideChildLeft .contentChatSide {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    font-weight: 350;
+    letter-spacing: 1px;
+    color: gray;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+    text-wrap: nowrap;
+}
+
+.chatSideChild .chatSideChildRight {
+    width: 10%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+}
+
+.chatSideChild .chatSideChildRight span {
+    color: #fff;
+    background: tomato;
+    border-radius: 50%;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    padding: 0 3px 1px 4px;
+    font-size: 14px;
+}
+
+.chatRoom {
+    padding: 15px;
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.chatRoom .chatRoomEmpty {
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    color: #fff;
+    letter-spacing: 1px;
+    font-size: 22px;
+    text-align: center;
+}
+
+.chatRoom .chatPlace {
+    padding: 0 10px 0 0;
+    width: 100%;
+    height: 88%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    overflow-y: auto;
+}
+
+.chatRoom .chatPlace::-webkit-scrollbar,
+.chatSide::-webkit-scrollbar,
+.notiShow::-webkit-scrollbar {
+    background: none;
+    width: 10px;
+}
+
+.chatRoom .chatPlace::-webkit-scrollbar-thumb,
+.chatSide::-webkit-scrollbar-thumb,
+.notiShow::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+}
+
+.chatRoom .inputChatPlace {
+    width: 100%;
+    height: 10%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}
+
+.chatRoom .inputChatPlace input {
+    height: 100%;
+    width: 88%;
+    border: none;
+    background: none;
+    color: #fff;
+    font-size: 18px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    word-break: break-all;
+    border-right: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.chatRoom .inputChatPlace .emojiButton,
+.chatRoom .inputChatPlace .sendButton {
+    position: relative;
+    width: 5%;
+    height: 100%;
+    padding: 0 2px;
+}
+
+.chatRoom .inputChatPlace .emojiButton .emojiPickerShow {
+    position: absolute;
+    bottom: 125%;
+    right: 100%;
+}
+
+.chatRoom .inputChatPlace .emojiButton button,
+.chatRoom .inputChatPlace .sendButton button {
+    font-size: 20px;
+    background: none;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    border: none;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    transition: all .4s;
+}
+
+.chatRoom .inputChatPlace .emojiButton button:hover,
+.chatRoom .inputChatPlace .sendButton button:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chatRoom .inputChatPlace .sendButton button svg {
+    padding: 11px;
+    width: 40px;
+    height: 40px;
+    fill: #fff;
+}
+
+.chatPlace .abbortTime {
+    margin: 0;
+    color: #999;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-align: center;
+    font-size: 15px;
+}
+
+.chatPlace span {
+    padding: 10px;
+    border-radius: 6px;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 18px;
+    position: relative;
+}
+
+.chatPlace .leftSideChat {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.chatPlace .leftSideChat span {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.chatPlace .rightSideChat {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.chatPlace .rightSideChat span p,
+.chatPlace .leftSideChat span p {
+    margin: 0;
+    position: absolute;
+    font-family: "Oswald", sans-serif;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: 1px;
+    top: 20%;
+    font-size: 15px;
+    right: 110%;
+    opacity: 0;
+    transition: all .4s;
+    text-wrap: nowrap;
+}
+
+.chatPlace .leftSideChat span p {
+    left: 110%;
+}
+
+.chatPlace .rightSideChat span:hover p,
+.chatPlace .leftSideChat span:hover p {
+    opacity: 1;
+}
+
+.chatPlace .rightSideChat span {
+    background: rgba(144, 77, 48, 0.5);
 }

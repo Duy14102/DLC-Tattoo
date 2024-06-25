@@ -45,7 +45,6 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
             }
         }
         axios(configuration).then((res) => {
-            console.log(res.data.results.result);
             setState({ accounts: res.data.results.result, pageCount: res.data.results.pageCount });
         })
     }

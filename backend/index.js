@@ -126,7 +126,7 @@ app.post("/api/v1/Login", (req, res) => {
 // Get Accounts
 app.get("/api/v1/GetAccounts", async (req, res) => {
     await getAccounts.findOne({ _id: req.query.id }).then((resa) => {
-        const dataToSend = { phone: resa.phonenumber, image: resa.userimage }
+        const dataToSend = { phone: resa.phonenumber, image: resa.userimage, notification: resa.notification }
         res.status(201).send(dataToSend)
     }).catch((err) => {
         res.status(404).send(err)
@@ -248,6 +248,38 @@ app.post("/api/v1/ChangeAvatar", async (req, res) => {
         }).catch(() => {
             res.status(500).send("Thay avatar thất bại!")
         })
+    })
+})
+
+// Update Notification
+app.post("/api/v1/UpdateNotification", async (req, res) => {
+    const findEach = await getAccounts.findOne({ _id: req.body.id })
+    const dataPush = []
+    for (var i = 0; i < findEach.notification.length; i++) {
+        findEach.notification[i].status = 2
+        dataPush.push(findEach.notification[i])
+    }
+    getAccounts.updateOne({ _id: req.body.id }, {
+        notification: dataPush
+    }).then(() => {
+        res.status(201).send({})
+    })
+})
+
+// Update Notification Side
+app.post("/api/v1/UpdateNotificationSide", async (req, res) => {
+    const findEach = await getAccounts.findOne({ _id: req.body.id })
+    const dataPush = []
+    for (var i = 0; i < findEach.notification.length; i++) {
+        if (findEach.notification[i].place === req.body.update) {
+            findEach.notification[i].status = 2
+        }
+        dataPush.push(findEach.notification[i])
+    }
+    getAccounts.updateOne({ _id: req.body.id }, {
+        notification: dataPush
+    }).then(() => {
+        res.status(201).send({})
     })
 })
 
@@ -608,6 +640,35 @@ app.get("/api/v1/GetChatRoom", async (req, res) => {
     })
 })
 
+// Get Chat Room For Admin
+app.get("/api/v1/GetChatRoomAdmin", async (req, res) => {
+    await getChats.find({}).then(async (room) => {
+        const dataPush = []
+        room.reduce((acc, curr) => { dataPush.push(curr.createdBy) }, 0)
+        await getAccounts.find({ _id: { $in: dataPush } }).then((user) => {
+            res.status(201).send({ room, user })
+        })
+    })
+})
+
+// Update Notification Chat Tabs
+app.post("/api/v1/UpdateNotificationChatTabs", async (req, res) => {
+    const findEach = await getChats.findOne({ createdBy: req.body.id })
+    const dataPush = []
+    for (var i = 0; i < findEach.data.length; i++) {
+        if (findEach.data[i].id !== req.body.adminId) {
+            findEach.data[i].status = 2
+        }
+        dataPush.push(findEach.data[i])
+    }
+    getChats.updateOne({ createdBy: req.body.id }, {
+        data: dataPush
+    }).then(() => {
+        res.status(201).send({})
+    })
+})
+
+
 
 
 //                                              SOCKET IO
@@ -630,9 +691,15 @@ socketIo.on("connection", (socket) => {
         })
         chats.save().then(() => {
             const dated = { title: "Bạn đã tạo 1 phòng chat", place: "Chat", time: Date.now(), status: 1 }
+            const dated2 = { title: "1 phòng chat đã được tạo", place: "Chat", time: Date.now(), status: 1 }
             getAccounts.updateOne({ _id: data.userId }, {
                 $push: {
                     notification: dated
+                }
+            }).exec()
+            getAccounts.updateMany({ role: 2 }, {
+                $push: {
+                    notification: dated2
                 }
             }).exec()
             socketIo.emit("ChatStartSuccess", { id: data.userId });
@@ -642,13 +709,30 @@ socketIo.on("connection", (socket) => {
     })
 
     socket.on("ChatSend", function (data) {
-        const dated = { id: data.userId, chat: data.chat, time: Date.now() }
+        const dated = { id: data.userId, chat: data.chat, time: Date.now(), status: 1 }
         getChats.updateOne({ _id: data.roomId }, {
             $push: {
                 data: dated
             }
         }).then(() => {
             socketIo.emit("ChatSendSuccess", { id: data.userId });
+        })
+    })
+
+    socket.on("ChatSendAdmin", function (data) {
+        const dated = { id: data.adminId, chat: data.chat, time: Date.now(), status: 1 }
+        getChats.updateOne({ _id: data.roomId }, {
+            $push: {
+                data: dated
+            }
+        }).then(() => {
+            socketIo.emit("ChatSendAdminSuccess", { userId: data.userId, adminId: data.adminId });
+        })
+    })
+
+    socket.on("DeleteChat", function (data) {
+        getChats.deleteOne({ _id: data.roomId }).then(() => {
+            socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
         })
     })
 })

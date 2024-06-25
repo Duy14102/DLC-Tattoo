@@ -13,34 +13,17 @@ import ToastUpdate from '../Toastify/ToastUpdate';
 import { useRef } from "react"
 import GalleryTabs from "./Tabs/GalleryTabs"
 
-function AdminMainBar({ useState, token, useEffect }) {
+function AdminMainBar({ useState, useEffect, accounts, getAccounts, token }) {
     const [open, setOpen] = useState(false)
     const [type, setType] = useState(null)
-    const [accounts, setAccounts] = useState(null)
-    function getAccounts() {
-        const configuration = {
-            method: "get",
-            url: `${process.env.REACT_APP_apiAddress}/api/v1/GetAccounts`,
-            params: {
-                id: token.userId
-            }
-        }
-        axios(configuration).then((res) => {
-            setAccounts(res.data)
-        })
-    }
-    useEffect(() => {
-        getAccounts()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
     return (
         <div className="mainAdminMainBar">
-            <MainBarHeader setOpen={setOpen} axios={axios} accounts={accounts} setType={setType} getAccounts={getAccounts} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} id={token.userId} />
+            <MainBarHeader setOpen={setOpen} axios={axios} accounts={accounts} setType={setType} getAccounts={getAccounts} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} id={token.userId} useEffect={useEffect} />
             <div className="contentMainBar">
                 {localStorage.getItem("tabs") === "Dashboard" ? (
                     <DashboardTabs />
                 ) : localStorage.getItem("tabs") === "Chat" ? (
-                    <ChatTabs />
+                    <ChatTabs useEffect={useEffect} axios={axios} token={token} useRef={useRef} toast={toast} accounts={accounts} />
                 ) : localStorage.getItem("tabs") === "Booking" ? (
                     <BookingTabs />
                 ) : localStorage.getItem("tabs") === "Sample" ? (

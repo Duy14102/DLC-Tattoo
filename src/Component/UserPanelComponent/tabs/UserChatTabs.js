@@ -3,6 +3,7 @@ import UserHeaderTabs from "./UserHeaderTabs"
 import socketIOClient from "socket.io-client";
 import EmojiPicker from 'emoji-picker-react';
 import axios from "axios";
+import ToastError from "../../Toastify/ToastError";
 
 function UserChatTabs({ useRef, decode, toast, ToastUpdate }) {
     const toastNow = useRef(null)
@@ -34,6 +35,19 @@ function UserChatTabs({ useRef, decode, toast, ToastUpdate }) {
             if (decode.userId === data.id) {
                 setState({ chatState: "" })
                 getChatRoom()
+            }
+        })
+
+        socketRef.current.on('ChatSendAdminSuccess', data => {
+            if (decode.userId === data.userId) {
+                getChatRoom()
+            }
+        })
+
+        socketRef.current.on('DeleteChatSuccess', data => {
+            if (decode.userId === data.userId) {
+                getChatRoom()
+                ToastError({ message: "Đoạn chat đã bị xóa!" })
             }
         })
 
