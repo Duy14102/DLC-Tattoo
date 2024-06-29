@@ -1,3 +1,4 @@
+import { useReducer } from "react"
 import About from "../../Component/HomePageComponent/About"
 import BlogSmall from "../../Component/HomePageComponent/BlogSmall"
 import Booking from "../../Component/HomePageComponent/Booking"
@@ -6,13 +7,25 @@ import SlideShow from "../../Component/HomePageComponent/SlideShow"
 
 function HomePage() {
     document.title = "DLC Tattoo - Trang chủ"
+    const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
+        name: "",
+        phone: "",
+        date: "",
+        time: "",
+        note: "",
+        cancelReason: "",
+        haveBooking: null,
+        wantUpdateBooking: false,
+        wantDeleteBooking: false,
+        bookingId: [],
+    })
     return (
         <>
             <SlideShow />
 
             <About />
 
-            <Booking />
+            <Booking type={1} state={state} setState={setState} />
 
             <Service />
 

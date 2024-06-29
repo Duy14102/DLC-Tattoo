@@ -53,7 +53,7 @@
 }
 
 .filterOptions input {
-    accent-color: #904d03;
+    accent-color: #904d30;
     width: 15px;
     height: 15px;
 }
@@ -166,6 +166,26 @@
     position: relative;
 }
 
+.textAdviceBooking {
+    font-family: "Oswald", sans-serif;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: 1px;
+}
+
+.coverImageX .checkMark4Fav {
+    cursor: pointer;
+    position: absolute;
+    top: 37%;
+    left: 37%;
+    font-size: 45px;
+    font-weight: bold;
+    color: #09c167;
+    border: 2px solid #09c167;
+    padding: 8px 16px;
+    border-radius: 50%;
+}
+
 .coverImageX button {
     position: absolute;
     opacity: 0;
@@ -199,7 +219,7 @@
 }
 
 .insideSample h5:hover a {
-    color: #904d03;
+    color: #904d30;
 }
 
 .insideSample .downSample {
@@ -217,7 +237,7 @@
 }
 
 .insideSample .downSample p a {
-    color: #904d03;
+    color: #904d30;
 }
 
 .insideSample .downSample span {
@@ -317,4 +337,35 @@
 .rate>input:checked~label:hover,
 .rate>input:checked~label:hover~label {
     color: #c59b08;
+}
+
+.startBooking,
+.cancelStartBooking {
+    background: #904d30;
+    border: none;
+    color: #fff;
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    padding: 11px;
+    font-size: 15px;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.cancelStartBooking {
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.cancelStartBooking:hover {
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.startBooking:hover {
+    background: rgba(144, 77, 48, 0.7);
+}
+
+.startBooking:active,
+.cancelStartBooking:active {
+    scale: 0.9;
 }

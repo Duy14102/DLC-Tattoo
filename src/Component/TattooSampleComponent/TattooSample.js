@@ -7,6 +7,7 @@ import ToastUpdate from "../Toastify/ToastUpdate";
 import ToastSuccess from "../Toastify/ToastSuccess";
 import ToastError from "../Toastify/ToastError";
 import { jwtDecode } from "jwt-decode";
+import FavouriteBookingModal from "../Modal/FavouriteBookingModal";
 
 function TattooSample({ state, setState, params, useEffect, getSamples, useRef, axios, type }) {
     const toastNow = useRef(null)
@@ -107,10 +108,35 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
             return star.rate.count >= 0
         }
     }
+
+    function pushBookingId(e) {
+        const dataPush = state.bookingId
+        if (dataPush.includes(e)) {
+            dataPush.splice(dataPush.indexOf(e), 1)
+        } else {
+            dataPush.push(e)
+        }
+        setState({ bookingId: dataPush })
+    }
     return (
         <>
             <div className="mainSample">
-                <div style={{ display: "flex", justifyContent: "flex-end", marginBottom: 20 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10, marginBottom: 20 }}>
+                    {type === 2 ? (
+                        state.wantBooking ? (
+                            <>
+                                {state.warningBooking ? (
+                                    <div style={{ color: "tomato" }} className="textAdviceBooking">Chọn ít nhất 1!</div>
+                                ) : (
+                                    <div className="textAdviceBooking">Nhấn vào hình để chọn!</div>
+                                )}
+                                <button onClick={() => setState(state.bookingId.length < 1 ? { warningBooking: true } : { modalFav: true })} className="startBooking">Xong</button>
+                                <button onClick={() => setState({ wantBooking: false, bookingId: [], warningBooking: false })} className="cancelStartBooking">Hủy</button>
+                            </>
+                        ) : (
+                            <button onClick={() => setState({ wantBooking: true })} className="startBooking">Booking</button>
+                        )
+                    ) : null}
                     <select defaultValue={params.sorted} onChange={(e) => { window.location.href = `/${type === 1 ? "TattooSamplePage" : "FavouritePage"}/${e.target.value}/${params.cate}/${params.star}` }}>
                         <option value={"Newtoold"}>Mới nhất trước</option>
                         <option value={"Oldtonew"}>Cũ nhất trước</option>
@@ -125,11 +151,20 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
                         return (
                             <div key={i._id} className="insideSample">
                                 <div className="coverImageX">
-                                    <img onClick={() => { window.location.href = i.thumbnail }} alt="" src={i.thumbnail} width={"100%"} height={"100%"} />
-                                    <button style={localStorage.getItem("favourites")?.includes(i._id) ? { WebkitTextStroke: "1px #fff", color: "transparent" } : null} onClick={() => localStorage.getItem("favourites")?.includes(i._id) ? delFav(i._id) : addFav(i._id)} title={localStorage.getItem("favourites")?.includes(i._id) ? "Bỏ thích" : "Yêu thích"}>❤︎</button>
+                                    {state.wantBooking && type === 2 ? (
+                                        <img onClick={() => pushBookingId(i._id)} style={{ opacity: 0.5 }} alt="" src={i.thumbnail} width={"100%"} height={"100%"} />
+                                    ) : (
+                                        <>
+                                            <img onClick={() => window.location.href = i.thumbnail} alt="" src={i.thumbnail} width={"100%"} height={"100%"} />
+                                            <button style={localStorage.getItem("favourites")?.includes(i._id) ? { WebkitTextStroke: "1px #fff", color: "transparent" } : null} onClick={() => localStorage.getItem("favourites")?.includes(i._id) ? delFav(i._id) : addFav(i._id)} title={localStorage.getItem("favourites")?.includes(i._id) ? "Bỏ thích" : "Yêu thích"}>❤︎</button>
+                                        </>
+                                    )}
+                                    {type === 2 && state.bookingId.includes(i._id) ? (
+                                        <div onClick={() => pushBookingId(i._id)} className="checkMark4Fav">✔</div>
+                                    ) : null}
                                 </div>
-                                <h5><NavLink reloadDocument>{i.title}</NavLink></h5>
-                                <div className="downSample">
+                                <h5 style={state.wantBooking ? { pointerEvents: "none", opacity: 0.5 } : null}><NavLink reloadDocument>{i.title}</NavLink></h5>
+                                <div style={state.wantBooking ? { pointerEvents: "none", opacity: 0.5 } : null} className="downSample">
                                     <div style={{ display: "flex", alignItems: "center", gap: 5 }}>
                                         <p onClick={() => setState({ modalOpen: true, modalData: i })} className="clickViewSession">{i.session.data?.length > 0 ? i.session.data?.length : "1"} buổi</p>
                                         <p>•</p>
@@ -157,6 +192,7 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
                 </div>
             </div>
             <ViewSampleModal state={state} setState={setState} />
+            <FavouriteBookingModal state={state} setState={setState} />
         </>
     )
 }

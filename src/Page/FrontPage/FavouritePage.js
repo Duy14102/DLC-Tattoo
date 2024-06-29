@@ -9,11 +9,24 @@ function FavouritePage() {
     const currentPage = useRef();
     const limit = 9
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
+        name: "",
+        phone: "",
+        date: "",
+        time: "",
+        note: "",
+        cancelReason: "",
         allSamples: null,
+        haveBooking: null,
         modalOpen: false,
         modalData: null,
         indexRateStar: null,
         wantRateStar: false,
+        modalFav: false,
+        wantBooking: false,
+        warningBooking: false,
+        wantUpdateBooking: false,
+        wantDeleteBooking: false,
+        bookingId: [],
         pageCount: 6
     })
 

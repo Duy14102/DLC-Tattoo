@@ -1,9 +1,8 @@
 import EmojiPicker from "emoji-picker-react"
 import { Fragment, useReducer } from "react"
 import socketIOClient from "socket.io-client";
-import ToastSuccess from "../../Toastify/ToastSuccess";
 
-function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
+function ChatTabs({ useEffect, axios, token, useRef, toast }) {
     const toastNow = useRef(null)
     const socketRef = useRef();
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
@@ -11,6 +10,7 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
         chatState: "",
         showEmoji: false,
         chatStorage: null,
+        loading: false,
     })
 
     useEffect(() => {
@@ -34,7 +34,7 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
 
         socketRef.current.on('ChatSendAdminSuccess', data => {
             if (token.userId === data.adminId) {
-                setState({ chatState: "" })
+                setState({ chatState: "", loading: false })
                 getChatRoom()
                 getChatRoomSpecific(data.userId)
             }
@@ -43,10 +43,8 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
         socketRef.current.on('DeleteChatSuccess', data => {
             if (token.userId === data.adminId && data.userId === localStorage.getItem("chatRoom")) {
                 localStorage.removeItem("chatRoom")
-                localStorage.setItem("successDeleteChat", 1)
                 window.location.reload()
             } else if (token.userId === data.adminId && data.userId !== localStorage.getItem("chatRoom")) {
-                localStorage.setItem("successDeleteChat", 1)
                 window.location.reload()
             }
         })
@@ -57,16 +55,7 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const findOut = localStorage.getItem("successDeleteChat")
     const chatRoomX = localStorage.getItem("chatRoom")
-    useEffect(() => {
-        if (findOut) {
-            localStorage.removeItem("successDeleteChat")
-            ToastSuccess({ message: "Xóa đoạn chat thành công!" })
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [findOut])
-
     useEffect(() => {
         if (chatRoomX) {
             const configuration = {
@@ -119,7 +108,8 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
 
     function chatSendAdmin(e, roomId, userId) {
         e.preventDefault()
-        const data = { roomId: roomId, userId: userId, adminId: token.userId, chat: state.chatState }
+        setState({ loading: true })
+        const data = { roomId: roomId, userId: userId, adminId: token.userId, image: state.imageChatState }
         socketRef.current.emit('ChatSendAdmin', data)
     }
 
@@ -127,6 +117,19 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
         toastNow.current = toast.loading("Chờ một chút...")
         const data = { roomId: roomId, userId: userId, adminId: token.userId }
         socketRef.current.emit('DeleteChat', data)
+    }
+
+    function convertToBase64(e) {
+        var reader = new FileReader();
+        if (e.target.files[0]) {
+            reader.readAsDataURL(e.target.files[0]);
+            reader.onload = () => {
+                setState({ imageChatState: reader.result })
+            };
+            reader.onerror = (err) => {
+                console.log(err);
+            }
+        }
     }
 
     return (
@@ -184,24 +187,46 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
                             {state?.chatStorage?.data.map((i, index) => {
                                 return (
                                     <div key={index} className={i.id === token.userId ? "rightSideChat" : "leftSideChat"}>
-                                        <span>{i.chat}
-                                            <p>{new Date(i.time).toLocaleDateString() !== new Date(Date.now()).toLocaleDateString() ? new Date(i.time).toLocaleString() : new Date(i.time).toLocaleTimeString()}</p>
-                                        </span>
+                                        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+                                            {i.chat !== "" ? (
+                                                <span>{i.chat}
+                                                    <p>{new Date(i.time).toLocaleDateString() !== new Date(Date.now()).toLocaleDateString() ? new Date(i.time).toLocaleString() : new Date(i.time).toLocaleTimeString()}</p>
+                                                </span>
+                                            ) : null}
+                                            {i.image ? (
+                                                <a href={i.image}><img alt="" src={i.image} /></a>
+                                            ) : null}
+                                        </div>
                                     </div>
                                 )
                             })}
                         </div>
-                        <form onSubmit={(e) => chatSendAdmin(e, state?.chatStorage._id, state?.chatStorage.createdBy)} className="inputChatPlace">
-                            <input autoComplete="off" value={state.chatState} onChange={(e) => setState({ chatState: e.target.value })} type="text" required />
-                            <input type="submit" style={{ display: "none" }} />
-                            <div className="emojiButton">
-                                <button onClick={() => state.showEmoji ? setState({ showEmoji: false }) : setState({ showEmoji: true })} type="button">😊</button>
-                                {state.showEmoji ? (
-                                    <EmojiPicker className="emojiPickerShow" theme="auto" emojiStyle="facebook" lazyLoadEmojis={true} onEmojiClick={(e) => setState({ chatState: state.chatState + e.emoji, showEmoji: false })} />
+                        <form onSubmit={(e) => chatSendAdmin(e, state?.chatStorage._id, state?.chatStorage.createdBy)} style={state.imageChatState ? { height: "15%" } : null} className="inputChatPlace">
+                            <div className="fatherInput">
+                                {state.imageChatState ? (
+                                    <div className="haveImageChat">
+                                        <img alt="" src={state.imageChatState} width={"100%"} height={"100%"} />
+                                        <button onClick={() => setState({ imageChatState: null })} type="button" className="closeImageChat">x</button>
+                                    </div>
                                 ) : null}
-
+                                {state.imageChatState ? (
+                                    <input autoComplete="off" value={state.chatState} onChange={(e) => setState({ chatState: e.target.value })} type="text" />
+                                ) : (
+                                    <input autoComplete="off" value={state.chatState} onChange={(e) => setState({ chatState: e.target.value })} type="text" required />
+                                )}
                             </div>
-                            <div className="sendButton">
+                            <input type="submit" style={{ display: "none" }} />
+                            <div className="coverButtonRightChat">
+                                <button className="emojiButton" onClick={() => state.showEmoji ? setState({ showEmoji: false }) : setState({ showEmoji: true })} type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 512A256 256 0 1 0 256 0a256 256 0 1 0 0 512zM164.1 325.5C182 346.2 212.6 368 256 368s74-21.8 91.9-42.5c5.8-6.7 15.9-7.4 22.6-1.6s7.4 15.9 1.6 22.6C349.8 372.1 311.1 400 256 400s-93.8-27.9-116.1-53.5c-5.8-6.7-5.1-16.8 1.6-22.6s16.8-5.1 22.6 1.6zM144.4 208a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm192-32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z" /></svg>
+                                    {state.showEmoji ? (
+                                        <EmojiPicker className="emojiPickerShow" theme="auto" emojiStyle="facebook" lazyLoadEmojis={true} onEmojiClick={(e) => setState({ chatState: state.chatState + e.emoji, showEmoji: false })} />
+                                    ) : null}
+                                </button>
+                                <button type="button">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 96C0 60.7 28.7 32 64 32H448c35.3 0 64 28.7 64 64V416c0 35.3-28.7 64-64 64H64c-35.3 0-64-28.7-64-64V96zM323.8 202.5c-4.5-6.6-11.9-10.5-19.8-10.5s-15.4 3.9-19.8 10.5l-87 127.6L170.7 297c-4.6-5.7-11.5-9-18.7-9s-14.2 3.3-18.7 9l-64 80c-5.8 7.2-6.9 17.1-2.9 25.4s12.4 13.6 21.6 13.6h96 32H424c8.9 0 17.1-4.9 21.2-12.8s3.6-17.4-1.4-24.7l-120-176zM112 192a48 48 0 1 0 0-96 48 48 0 1 0 0 96z" /></svg>
+                                    <input onChange={convertToBase64} type="file" style={{ opacity: 0, width: "100%", height: "100%", top: 0, left: 0, position: "absolute", cursor: "pointer" }} />
+                                </button>
                                 <button type="submit">
                                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M498.1 5.6c10.1 7 15.4 19.1 13.5 31.2l-64 416c-1.5 9.7-7.4 18.2-16 23s-18.9 5.4-28 1.6L284 427.7l-68.5 74.1c-8.9 9.7-22.9 12.9-35.2 8.1S160 493.2 160 480V396.4c0-4 1.5-7.8 4.2-10.7L331.8 202.8c5.8-6.3 5.6-16-.4-22s-15.7-6.4-22-.7L106 360.8 17.7 316.6C7.1 311.3 .3 300.7 0 288.9s5.9-22.8 16.1-28.7l448-256c10.7-6.1 23.9-5.5 34 1.4z" /></svg>
                                 </button>
@@ -212,6 +237,9 @@ function ChatTabs({ useEffect, axios, token, useRef, toast, accounts }) {
                     <h4 className="chatRoomEmpty">Hãy chọn 1 người phía bên trái để chat!</h4>
                 )}
             </div>
+            {state.loading ? (
+                <span className="rotateLoading">↻</span>
+            ) : null}
         </div>
     )
 }

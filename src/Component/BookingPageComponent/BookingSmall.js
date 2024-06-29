@@ -1,7 +1,6 @@
 import "./BookingSmall.css"
 
 function BookingSmall() {
-    const AllCate = ["Bắp tay", "Cẳng tay", "Bàn tay", "Bắp chân", "Cẳng chân", "Bàn chân", "Cổ", "Sườn", "Ngực", "Bụng", "Mông", "Vai", "Lưng"]
     return (
         <div className="mainBookingSmall">
             <div className="leftDesc">
@@ -42,17 +41,6 @@ function BookingSmall() {
                 <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
                     <input type="date" required />
                     <input type="time" required />
-                </div>
-                <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
-                    <input type="file" required />
-                    <select required>
-                        <option hidden value={null}>Vị trí xăm</option>
-                        {AllCate.map((i, index) => {
-                            return (
-                                <option key={index}>{i}</option>
-                            )
-                        })}
-                    </select>
                 </div>
                 <textarea required placeholder="Ghi chú"></textarea>
                 <button type="submit">Book lịch xăm</button>

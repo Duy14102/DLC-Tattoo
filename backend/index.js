@@ -55,6 +55,8 @@ const Gallerys = require("./model/Gallerys");
 const getGallerys = mongoose.model("Gallerys");
 const Chats = require("./model/Chats");
 const getChats = mongoose.model("Chats");
+const Bookings = require("./model/Bookings");
+const getBookings = mongoose.model("Bookings");
 
 // Api
 
@@ -451,7 +453,7 @@ app.get("/api/v1/GetAllSample", async (req, res) => {
 // Get Favourite
 app.get("/api/v1/GetFavourites", async (req, res) => {
     const forSort = req.query.sorted === "Newtoold" ? { createdAt: -1 } : req.query.sorted === "Oldtonew" ? { createdAt: 1 } : req.query.sorted === "Bigsession" ? { "session.count": -1 } : req.query.sorted === "Smallsession" ? { "session.count": 1 } : req.query.sorted === "Highprice" ? { price: -1 } : req.query.sorted === "Lowprice" ? { price: 1 } : null
-    const getOrder = await getSamples.find(req.query.cate !== "All" ? { "categories.data.cate": { $in: req.query.cate.split(",").slice(1), _id: { $in: JSON.parse(req.query.id) } } } : { _id: { $in: JSON.parse(req.query.id) } }).sort(forSort)
+    const getOrder = await getSamples.find(req.query.cate !== "All" ? { "categories.data.cate": { $in: req.query.cate.split(",").slice(1) }, _id: { $in: JSON.parse(req.query.id) } } : { _id: { $in: JSON.parse(req.query.id) } }).sort(forSort)
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
 
@@ -505,7 +507,7 @@ app.post("/api/v1/UpdateSample", async (req, res) => {
         updateThis({ "session.data": req.body.session, "session.count": req.body.session.length, lastUpdate: Date.now() })
     }
     if (req.body.content !== "") {
-        updateThis({ content: req.body.conten, lastUpdate: Date.now() })
+        updateThis({ content: req.body.content, lastUpdate: Date.now() })
     }
     if (req.body.price && req.body.price !== "") {
         updateThis({ price: req.body.price, lastUpdate: Date.now() })
@@ -668,6 +670,40 @@ app.post("/api/v1/UpdateNotificationChatTabs", async (req, res) => {
     })
 })
 
+// Get Specific Booking
+app.get("/api/v1/GetSpecBooking", async (req, res) => {
+    await getBookings.findOne({ phone: req.query.phone, status: 1 }).then((resa) => {
+        res.status(201).send(resa)
+    })
+})
+
+// Update Booking
+app.post("/api/v1/UpdateBooking", (req, res) => {
+    function updateThis(updateWhat) {
+        getBookings.updateOne({ _id: req.body.id }, updateWhat).exec()
+    }
+    if (req.body.name !== "") {
+        updateThis({ name: req.body.name })
+    }
+    if (req.body.phone !== "") {
+        updateThis({ phone: req.body.phone })
+    }
+    if (req.body.date !== "") {
+        updateThis({ date: req.body.date })
+    }
+    if (req.body.time !== "") {
+        updateThis({ time: req.body.time })
+    }
+    if (req.body.note !== "") {
+        updateThis({ note: req.body.note })
+    }
+    if (req.body.samples.length > 0) {
+        updateThis({ samples: req.body.samples })
+    }
+    res.status(201).send({})
+})
+
+
 
 
 
@@ -709,30 +745,98 @@ socketIo.on("connection", (socket) => {
     })
 
     socket.on("ChatSend", function (data) {
-        const dated = { id: data.userId, chat: data.chat, time: Date.now(), status: 1 }
-        getChats.updateOne({ _id: data.roomId }, {
-            $push: {
-                data: dated
-            }
-        }).then(() => {
-            socketIo.emit("ChatSendSuccess", { id: data.userId });
-        })
+        var id = new mongoose.Types.ObjectId()
+        const mainChatId = data.roomId + "_" + id
+        if (data.image) {
+            cloudinary.uploader.upload(data.image, {
+                public_id: mainChatId, folder: `Chat/${data.roomId}`
+            }).then((result) => {
+                getChats.updateOne({ _id: data.roomId }, {
+                    $push: {
+                        data: { chatId: mainChatId, id: data.userId, chat: data.chat, image: result.url, time: Date.now(), status: 1 }
+                    }
+                }).then(() => {
+                    socketIo.emit("ChatSendSuccess", { id: data.userId });
+                })
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            getChats.updateOne({ _id: data.roomId }, {
+                $push: {
+                    data: { chatId: mainChatId, id: data.userId, chat: data.chat, time: Date.now(), status: 1 }
+                }
+            }).then(() => {
+                socketIo.emit("ChatSendSuccess", { id: data.userId });
+            })
+        }
     })
 
     socket.on("ChatSendAdmin", function (data) {
-        const dated = { id: data.adminId, chat: data.chat, time: Date.now(), status: 1 }
-        getChats.updateOne({ _id: data.roomId }, {
-            $push: {
-                data: dated
-            }
-        }).then(() => {
-            socketIo.emit("ChatSendAdminSuccess", { userId: data.userId, adminId: data.adminId });
+        var id = new mongoose.Types.ObjectId()
+        const mainChatId = data.roomId + "_" + id
+        if (data.image) {
+            cloudinary.uploader.upload(data.image, {
+                public_id: mainChatId, folder: `Chat/${data.roomId}`
+            }).then((result) => {
+                getChats.updateOne({ _id: data.roomId }, {
+                    $push: {
+                        data: { chatId: mainChatId, id: data.userId, chat: data.chat, image: result.url, time: Date.now(), status: 1 }
+                    }
+                }).then(() => {
+                    socketIo.emit("ChatSendAdminSuccess", { userId: data.userId, adminId: data.adminId });
+                })
+            }).catch((err) => {
+                console.log(err);
+            })
+        } else {
+            getChats.updateOne({ _id: data.roomId }, {
+                $push: {
+                    data: dated
+                }
+            }).then(() => {
+                socketIo.emit("ChatSendAdminSuccess", { userId: data.userId, adminId: data.adminId });
+            })
+        }
+    })
+
+    socket.on("DeleteChat", async function (data) {
+        await cloudinary.api.delete_all_resources(`Chat/${data.roomId}`).then(async () => {
+            await cloudinary.api.delete_folder(`Chat/${data.roomId}`).then(() => {
+                getChats.deleteOne({ _id: data.roomId }).then(() => {
+                    socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
+                })
+            })
+        }).catch(() => {
+            getChats.deleteOne({ _id: data.roomId }).then(() => {
+                socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
+            })
         })
     })
 
-    socket.on("DeleteChat", function (data) {
-        getChats.deleteOne({ _id: data.roomId }).then(() => {
-            socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
+    socket.on("AddBooking", function (data) {
+        const booking = new Bookings({
+            name: data.name,
+            phone: data.phone,
+            date: data.date,
+            time: data.time,
+            note: data.note,
+            samples: data.samples,
+            status: 1
+        })
+        booking.save().then(() => {
+            socketIo.emit("AddBookingSuccess", { phone: data.phone });
+        }).catch(() => {
+            socketIo.emit("AddBookingFail", { phone: data.phone });
+        })
+    })
+
+    socket.on("CancelBooking", function (data) {
+        getBookings.updateOne({ _id: data.id }, {
+            status: 2,
+            cancelReason: data.reason
+        }).then(() => {
+            socketIo.emit("CancelBookingSuccess", { phone: data.phone });
         })
     })
 })
