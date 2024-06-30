@@ -430,7 +430,8 @@ button.buttonB {
     font-size: 15px;
 }
 
-.chatPlace span {
+.chatPlace span,
+.noBookingText {
     padding: 10px;
     border-radius: 6px;
     color: #fff;
@@ -488,4 +489,88 @@ button.buttonB {
 
 .chatPlace .rightSideChat span {
     background: rgba(144, 77, 48, 0.5);
+}
+
+.formBooking {
+    width: 100%;
+    height: auto;
+    background: #101010;
+    padding: 15px;
+    margin-top: 10px;
+}
+
+.formBooking .formHaveH4 {
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    font-size: 22px;
+    margin: 0;
+}
+
+.formBooking input,
+.formBooking select,
+.formBooking textarea {
+    resize: none;
+    display: block;
+    width: 100%;
+    font-size: 15px;
+    color: #fff;
+    padding: 15px;
+    background: #101010;
+    border: none;
+    box-shadow: none;
+    border-radius: 0;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.formBooking textarea {
+    height: 150px;
+}
+
+.formBooking select {
+    width: 105%;
+    padding: 17px;
+}
+
+.formBooking select option {
+    color: #fff;
+}
+
+.formBooking input:focus,
+.formBooking select:focus,
+.formBooking textarea:focus {
+    outline: none;
+}
+
+input[type=date]:invalid::-webkit-datetime-edit,
+input[type=time]:invalid::-webkit-datetime-edit {
+    color: gray;
+}
+
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+    opacity: 0.6;
+    filter: invert(0.8);
+}
+
+.formBooking button {
+    margin-top: 20px;
+    cursor: pointer;
+    text-decoration: none;
+    padding: 14px 30px;
+    overflow: hidden;
+    color: #fff;
+    background: #904d30;
+    font-size: 15px;
+    font-weight: 400;
+    font-family: 'Barlow', sans-serif;
+    transition: all .4s;
+    width: 100%;
+    border: none;
+}
+
+.formBooking button:hover {
+    background: #fff;
+    color: black;
 }

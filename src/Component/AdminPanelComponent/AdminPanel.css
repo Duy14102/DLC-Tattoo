@@ -532,6 +532,17 @@ textarea:focus {
     gap: 10px;
 }
 
+.topBlobTaps select {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: #000;
+    font-weight: 400;
+    font-size: 17px;
+    font-family: "Oswald", sans-serif;
+    padding: 8px;
+    color: #fff;
+    border-radius: 6px;
+}
+
 .topBlobTaps .addNewBlog {
     border: 1px solid rgba(255, 255, 255, 0.1);
     background: #101010;
@@ -734,6 +745,23 @@ textarea:focus {
     margin-top: 25px;
 }
 
+.blogAllWrap .blogAllContent .samplesImage {
+    width: 75px;
+    height: 75px;
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all .4s;
+}
+
+.blogAllWrap .blogAllContent .samplesImage:hover {
+    filter: brightness(0.7);
+}
+
+.blogAllWrap .blogAllContent .samplesImage img {
+    width: 100%;
+    height: 100%;
+}
+
 .blogAllContent .upperContent {
     display: flex;
     justify-content: space-between;
@@ -860,7 +888,7 @@ textarea:focus {
     opacity: 1;
 }
 
-.blogAllContent .botContent .textDate {
+.textDate {
     margin: 0;
     font-family: "Oswald", sans-serif;
     color: #999;
@@ -1784,4 +1812,59 @@ textarea:focus {
 
 .chatPlace .rightSideChat span {
     background: rgba(144, 77, 48, 0.5);
+}
+
+.inputOfBooking {
+    width: 48%;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 15px;
+    background: #000;
+    resize: none;
+    font-size: 18px;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.openMoreSamples {
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all .4s;
+}
+
+.openMoreSamples:hover {
+    color: #fff;
+}
+
+.openMoreSamples span {
+    transition: all .4s;
+    display: inline-block;
+}
+
+.textUnderMoreSamples {
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: #fff;
+    font-size: 18px;
+}
+
+.cancelReasonText {
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    color: #fff;
+    font-size: 18px;
+}
+
+.cancelReasonText span {
+    color: #999;
 }

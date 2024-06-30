@@ -8,7 +8,7 @@ function UserMainBar({ accounts, decode, getAccounts, toast, ToastUpdate, useRef
         <div className="mainAdminMainBar">
             <div className="contentMainBar">
                 {localStorage.getItem("tabs") === "Booking" ? (
-                    <UserBookingTabs />
+                    <UserBookingTabs token={decode} />
                 ) : localStorage.getItem("tabs") === "Chat" ? (
                     <UserChatTabs useRef={useRef} decode={decode} toast={toast} ToastUpdate={ToastUpdate} />
                 ) : localStorage.getItem("tabs") === "ChangePhone" ? (

@@ -1,4 +1,4 @@
-function HaveBooking({ state, setState, axios, toastNow, toast, ToastUpdate, getBookingsX, socketRef }) {
+function HaveBooking({ state, setState, axios, toastNow, toast, ToastUpdate, getBookingsX, socketRef, token }) {
     function updateBooking(e) {
         e.preventDefault()
         toastNow.current = toast.loading("Chờ một chút...")
@@ -42,13 +42,13 @@ function HaveBooking({ state, setState, axios, toastNow, toast, ToastUpdate, get
                     <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, textAlign: "end", paddingTop: 5 }}>Số điện thoại không hợp lệ!</p>
                 ) : null}
                 <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 20 }}>
-                    <input value={state.haveBooking.date} onChange={(e) => setState({ date: e.target.value })} type="date" required />
-                    <input value={state.haveBooking.time} onChange={(e) => setState({ time: e.target.value })} type="time" required />
+                    <input defaultValue={state.haveBooking.date} onChange={(e) => setState({ date: e.target.value })} type="date" required />
+                    <input defaultValue={state.haveBooking.time} onChange={(e) => setState({ time: e.target.value })} type="time" required />
                 </div>
                 {state.date !== "" && new Date(state.date) < Date.now() ? (
                     <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, textAlign: "end", paddingTop: 5 }}>Ngày không hợp lệ!</p>
                 ) : null}
-                <textarea value={state.haveBooking.note} onChange={(e) => setState({ note: e.target.value })} style={{ marginTop: 20 }} placeholder="Ghi chú"></textarea>
+                <textarea defaultValue={state.haveBooking.note} onChange={(e) => setState({ note: e.target.value })} style={{ marginTop: 20 }} placeholder="Ghi chú"></textarea>
             </div>
             {state.wantDeleteBooking ? (
                 <input value={state.cancelReason} onChange={(e) => setState({ cancelReason: e.target.value })} style={{ marginTop: 20 }} placeholder="Lý do hủy..." />

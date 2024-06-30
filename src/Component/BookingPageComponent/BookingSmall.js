@@ -1,6 +1,147 @@
 import "./BookingSmall.css"
+import { useEffect, useReducer, useRef } from "react";
+import { toast } from "react-toastify";
+import socketIOClient from "socket.io-client";
+import ToastUpdate from "../Toastify/ToastUpdate";
+import axios from "axios";
+import Cookies from "universal-cookie";
+import { jwtDecode } from "jwt-decode"
 
 function BookingSmall() {
+    const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
+        name: "",
+        phone: "",
+        date: "",
+        time: "",
+        note: "",
+        cancelReason: "",
+        haveBooking: null,
+        wantUpdateBooking: false,
+        wantDeleteBooking: false,
+        bookingId: [],
+    })
+    const cookies = new Cookies()
+    const token = cookies.get("TOKEN")
+    const socketRef = useRef();
+    const toastNow = useRef(null)
+    useEffect(() => {
+        socketRef.current = socketIOClient.connect(`${process.env.REACT_APP_apiAddress}`)
+
+        socketRef.current.on('AddBookingSuccess', data => {
+            if (data.phone === localStorage?.getItem("bookingSave")) {
+                getBookingsX(localStorage?.getItem("bookingSave"))
+                setState({ name: "", phone: "", date: "", time: "", note: "" })
+                ToastUpdate({ type: 1, message: "Booking thành công!", refCur: toastNow.current })
+            }
+        })
+
+        socketRef.current.on('AddBookingFail', data => {
+            if (data.phone === localStorage?.getItem("bookingSave")) {
+                localStorage.removeItem("bookingSave")
+                ToastUpdate({ type: 2, message: "Booking thất bại!", refCur: toastNow.current })
+            }
+        })
+
+        socketRef.current.on('CancelBookingSuccess', data => {
+            if (data.phone === localStorage?.getItem("bookingSave")) {
+                localStorage.removeItem("bookingSave")
+                setState({ haveBooking: null, wantDeleteBooking: false, cancelReason: "" })
+                ToastUpdate({ type: 1, message: "Hủy booking thành công!", refCur: toastNow.current })
+            }
+        })
+
+        return () => {
+            socketRef.current.disconnect();
+        };
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
+
+    const bookingPhone = localStorage?.getItem("bookingSave")
+    useEffect(() => {
+        if (bookingPhone) {
+            getBookingsX(bookingPhone)
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [bookingPhone])
+
+    useEffect(() => {
+        if (token) {
+            const configuration = {
+                method: "get",
+                url: `${process.env.REACT_APP_apiAddress}/api/v1/GetAccounts`,
+                params: {
+                    id: jwtDecode(token).userId
+                }
+            }
+            axios(configuration).then((res) => {
+                setState({ phone: res.data.phone })
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token])
+
+    function getBookingsX(e) {
+        const configuration = {
+            method: "get",
+            url: `${process.env.REACT_APP_apiAddress}/api/v1/GetSpecBooking`,
+            params: {
+                phone: e
+            }
+        }
+        axios(configuration).then((res) => {
+            console.log(res.data);
+            setState({ haveBooking: res.data })
+        })
+    }
+
+    function addBooking(e) {
+        e.preventDefault()
+        if (!token) {
+            if (!/((09|03|07|08|05)+([0-9]{8})\b)/g.test(state.phone) || new Date(state.date) < Date.now()) {
+                return false
+            }
+        } else {
+            if (new Date(state.date) < Date.now()) {
+                return false
+            }
+        }
+        toastNow.current = toast.loading("Chờ một chút...")
+        localStorage.setItem("bookingSave", state.phone)
+        const data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note }
+        socketRef.current.emit('AddBooking', data)
+    }
+
+    function updateBooking(e) {
+        e.preventDefault()
+        toastNow.current = toast.loading("Chờ một chút...")
+        const configuration = {
+            method: "post",
+            url: `${process.env.REACT_APP_apiAddress}/api/v1/UpdateBooking`,
+            data: {
+                id: state.haveBooking._id,
+                name: state.name,
+                phone: state.phone,
+                date: state.date,
+                time: state.time,
+                note: state.note,
+                samples: state.bookingId
+            }
+        }
+        axios(configuration).then(() => {
+            if (state.phone) {
+                localStorage.setItem("bookingSave", state.phone)
+            }
+            getBookingsX(localStorage.getItem("bookingSave"))
+            setState({ name: "", phone: "", date: "", time: "", note: "", bookingId: [], wantUpdateBooking: false })
+            ToastUpdate({ type: 1, message: "Cập nhật booking thành công!", refCur: toastNow.current })
+        })
+    }
+
+    function cancelBooking() {
+        toastNow.current = toast.loading("Chờ một chút...")
+        const data = { id: state.haveBooking._id, reason: state.cancelReason, phone: localStorage.getItem("bookingSave") }
+        socketRef.current.emit('CancelBooking', data)
+    }
     return (
         <div className="mainBookingSmall">
             <div className="leftDesc">
@@ -34,17 +175,70 @@ function BookingSmall() {
                     </div>
                 </div>
             </div>
-            <form className="rightForm">
-                <h5>Booking form</h5>
-                <input type="text" placeholder="Họ và tên" required />
-                <input type="tel" placeholder="Số điện thoại" required />
-                <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
-                    <input type="date" required />
-                    <input type="time" required />
-                </div>
-                <textarea required placeholder="Ghi chú"></textarea>
-                <button type="submit">Book lịch xăm</button>
-            </form>
+            {state.haveBooking ? (
+                <form onSubmit={(e) => updateBooking(e)} className="rightForm">
+                    <h5>Thông tin booking</h5>
+                    <div className="insideRightForm" style={state.wantUpdateBooking ? null : { pointerEvents: "none" }}>
+                        <input key={state.haveBooking.name} defaultValue={state.haveBooking.name} onChange={(e) => setState({ name: e.target.value })} type="text" placeholder="Họ và tên" required />
+                        <input key={state.haveBooking.phone} defaultValue={state.haveBooking.phone} onChange={(e) => setState({ phone: e.target.value })} type="tel" placeholder="Số điện thoại" required />
+                        {state.phone !== "" && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(state.phone) ? (
+                            <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, paddingTop: 5 }}>Số điện thoại không hợp lệ!</p>
+                        ) : null}
+                        <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+                            <input key={state.haveBooking.date} defaultValue={state.haveBooking.date} onChange={(e) => setState({ date: e.target.value })} type="date" required />
+                            <input key={state.haveBooking.time} defaultValue={state.haveBooking.time} onChange={(e) => setState({ time: e.target.value })} type="time" required />
+                        </div>
+                        {state.date !== "" && new Date(state.date) < Date.now() ? (
+                            <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, paddingTop: 5 }}>Ngày không hợp lệ!</p>
+                        ) : null}
+                        <textarea key={state.haveBooking.note} defaultValue={state.haveBooking.note} onChange={(e) => setState({ note: e.target.value })} required placeholder="Ghi chú"></textarea>
+                    </div>
+                    {state.wantDeleteBooking ? (
+                        <input value={state.cancelReason} onChange={(e) => setState({ cancelReason: e.target.value })} style={{ marginTop: 15 }} placeholder="Lý do hủy..." />
+                    ) : null}
+                    <div style={{ display: "flex", alignItems: "center", gap: 20, marginTop: 15 }}>
+                        {state.haveBooking.status === 1 && !state.wantUpdateBooking && !state.wantDeleteBooking ? (
+                            <>
+                                <button onClick={() => setState({ wantUpdateBooking: true })} type="button">Cập nhật</button>
+                                <button onClick={() => setState({ wantDeleteBooking: true })} style={{ background: "tomato" }} type="button">Hủy booking</button>
+                            </>
+                        ) : null}
+                        {state.wantUpdateBooking ? (
+                            <>
+                                <button type="submit">Xong</button>
+                                <button onClick={() => setState({ wantUpdateBooking: false })} style={{ background: "gray" }} type="button">Hủy</button>
+                            </>
+                        ) : state.wantDeleteBooking ? (
+                            <>
+                                <button onClick={() => cancelBooking()} style={{ background: "tomato" }} type="button">Xác nhận</button>
+                                <button onClick={() => setState({ wantDeleteBooking: false })} style={{ background: "gray" }} type="button">Hủy</button>
+                            </>
+                        ) : null}
+                    </div>
+                </form>
+            ) : (
+                <form onSubmit={(e) => addBooking(e)} className="rightForm">
+                    <h5>Booking form</h5>
+                    <div className="insideRightForm">
+                        <input value={state.name} onChange={(e) => setState({ name: e.target.value })} type="text" placeholder="Họ và tên" required />
+                        {token ? null : (
+                            <input value={state.phone} onChange={(e) => setState({ phone: e.target.value })} type="tel" placeholder="Số điện thoại" required />
+                        )}
+                        {state.phone !== "" && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(state.phone) ? (
+                            <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, paddingTop: 5 }}>Số điện thoại không hợp lệ!</p>
+                        ) : null}
+                        <div style={{ display: "flex", alignItems: "center", gap: 15 }}>
+                            <input value={state.date} onChange={(e) => setState({ date: e.target.value })} type="date" required />
+                            <input value={state.time} onChange={(e) => setState({ time: e.target.value })} type="time" required />
+                        </div>
+                        {state.date !== "" && new Date(state.date) < Date.now() ? (
+                            <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, paddingTop: 5 }}>Ngày không hợp lệ!</p>
+                        ) : null}
+                        <textarea value={state.note} onChange={(e) => setState({ note: e.target.value })} required placeholder="Ghi chú"></textarea>
+                        <button type="submit">Book lịch xăm</button>
+                    </div>
+                </form>
+            )}
         </div>
     )
 }

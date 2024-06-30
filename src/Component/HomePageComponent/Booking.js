@@ -5,8 +5,12 @@ import socketIOClient from "socket.io-client";
 import ToastUpdate from "../Toastify/ToastUpdate";
 import axios from "axios";
 import HaveBooking from "./HaveBooking";
+import Cookies from "universal-cookie";
+import { jwtDecode } from "jwt-decode";
 
 function Booking({ type, state, setState }) {
+    const cookies = new Cookies()
+    const token = cookies.get("TOKEN")
     const socketRef = useRef();
     const toastNow = useRef(null)
     useEffect(() => {
@@ -14,13 +18,13 @@ function Booking({ type, state, setState }) {
 
         socketRef.current.on('AddBookingSuccess', data => {
             if (data.phone === localStorage?.getItem("bookingSave")) {
+                getBookingsX(localStorage?.getItem("bookingSave"))
                 if (type === 2) {
                     setState({ wantBooking: false, bookingId: [], warningBooking: false, name: "", phone: "", date: "", time: "", note: "", modalFav: false })
                 } else {
                     setState({ name: "", phone: "", date: "", time: "", note: "" })
                 }
                 ToastUpdate({ type: 1, message: "Booking thành công!", refCur: toastNow.current })
-                getBookingsX(localStorage?.getItem("bookingSave"))
             }
         })
 
@@ -53,6 +57,22 @@ function Booking({ type, state, setState }) {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookingPhone])
 
+    useEffect(() => {
+        if (token) {
+            const configuration = {
+                method: "get",
+                url: `${process.env.REACT_APP_apiAddress}/api/v1/GetAccounts`,
+                params: {
+                    id: jwtDecode(token).userId
+                }
+            }
+            axios(configuration).then((res) => {
+                setState({ phone: res.data.phone })
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [token])
+
     function getBookingsX(e) {
         const configuration = {
             method: "get",
@@ -75,7 +95,15 @@ function Booking({ type, state, setState }) {
         localStorage.setItem("bookingSave", state.phone)
         var data = null
         if (type === 2) {
-            data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note, samples: state.bookingId }
+            const renamedCate = []
+            state.bookingId.some(e => {
+                if (!Object.hasOwn(e, 'id')) {
+                    e = { id: e, type: 1 }
+                }
+                renamedCate.push(e)
+                return null
+            })
+            data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note, samples: renamedCate }
         } else {
             data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note }
         }
@@ -98,12 +126,14 @@ function Booking({ type, state, setState }) {
                         </div>
                     </div>
                     {state.haveBooking ? (
-                        <HaveBooking state={state} setState={setState} axios={axios} toastNow={toastNow} toast={toast} ToastUpdate={ToastUpdate} getBookingsX={getBookingsX} socketRef={socketRef} />
+                        <HaveBooking state={state} setState={setState} axios={axios} toastNow={toastNow} toast={toast} ToastUpdate={ToastUpdate} getBookingsX={getBookingsX} socketRef={socketRef} token={token} />
                     ) : (
                         <form onSubmit={(e) => addBooking(e)} className="formBooking">
                             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
                                 <input type="text" value={state.name} onChange={(e) => setState({ name: e.target.value })} placeholder="Họ và tên" required />
-                                <input type="tel" value={state.phone} onChange={(e) => setState({ phone: e.target.value })} placeholder="Số điện thoại" required />
+                                {token ? null : (
+                                    <input type="tel" value={state.phone} onChange={(e) => setState({ phone: e.target.value })} placeholder="Số điện thoại" required />
+                                )}
                             </div>
                             {state.phone !== "" && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(state.phone) ? (
                                 <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, textAlign: "end", paddingTop: 5 }}>Số điện thoại không hợp lệ!</p>
@@ -122,10 +152,12 @@ function Booking({ type, state, setState }) {
                 </div>
             </div>
         ) : (
-            <form onSubmit={(e) => addBooking(e)} style={{ width: "100%" }} className="formBooking">
+            <form onSubmit={(e) => addBooking(e)} style={{ width: "100%", padding: "30px 20px" }} className="formBooking">
                 <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
                     <input value={state.name} onChange={(e) => setState({ name: e.target.value })} type="text" placeholder="Họ và tên" required />
-                    <input value={state.phone} onChange={(e) => setState({ phone: e.target.value })} type="tel" placeholder="Số điện thoại" required />
+                    {token ? null : (
+                        <input value={state.phone} onChange={(e) => setState({ phone: e.target.value })} type="tel" placeholder="Số điện thoại" required />
+                    )}
                 </div>
                 {state.phone !== "" && !/((09|03|07|08|05)+([0-9]{8})\b)/g.test(state.phone) ? (
                     <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, textAlign: "end", paddingTop: 5 }}>Số điện thoại không hợp lệ!</p>
@@ -135,7 +167,7 @@ function Booking({ type, state, setState }) {
                     <input value={state.time} onChange={(e) => setState({ time: e.target.value })} type="time" required />
                 </div>
                 {state.date !== "" && new Date(state.date) < Date.now() ? (
-                    <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, textAlign: "end", paddingTop: 5 }}>Ngày không hợp lệ!</p>
+                    <p style={{ color: "tomato", fontWeight: 400, fontFamily: "Oswald", letterSpacing: 1, margin: 0, paddingTop: 5 }}>Ngày không hợp lệ!</p>
                 ) : null}
                 <textarea value={state.note} onChange={(e) => setState({ note: e.target.value })} style={{ marginTop: 20 }} placeholder="Ghi chú"></textarea>
                 <button type="submit">Book lịch xăm</button>

@@ -122,7 +122,7 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
         <>
             <div className="mainSample">
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "flex-end", gap: 10, marginBottom: 20 }}>
-                    {type === 2 ? (
+                    {type === 2 && !localStorage.getItem("bookingSave") ? (
                         state.wantBooking ? (
                             <>
                                 {state.warningBooking ? (

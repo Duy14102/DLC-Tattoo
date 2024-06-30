@@ -11,6 +11,12 @@
     text-align: start;
 }
 
+.mainBookingSmall .rightForm .insideRightForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
 .mainBookingSmall h5 {
     color: #fff;
     font-size: 27px;
@@ -86,7 +92,6 @@
     font-weight: 400;
     color: #FFF;
     border: 1px solid rgba(255, 255, 255, 0.1);
-    margin-bottom: 15px;
 }
 
 .rightForm textarea {

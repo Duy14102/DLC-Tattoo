@@ -205,14 +205,13 @@ app.post("/api/v1/UnbanAccount", (req, res) => {
 app.post("/api/v1/UpdatePhone", async (req, res) => {
     const find = await getAccounts.findOne({ phonenumber: req.body.phone })
     if (find) {
-        res.status(404).send("Số điện thoại đã tồn tại!")
-    } else {
-        getAccounts.updateOne({ _id: req.body.id }, {
-            phonenumber: req.body.phone
-        }).then(() => {
-            res.status(201).send("Thay đổi thành công!")
-        }).catch((err) => console.log(err))
+        return res.status(404).send("Số điện thoại đã tồn tại!")
     }
+    getAccounts.updateOne({ _id: req.body.id }, {
+        phonenumber: req.body.phone
+    }).then(() => {
+        res.status(201).send("Thay đổi thành công!")
+    }).catch((err) => console.log(err))
 })
 
 // Update password
@@ -703,6 +702,64 @@ app.post("/api/v1/UpdateBooking", (req, res) => {
     res.status(201).send({})
 })
 
+// Get Booking Admin
+app.get("/api/v1/GetBookingAdmin", async (req, res) => {
+    const filterStatus = parseInt(req.query.filter)
+    const getOrder = await getBookings.find(req.query.search ? { name: new RegExp(req.query.search, 'i'), status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } } : { status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } }).sort({ status: 1, createdAt: -1 })
+    const dataPush = []
+    if (getOrder) {
+        getOrder.reduce((acc, curr) => {
+            curr.samples.filter((item, index) => item.type === 1 && curr.samples.indexOf(item) === index).reduce((acc2, curr2) => {
+                dataPush.push(curr2.id)
+            }, 0)
+        }, 0)
+    }
+    const page = parseInt(req.query.page)
+    const limit = parseInt(req.query.limit)
+
+    const start = (page - 1) * limit
+    const end = page * limit
+
+    const results = {}
+    results.total = getOrder.length
+    results.pageCount = Math.ceil(getOrder.length / limit)
+    if (dataPush.length > 0) {
+        results.samples = await getSamples.find({ _id: dataPush })
+    }
+
+    if (end < getOrder.length) {
+        results.next = {
+            page: page + 1
+        }
+    }
+    if (start > 0) {
+        results.prev = {
+            page: page - 1
+        }
+    }
+
+    results.result = getOrder.slice(start, end)
+    res.send({ results });
+})
+
+// Add sample booking
+app.post("/api/v1/AddSamplesToBooking", (req, res) => {
+    var id = new mongoose.Types.ObjectId()
+    const mainChatId = req.body.id + "_" + id
+    cloudinary.uploader.upload(req.body.samples, {
+        public_id: mainChatId, folder: "Booking"
+    }).then((result) => {
+        const dataSamples = { link: result.url, type: 2 }
+        getBookings.updateOne({ _id: req.body.id }, {
+            $push: {
+                samples: dataSamples
+            }
+        }).exec()
+        res.status(201).send("Thêm hình mẫu thành công!")
+    }).catch(() => {
+        return res.status(500).send("Thêm hình mẫu thất bại!")
+    })
+})
 
 
 
@@ -801,7 +858,7 @@ socketIo.on("connection", (socket) => {
     })
 
     socket.on("DeleteChat", async function (data) {
-        await cloudinary.api.delete_all_resources(`Chat/${data.roomId}`).then(async () => {
+        await cloudinary.api.delete_resources_by_prefix(`Chat/${data.roomId}`).then(async () => {
             await cloudinary.api.delete_folder(`Chat/${data.roomId}`).then(() => {
                 getChats.deleteOne({ _id: data.roomId }).then(() => {
                     socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
@@ -814,10 +871,15 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("AddBooking", function (data) {
+    socket.on("AddBooking", async function (data) {
+        var dataPhone = null
+        if (data.tokenId) {
+            const dataFind = await getAccounts.findOne({ _id: data.tokenId })
+            dataPhone = dataFind.phonenumber
+        }
         const booking = new Bookings({
             name: data.name,
-            phone: data.phone,
+            phone: data.tokenId ? dataPhone : data.phone,
             date: data.date,
             time: data.time,
             note: data.note,
@@ -825,7 +887,7 @@ socketIo.on("connection", (socket) => {
             status: 1
         })
         booking.save().then(() => {
-            socketIo.emit("AddBookingSuccess", { phone: data.phone });
+            socketIo.emit("AddBookingSuccess", { phone: data.tokenId ? dataPhone : data.phone });
         }).catch(() => {
             socketIo.emit("AddBookingFail", { phone: data.phone });
         })
@@ -833,10 +895,27 @@ socketIo.on("connection", (socket) => {
 
     socket.on("CancelBooking", function (data) {
         getBookings.updateOne({ _id: data.id }, {
-            status: 2,
+            status: 4,
             cancelReason: data.reason
         }).then(() => {
             socketIo.emit("CancelBookingSuccess", { phone: data.phone });
+        })
+    })
+
+    socket.on("CancelBookingByAdmin", function (data) {
+        getBookings.updateOne({ _id: data.bookingId }, {
+            status: 4,
+            cancelReason: data.reason
+        }).then(() => {
+            socketIo.emit("CancelBookingByAdminSuccess", { adminId: data.adminId });
+        })
+    })
+
+    socket.on("ConfirmBooking", function (data) {
+        getBookings.updateOne({ _id: data.bookingId }, {
+            status: 2,
+        }).then(() => {
+            socketIo.emit("ConfirmBookingSuccess", { adminId: data.adminId });
         })
     })
 })
