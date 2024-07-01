@@ -387,7 +387,7 @@ app.post("/api/v1/UpdateBlog", async (req, res) => {
 })
 
 // add sample
-app.post("/api/v1/AddSample", (req, res) => {
+app.post("/api/v1/AddSample", async (req, res) => {
     const blog = new Samples({
         title: req.body.title,
         content: req.body.content,
@@ -760,6 +760,46 @@ app.post("/api/v1/AddSamplesToBooking", (req, res) => {
         return res.status(500).send("Thêm hình mẫu thất bại!")
     })
 })
+
+// Update price booking session
+app.post("/api/v1/UpdateBookingSessionPrice", async (req, res) => {
+    const dataPush = []
+    const dataPush2 = []
+    if (!req.body.realSession || req.body.realSession.length < 1) {
+        getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, {
+            $push: {
+                "samples.$.payingSession": req.body.price
+            }
+        }).then(() => {
+            return res.status(201).send({})
+        })
+    } else {
+        req.body.realSession.reduce((acc, curr) => {
+            if (curr.sessionTitle.localeCompare(req.body.price.sessionTitle) === 0) {
+                curr = req.body.price
+                dataPush.push(curr)
+            } else {
+                dataPush2.push(curr)
+            }
+        }, 0)
+        if (dataPush.length > 0) {
+            getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, {
+                "samples.$.payingSession": dataPush.concat(dataPush2)
+            }).then(() => {
+                return res.status(201).send({})
+            })
+        } else {
+            getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, {
+                $push: {
+                    "samples.$.payingSession": req.body.price
+                }
+            }).then(() => {
+                return res.status(201).send({})
+            })
+        }
+    }
+})
+
 
 
 

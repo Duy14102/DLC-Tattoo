@@ -111,12 +111,18 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
 
     function pushBookingId(e) {
         const dataPush = state.bookingId
-        if (dataPush.includes(e)) {
-            dataPush.splice(dataPush.indexOf(e), 1)
+        if (dataPush.filter(item => item.id === e).length > 0) {
+            dataPush.filter((item) => {
+                if (item.id === e) {
+                    dataPush.splice(dataPush.indexOf(item), 1)
+                }
+                return dataPush
+            })
+            return setState({ bookingId: dataPush })
         } else {
-            dataPush.push(e)
+            dataPush.push({ id: e, type: 1 })
+            return setState({ bookingId: dataPush })
         }
-        setState({ bookingId: dataPush })
     }
     return (
         <>
@@ -159,8 +165,14 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
                                             <button style={localStorage.getItem("favourites")?.includes(i._id) ? { WebkitTextStroke: "1px #fff", color: "transparent" } : null} onClick={() => localStorage.getItem("favourites")?.includes(i._id) ? delFav(i._id) : addFav(i._id)} title={localStorage.getItem("favourites")?.includes(i._id) ? "Bỏ thích" : "Yêu thích"}>❤︎</button>
                                         </>
                                     )}
-                                    {type === 2 && state.bookingId.includes(i._id) ? (
-                                        <div onClick={() => pushBookingId(i._id)} className="checkMark4Fav">✔</div>
+                                    {type === 2 && state.bookingId.length > 0 ? (
+                                        state.bookingId.map((h) => {
+                                            return (
+                                                i._id === h.id ? (
+                                                    <div key={h.id} onClick={() => pushBookingId(i._id)} className="checkMark4Fav">✔</div>
+                                                ) : null
+                                            )
+                                        })
                                     ) : null}
                                 </div>
                                 <h5 style={state.wantBooking ? { pointerEvents: "none", opacity: 0.5 } : null}><NavLink reloadDocument>{i.title}</NavLink></h5>
@@ -176,11 +188,11 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
                                         )}
                                         {state.wantRateStar && state.indexRateStar === index ? (
                                             <div onMouseLeave={() => setState({ wantRateStar: false, indexRateStar: null })} className="rate">
-                                                <label title="text" onClick={() => rateThis("5", i)} htmlFor='star5'>5 stars</label>
-                                                <label title="text" onClick={() => rateThis("4", i)} htmlFor='star4'>4 stars</label>
-                                                <label title="text" onClick={() => rateThis("3", i)} htmlFor='star3'>3 stars</label>
-                                                <label title="text" onClick={() => rateThis("2", i)} htmlFor='star2'>2 stars</label>
-                                                <label title="text" onClick={() => rateThis("1", i)} htmlFor='star1'>1 star</label>
+                                                <label title="5 sao" onClick={() => rateThis("5", i)} htmlFor='star5'>5 stars</label>
+                                                <label title="4 sao" onClick={() => rateThis("4", i)} htmlFor='star4'>4 stars</label>
+                                                <label title="3 sao" onClick={() => rateThis("3", i)} htmlFor='star3'>3 stars</label>
+                                                <label title="2 sao" onClick={() => rateThis("2", i)} htmlFor='star2'>2 stars</label>
+                                                <label title="1 sao" onClick={() => rateThis("1", i)} htmlFor='star1'>1 star</label>
                                             </div>
                                         ) : null}
                                         <p>{`(${i.rate.data.length})`}</p>
@@ -190,7 +202,7 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
                         )
                     })}
                 </div>
-            </div>
+            </div >
             <ViewSampleModal state={state} setState={setState} />
             <FavouriteBookingModal state={state} setState={setState} />
         </>

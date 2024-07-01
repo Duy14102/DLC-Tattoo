@@ -95,15 +95,7 @@ function Booking({ type, state, setState }) {
         localStorage.setItem("bookingSave", state.phone)
         var data = null
         if (type === 2) {
-            const renamedCate = []
-            state.bookingId.some(e => {
-                if (!Object.hasOwn(e, 'id')) {
-                    e = { id: e, type: 1 }
-                }
-                renamedCate.push(e)
-                return null
-            })
-            data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note, samples: renamedCate }
+            data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note, samples: state.bookingId }
         } else {
             data = { name: state.name, phone: state.phone, date: state.date, time: state.time, note: state.note }
         }

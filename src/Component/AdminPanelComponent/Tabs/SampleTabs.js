@@ -27,6 +27,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         warningAddSession: null, warningUpdateSession2: null, warningUpdateSession: null,
         wantAddSample: false,
         appearWarning: false,
+        checkTitle: false, checkTitle2: null,
         pageCount: 6
     })
 
@@ -109,6 +110,13 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         if (parseInt(state.sessionAdd.reduce((acc, o) => { return acc + parseInt(o.price) }, 0)) > parseInt(state.price)) {
             return false
         }
+        var valueArr = state.sessionAdd.map(function (item) { return item.title });
+        var isDuplicate = valueArr.some(function (item, idx) {
+            return valueArr.indexOf(item) !== idx
+        });
+        if (isDuplicate) {
+            return setState({ checkTitle: true })
+        }
         const cateNamed = state.cateChoose.map(z => { return { cate: z } })
         const configuration = {
             method: "post",
@@ -124,7 +132,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         }
         toastNow.current = toast.loading("Chờ một chút...")
         axios(configuration).then((res) => {
-            setState({ title: "", thumbnail: "", content: "", price: undefined, cateChoose: [], sessionAdd: [], wantAddSample: false, warningCate: false })
+            setState({ title: "", thumbnail: "", content: "", price: undefined, cateChoose: [], sessionAdd: [], wantAddSample: false, warningCate: false, checkTitle: false })
             getSamples()
             ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
         }).catch((err) => {
@@ -177,6 +185,13 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
             renamedCate.push(t)
             return null
         })
+        var valueArr = state.updateSessionAdd.map(function (item) { return item.title });
+        var isDuplicate = valueArr.some(function (item, idx) {
+            return valueArr.indexOf(item) !== idx
+        });
+        if (isDuplicate) {
+            return setState({ checkTitle2: state.indexChange })
+        }
         const configuration = {
             method: "post",
             url: `${process.env.REACT_APP_apiAddress}/api/v1/UpdateSample`,
@@ -192,7 +207,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         }
         toastNow.current = toast.loading("Chờ một chút...")
         axios(configuration).then((res) => {
-            setState({ indexChange: null, wantChangeContent: false, wantChangeCate: false, wantChangeSession: false, wantChangePrice: false, wantChangeTitle: false, updateContent: "", updateThumbnail: "", updateTitle: "", updateCateChoose: [], updateSessionAdd: [], updatePrice: undefined, appearWarning: true })
+            setState({ indexChange: null, wantChangeContent: false, wantChangeCate: false, wantChangeSession: false, wantChangePrice: false, wantChangeTitle: false, updateContent: "", updateThumbnail: "", updateTitle: "", updateCateChoose: [], updateSessionAdd: [], updatePrice: undefined, appearWarning: true, checkTitle2: null })
             getSamples()
             ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
             setTimeout(() => {
@@ -285,6 +300,9 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                                 </div>
                             ) : null}
                         </div>
+                        {state.checkTitle ? (
+                            <p style={{ margin: 0, fontFamily: "Oswald", color: "tomato", paddingLeft: 15 }}>Tiêu đề bị trùng!</p>
+                        ) : null}
                         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-evenly" }}>
                             <button type='submit' className='yesForm yesNoButton'>Xong</button>
                             <button type='button' onClick={() => setState({ wantAddSample: false })} className='noForm yesNoButton'>Hủy</button>
@@ -407,6 +425,9 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                                     </>
                                 ) : null}
                             </div>
+                            {state.checkTitle2 === index ? (
+                                <p style={{ margin: 0, fontFamily: "Oswald", color: "tomato", paddingLeft: 15 }}>Tiêu đề bị trùng!</p>
+                            ) : null}
                             <div className='botContent'>
                                 {state.wantDelete && state.indexChange === index ? (
                                     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
@@ -418,7 +439,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
                                     state.indexChange === index ? (
                                         <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
                                             <button onClick={() => updateSamples(i._id)} style={{ background: "#904d03" }}>Cập nhật</button>
-                                            <button onClick={() => setState({ wantChangeTitle: false, updateThumbnail: "", wantChangeContent: false, wantChangeSession: false, wantChangePrice: false, wantChangeCate: false, indexChange: null, updateCateChoose: [], updateSessionAdd: [], updatePrice: undefined })} style={{ background: "#999" }}>Hủy</button>
+                                            <button onClick={() => setState({ wantChangeTitle: false, updateThumbnail: "", wantChangeContent: false, wantChangeSession: false, wantChangePrice: false, wantChangeCate: false, indexChange: null, updateCateChoose: [], updateSessionAdd: [], updatePrice: undefined, checkTitle2: null })} style={{ background: "#999" }}>Hủy</button>
                                         </div>
                                     ) : null
                                 ) : (

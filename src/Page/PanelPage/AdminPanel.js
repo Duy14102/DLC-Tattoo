@@ -43,7 +43,7 @@ function AdminPanel() {
         }
         getAccounts()
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [decode])
+    }, [])
 
     if (!token) {
         return NotFound404()

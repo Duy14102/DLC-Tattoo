@@ -2,6 +2,7 @@ import { Fragment, useReducer } from "react"
 import SearchBar from "./SearchBar"
 import ReactPaginate from 'react-paginate';
 import socketIOClient from "socket.io-client";
+import BookingType1Modal from "../../Modal/BookingType1Modal";
 
 function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
@@ -14,6 +15,9 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         pageCount: 6,
         moreSamples: false,
         wantCancel: false,
+        modalOpen: false, modalData: null, modalData2: null, modalData3: null,
+        payingPrice: null,
+        wantChangeSessionPrice: false, indexSessionPrice: null,
         filter: 0
     })
     const toastNow = useRef(null)
@@ -171,7 +175,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
                                                 <Fragment key={u.id}>
                                                     {state?.allSamples.filter(item2 => item2._id === u.id).map((y) => {
                                                         return (
-                                                            <a key={y._id} href={y.thumbnail} className="samplesImage"><img alt="" src={y.thumbnail} /></a>
+                                                            <button id="clickModal" onClick={() => setState({ modalOpen: true, modalData: y, modalData2: u, modalData3: i })} key={y._id} className="samplesImage"><img alt="" src={y.thumbnail} /></button>
                                                         )
                                                     })}
                                                 </Fragment>
@@ -214,6 +218,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
                 activeClassName="active"
                 forcePage={currentPage.current - 1}
             />
+            <BookingType1Modal state={state} setState={setState} axios={axios} getBooking={getBooking} toast={toast} toastNow={toastNow} ToastUpdate={ToastUpdate} />
         </>
     )
 }
