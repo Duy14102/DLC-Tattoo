@@ -746,10 +746,10 @@ app.get("/api/v1/GetBookingAdmin", async (req, res) => {
 app.post("/api/v1/AddSamplesToBooking", (req, res) => {
     var id = new mongoose.Types.ObjectId()
     const mainChatId = req.body.id + "_" + id
-    cloudinary.uploader.upload(req.body.samples, {
+    cloudinary.uploader.upload(req.body.image, {
         public_id: mainChatId, folder: "Booking"
     }).then((result) => {
-        const dataSamples = { link: result.url, type: 2 }
+        const dataSamples = { id: mainChatId, title: req.body.title, price: req.body.price, image: result.url, payingSession: req.body.session, type: 2 }
         getBookings.updateOne({ _id: req.body.id }, {
             $push: {
                 samples: dataSamples
@@ -798,6 +798,82 @@ app.post("/api/v1/UpdateBookingSessionPrice", async (req, res) => {
             })
         }
     }
+})
+
+// Update price booking session 2
+app.post("/api/v1/UpdateBookingSessionPrice2", (req, res) => {
+    getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, {
+        "samples.$.payingSession": req.body.realSession
+    }).then(() => {
+        return res.status(201).send({})
+    })
+})
+
+// Update Main Dish Of Booking
+app.post("/api/v1/UpdateBookingMainDish", async (req, res) => {
+    function updateWhat(e) {
+        getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, e).exec()
+    }
+    if (req.body.title && req.body.title !== "") {
+        updateWhat({ "samples.$.title": req.body.title })
+    }
+    if (req.body.price !== "") {
+        updateWhat({ "samples.$.price": req.body.price })
+    } else if (req.body.price === "") {
+        updateWhat({ "samples.$.price": "" })
+    }
+    if (req.body.image) {
+        await cloudinary.uploader.destroy(`Booking/${req.body.sessionId}`).then(() => {
+            cloudinary.uploader.upload(req.body.image, {
+                public_id: req.body.sessionId, folder: "Booking"
+            }).then((result) => {
+                updateWhat({ "samples.$.image": result.url })
+            }).catch(() => {
+                return res.status(500).send("Cập nhật booking thất bại!")
+            })
+        }).catch(() => {
+            return res.status(500).send("Cập nhật booking thất bại!")
+        })
+    }
+    return res.status(201).send("Cập nhật booking thành công!")
+})
+
+// Delete Main Dish Of Booking
+app.post("/api/v1/DeleteBookingMainDish", async (req, res) => {
+    await cloudinary.uploader.destroy(`Booking/${req.body.sessionId}`).then(() => {
+        getBookings.updateOne({ _id: req.body.bookingId }, {
+            $pull: {
+                samples: { id: req.body.sessionId }
+            }
+        }).then(() => {
+            return res.status(201).send("Xóa booking thành công!")
+        })
+    }).catch(() => {
+        return res.status(500).send("Xóa booking thất bại!")
+    })
+})
+
+// Update real booking
+app.post("/api/v1/UpdateRealBooking", (req, res) => {
+    function updateWhat(e) {
+        getBookings.updateOne({ _id: req.body.id }, e).exec()
+    }
+    if (req.body.name && req.body.name !== "") {
+        updateWhat({ name: req.body.name })
+    }
+    if (req.body.phone && req.body.phone !== "") {
+        updateWhat({ phone: req.body.phone })
+    }
+    if (req.body.date && req.body.date !== "") {
+        updateWhat({ date: req.body.date })
+    }
+    if (req.body.time && req.body.time !== "") {
+        updateWhat({ time: req.body.time })
+    }
+    if (req.body.note && req.body.note !== "") {
+        updateWhat({ note: req.body.note })
+    }
+    return res.status(201).send("Cập nhật booking thành công!")
 })
 
 
@@ -934,10 +1010,16 @@ socketIo.on("connection", (socket) => {
     })
 
     socket.on("CancelBooking", function (data) {
+        const dated2 = { title: "1 đơn booking bị hủy", place: "Booking", time: Date.now(), status: 1 }
         getBookings.updateOne({ _id: data.id }, {
             status: 4,
             cancelReason: data.reason
         }).then(() => {
+            getAccounts.updateMany({ role: 2 }, {
+                $push: {
+                    notification: dated2
+                }
+            }).exec()
             socketIo.emit("CancelBookingSuccess", { phone: data.phone });
         })
     })
@@ -956,6 +1038,14 @@ socketIo.on("connection", (socket) => {
             status: 2,
         }).then(() => {
             socketIo.emit("ConfirmBookingSuccess", { adminId: data.adminId });
+        })
+    })
+
+    socket.on("DoneBooking", function (data) {
+        getBookings.updateOne({ _id: data.bookingId }, {
+            status: 3,
+        }).then(() => {
+            socketIo.emit("DoneBookingSuccess", { adminId: data.adminId });
         })
     })
 })

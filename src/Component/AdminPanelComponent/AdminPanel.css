@@ -665,11 +665,13 @@ textarea:focus {
     transition: all .4s;
     color: #fff;
     border: none;
-    padding: 10px 20px;
+    padding: 8px 18px;
     border-radius: 6px;
     font-size: 18px;
-    font-weight: bold;
+    font-weight: 400;
     cursor: pointer;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
 }
 
 .yesForm {
@@ -1881,6 +1883,205 @@ textarea:focus {
     color: #fff;
     width: 500px;
     height: auto;
+}
+
+.coverWithHonor {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 48%;
+}
+
+.coverWithHonor input {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 10px;
+    color: #fff;
+    font-weight: 400;
+    font-size: 16px;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.coverWithHonor:nth-child(even) {
+    justify-content: flex-end;
+}
+
+.fatherAddType2 {
+    padding: 10px;
+    width: 500px;
+}
+
+.rateXXX {
+    color: #ffc700;
+    font-size: 20px;
+    font-weight: 400;
+    margin: 0;
+}
+
+.addType2 {
+    display: flex;
+    justify-content: space-between;
+}
+
+.addType2 .addType2FirstChild {
+    width: 73%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.addType2 .addType2FirstChild input {
+    background: #000;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 10px;
+    color: #fff;
+    font-weight: 400;
+    font-size: 18px;
+    width: 100%;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+}
+
+.plusSessionType2 {
+    border: none;
+    border-radius: 6px;
+    width: 75px;
+    padding: 5px 0;
+    background: #904d30;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: 16px;
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.plusSessionType2:active {
+    scale: 0.9;
+}
+
+.plusSessionType2:hover {
+    opacity: 0.7;
+}
+
+.addType2 .addType2SecondChild,
+.addType2 .addType2SecondChild2 {
+    width: 25%;
+    height: 125px;
+    position: relative;
+    display: grid;
+    place-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: all .4s;
+}
+
+.addType2 .addType2SecondChild svg {
+    width: 45px;
+    height: 45px;
+    fill: #fff;
+}
+
+.addType2 .addType2SecondChild img,
+.addType2 .addType2SecondChild2 img {
+    width: 100%;
+    height: 100%;
+    transition: all .4s;
+}
+
+.addType2 .addType2SecondChild svg.hoverSvgXXX {
+    opacity: 0;
+    position: absolute;
+    top: 30%;
+    left: 30%;
+    transition: all .4s;
+}
+
+.addType2 .addType2SecondChild:hover svg.hoverSvgXXX {
+    opacity: 1;
+}
+
+.addType2 .addType2SecondChild:hover img {
+    filter: brightness(0.6);
+}
+
+.addType2 .addType2SecondChild input {
+    position: absolute;
+    left: 0;
+    top: 0;
+    cursor: pointer;
+    width: 100%;
+    height: 100%;
+    opacity: 0;
+}
+
+.sessionOnOver {
+    display: flex;
+    margin-top: 10px;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.sessionOnOverX {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.deleteSessionType2Add {
+    background: none;
+    border: none;
+    width: 5%;
+    text-align: center;
+    cursor: pointer;
+}
+
+.deleteSessionType2Add:hover svg {
+    fill: tomato;
+}
+
+.deleteSessionType2Add svg {
+    fill: #fff;
+    width: 18px;
+    height: 18px;
+    transition: all .4s;
+}
+
+.sessionOnOver .sessionOnOverChild {
+    width: 95%;
+    padding: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.sessionOnOver .sessionOnOverChild input {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: inherit;
+    border-radius: 6px;
+    padding: 10px;
+    width: 48%;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    font-size: 15px;
+}
+
+.sessionOnOver .sessionOnOverChild input:nth-child(3),
+.sessionOnOver .sessionOnOverChild input:nth-child(4) {
+    margin-top: 10px;
 }
 
 .detailSession p {
