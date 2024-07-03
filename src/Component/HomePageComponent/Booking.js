@@ -82,7 +82,7 @@ function Booking({ type, state, setState }) {
             }
         }
         axios(configuration).then((res) => {
-            setState({ haveBooking: res.data })
+            setState({ haveBooking: res.data.resa, allSamples: res.data.samples })
         })
     }
 
@@ -118,7 +118,7 @@ function Booking({ type, state, setState }) {
                         </div>
                     </div>
                     {state.haveBooking ? (
-                        <HaveBooking state={state} setState={setState} axios={axios} toastNow={toastNow} toast={toast} ToastUpdate={ToastUpdate} getBookingsX={getBookingsX} socketRef={socketRef} token={token} />
+                        <HaveBooking state={state} setState={setState} axios={axios} toastNow={toastNow} toast={toast} ToastUpdate={ToastUpdate} getBookingsX={getBookingsX} socketRef={socketRef} token={token} useEffect={useEffect} useRef={useRef} />
                     ) : (
                         <form onSubmit={(e) => addBooking(e)} className="formBooking">
                             <div style={{ display: "flex", alignItems: "center", gap: 20 }}>

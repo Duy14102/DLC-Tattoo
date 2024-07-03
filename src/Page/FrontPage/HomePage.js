@@ -18,6 +18,7 @@ function HomePage() {
         wantUpdateBooking: false,
         wantDeleteBooking: false,
         bookingId: [],
+        modalOpen2: false, samplesId: [], wantType: null, pageCount2: 6, samplesForAdd: null, search2: "", contentSearch2: null, moreSamples: false, allSamples: []
     })
     return (
         <>

@@ -1,6 +1,5 @@
 import Modal from "react-responsive-modal"
 import socketIOClient from "socket.io-client";
-import 'react-responsive-modal/styles.css';
 
 function AccountManageModal({ open, setOpen, axios, getAccounts, toast, ToastUpdate, id, useRef, useEffect, Tokenid }) {
     const toastNow = useRef(null)

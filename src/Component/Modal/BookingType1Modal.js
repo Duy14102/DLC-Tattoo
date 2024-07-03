@@ -21,6 +21,26 @@ function BookingType1Modal({ state, setState, axios, getBooking, toast, toastNow
             ToastUpdate({ type: 1, message: "Cập nhật giá thành công!", refCur: toastNow.current })
         })
     }
+
+    function deleteMainDish() {
+        const configuration = {
+            method: "post",
+            url: `${process.env.REACT_APP_apiAddress}/api/v1/DeleteBookingMainDish`,
+            data: {
+                bookingId: state.modalData3?._id,
+                sessionId: state.modalData2?.id,
+            }
+        }
+        toastNow.current = toast.loading("Chờ một chút...")
+        axios(configuration).then((res) => {
+            setState({ modalOpen: false, modalData: null, modalData2: null, modalData3: null, payingPrice: null, wantChangeSessionPrice: false, indexSessionPrice: null })
+            getBooking()
+            ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
+        }).catch((err) => {
+            ToastUpdate({ type: 2, message: err.response.data, refCur: toastNow.current })
+        })
+    }
+
     const rating = stars => '★★★★★☆☆☆☆☆'.slice(5 - stars, 10 - stars);
     return (
         <Modal open={state.modalOpen} onClose={() => setState({ modalOpen: false, modalData: null, modalData2: null, modalData3: null, payingPrice: null, wantChangeSessionPrice: false, indexSessionPrice: null })} center>
@@ -46,6 +66,7 @@ function BookingType1Modal({ state, setState, axios, getBooking, toast, toastNow
                     <div style={{ display: "flex", alignItems: "center", gap: 5, flexWrap: "wrap" }}>
                         <b style={{ fontSize: 17 }}>Danh mục</b> : <p style={{ margin: 0, color: "#999", fontWeight: 400, wordBreak: "break-all" }}>{state?.modalData?.categories.data.reduce((acc, curr) => { return `${acc + curr.cate}, `.replace("0", "") }, 0)}</p>
                     </div>
+                    <button onClick={() => deleteMainDish()} type='button' style={{ background: "tomato" }} className='plusSessionType2'>Xóa</button>
                 </div>
                 <a href={state.modalData?.thumbnail} style={{ width: "25%", height: 125, overflow: "hidden", borderRadius: 6 }}>
                     <img alt='' src={state.modalData?.thumbnail} width={"100%"} height={"100%"} />

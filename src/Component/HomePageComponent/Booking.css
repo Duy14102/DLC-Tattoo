@@ -8,7 +8,7 @@
     position: relative;
     display: grid;
     place-items: center;
-    height: 78vh;
+    height: auto;
 }
 
 .mainBooking::before {
@@ -120,4 +120,158 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .formBooking button:hover {
     background: #fff;
     color: black;
+}
+
+.fatherAddType2 {
+    padding: 10px;
+    width: 500px;
+}
+
+.yesNoButton {
+    transition: all .4s;
+    color: #fff;
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 18px;
+    font-weight: 400;
+    cursor: pointer;
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+}
+
+.yesForm {
+    background: #904d30;
+}
+
+.noForm {
+    background: #999;
+}
+
+.yesNoButton button:hover {
+    opacity: 0.7;
+}
+
+.yesNoButton:active {
+    scale: 0.9;
+}
+
+.loadSamplesFather {
+    display: flex;
+    width: 100%;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.loadSamplesFather .loadSamplesChild {
+    width: 45%;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    position: relative;
+}
+
+.loadSamplesFather .loadSamplesChild span {
+    font-size: 40px;
+    position: absolute;
+    left: 40%;
+    top: 30%;
+    color: #09c167;
+    border: 2px solid #09c167;
+    border-radius: 50%;
+    padding: 5px 10px;
+}
+
+.loadSamplesFather .loadSamplesChild img {
+    width: 100%;
+    height: 200px;
+    transition: all .4s;
+}
+
+.loadSamplesFather .loadSamplesChild:hover img {
+    filter: brightness(0.7);
+}
+
+.loadSamplesFather .loadSamplesChild p {
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    letter-spacing: 1px;
+    margin: 0;
+    font-size: 16px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    line-clamp: 1;
+    -webkit-box-orient: vertical;
+}
+
+.openMoreSamples {
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: #999;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 20px;
+    transition: all .4s;
+}
+
+.openMoreSamples:hover {
+    color: #fff;
+}
+
+.openMoreSamples span {
+    transition: all .4s;
+    display: inline-block;
+}
+
+.textUnderMoreSamples {
+    font-family: "Oswald", sans-serif;
+    letter-spacing: 1px;
+    font-weight: 400;
+    color: #fff;
+    font-size: 18px;
+}
+
+.samplesImage {
+    width: 85px;
+    height: 75px;
+    transition: all .4s;
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+}
+
+.samplesImage .deleteSamples {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    color: #fff;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    border-radius: 50%;
+    background: #101010;
+    padding: 0 9px 3px 9px;
+    z-index: 10;
+    transition: all .4s;
+}
+
+.samplesImage .deleteSamples:hover {
+    color: tomato;
+}
+
+.samplesImage:hover {
+    filter: brightness(0.7);
+}
+
+.samplesImage img {
+    border-radius: 6px;
+    width: 100%;
+    height: 100%;
 }

@@ -9,7 +9,7 @@ import ToastWarning from "../../Toastify/ToastWarning";
 
 function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
-        search: "",
+        search: "", search2: "",
         cancelReason: "",
         addTitle: "",
         addPrice: "",
@@ -18,18 +18,19 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         addImage: null,
         allBookings: null,
         allSamples: null,
-        contentSearch: null,
-        pageCount: 6,
+        samplesForAdd: null,
+        contentSearch: null, contentSearch2: null,
         moreSamples: false,
         wantCancel: false, wantUpdate: false,
         modalOpen: false, modalData: null, modalData2: null, modalData3: null,
         modalOpen2: false, modalOpen3: false, modalDataX: null,
         payingPrice: null,
-        wantChangeSessionPrice: false, indexSessionPrice: null,
+        wantChangeSessionPrice: false, indexSessionPrice: null, wantType: null,
         checkTitle: false, wantChangeMainDish: false, warningOverPrice: false,
         sessionType2Add: [],
         sessionFix: [],
-        filter: 0
+        samplesId: [],
+        filter: 0, pageCount: 6, pageCount2: 6
     })
     const toastNow = useRef(null)
     const socketRef = useRef();
@@ -72,6 +73,20 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.contentSearch, state.filter])
+
+    useEffect(() => {
+        if (state.search !== "") {
+            const debounceResult = setTimeout(() => {
+                setState({ contentSearch: state.search })
+            }, 750);
+            return () => clearTimeout(debounceResult)
+        } else {
+            setTimeout(() => {
+                setState({ contentSearch: null })
+            }, 750);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [state.search])
 
     function handlePageClick(e) {
         currentPage.current = e.selected + 1
@@ -255,7 +270,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
             />
             <BookingType1Modal state={state} setState={setState} axios={axios} getBooking={getBooking} toast={toast} toastNow={toastNow} ToastUpdate={ToastUpdate} />
             <BookingType2Modal state={state} setState={setState} axios={axios} getBooking={getBooking} toast={toast} toastNow={toastNow} ToastUpdate={ToastUpdate} />
-            <AddType2Booking state={state} setState={setState} getBooking={getBooking} toast={toast} toastNow={toastNow} ToastUpdate={ToastUpdate} axios={axios} />
+            <AddType2Booking state={state} setState={setState} getBooking={getBooking} toast={toast} toastNow={toastNow} ToastUpdate={ToastUpdate} axios={axios} useRef={useRef} useEffect={useEffect} ReactPaginate={ReactPaginate} />
         </>
     )
 }

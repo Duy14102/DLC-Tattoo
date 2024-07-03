@@ -1,5 +1,4 @@
 import { Modal } from 'react-responsive-modal';
-import 'react-responsive-modal/styles.css';
 import { useReducer } from 'react';
 
 function AdminAccountModal({ open, setOpen, axios, token, type, getAccounts, toast, ToastUpdate, useRef }) {

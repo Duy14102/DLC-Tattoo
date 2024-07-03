@@ -671,8 +671,13 @@ app.post("/api/v1/UpdateNotificationChatTabs", async (req, res) => {
 
 // Get Specific Booking
 app.get("/api/v1/GetSpecBooking", async (req, res) => {
-    await getBookings.findOne({ phone: req.query.phone, status: 1 }).then((resa) => {
-        res.status(201).send(resa)
+    const dataPush = []
+    await getBookings.findOne({ phone: req.query.phone, status: { $in: [1, 2] } }).then(async (resa) => {
+        resa.samples.filter((item, index) => item.type === 1 && resa.samples.indexOf(item) === index).reduce((acc2, curr2) => {
+            dataPush.push(curr2.id)
+        }, 0)
+        const samples = await getSamples.find({ _id: dataPush })
+        res.status(201).send({ resa, samples })
     })
 })
 
@@ -875,6 +880,17 @@ app.post("/api/v1/UpdateRealBooking", (req, res) => {
     }
     return res.status(201).send("Cập nhật booking thành công!")
 })
+
+// Add samples type 1
+app.post("/api/v1/AddSamplesType1Booking", (req, res) => {
+    getBookings.updateOne({ _id: req.body.id }, {
+        $push: {
+            samples: req.body.samples.reduce((acc, curr) => { return curr }, 0)
+        }
+    }).exec()
+    res.status(201).send("Thêm mẫu thành công!")
+})
+
 
 
 
