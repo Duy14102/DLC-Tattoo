@@ -7,6 +7,8 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 import { jwtDecode } from "jwt-decode"
 import AddSamplesUser from "../Modal/AddSamplesUser";
+import ToastSuccess from "../Toastify/ToastSuccess";
+import ToastError from "../Toastify/ToastError";
 
 function BookingSmall() {
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
@@ -49,6 +51,29 @@ function BookingSmall() {
                 localStorage.removeItem("bookingSave")
                 setState({ haveBooking: null, wantDeleteBooking: false, cancelReason: "" })
                 ToastUpdate({ type: 1, message: "Hủy booking thành công!", refCur: toastNow.current })
+            }
+        })
+
+        socketRef.current.on('CancelBookingByAdminSuccess', data => {
+            if (localStorage?.getItem("bookingSave") === data.phone) {
+                getBookingsX(localStorage?.getItem("bookingSave"))
+                ToastError({ message: "Đơn booking bị hủy!" })
+                localStorage.removeItem("bookingSave")
+            }
+        })
+
+        socketRef.current.on('ConfirmBookingSuccess', data => {
+            if (localStorage?.getItem("bookingSave") === data.phone) {
+                getBookingsX(localStorage?.getItem("bookingSave"))
+                ToastSuccess({ message: "Đơn booking được xác nhận!" })
+            }
+        })
+
+        socketRef.current.on('DoneBookingSuccess', data => {
+            if (localStorage?.getItem("bookingSave") === data.phone) {
+                getBookingsX(localStorage?.getItem("bookingSave"))
+                ToastSuccess({ message: "Đơn booking hoàn thành!" })
+                localStorage.removeItem("bookingSave")
             }
         })
 

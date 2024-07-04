@@ -108,6 +108,7 @@ app.post("/api/v1/Login", (req, res) => {
                 const token = jwt.sign(
                     {
                         userId: user._id,
+                        phone: user.phonenumber,
                         userRole: user.role
                     },
                     "RANDOM-TOKEN",
