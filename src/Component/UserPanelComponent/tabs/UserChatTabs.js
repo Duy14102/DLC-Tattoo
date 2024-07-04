@@ -5,7 +5,7 @@ import EmojiPicker from 'emoji-picker-react';
 import axios from "axios";
 import ToastError from "../../Toastify/ToastError";
 
-function UserChatTabs({ useRef, decode, toast, ToastUpdate }) {
+function UserChatTabs({ useRef, decode, toast, ToastUpdate, getAccounts }) {
     const toastNow = useRef(null)
     const socketRef = useRef();
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
@@ -49,6 +49,7 @@ function UserChatTabs({ useRef, decode, toast, ToastUpdate }) {
         socketRef.current.on('DeleteChatSuccess', data => {
             if (decode.userId === data.userId) {
                 getChatRoom()
+                getAccounts()
                 ToastError({ message: "Đoạn chat đã bị xóa!" })
             }
         })

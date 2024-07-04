@@ -1,6 +1,8 @@
 import Cookies from "universal-cookie";
 import socketIOClient from "socket.io-client";
 import { useReducer } from "react";
+import ToastSuccess from "../Toastify/ToastSuccess"
+import ToastError from "../Toastify/ToastError"
 
 function MainBarHeader({ setOpen, axios, accounts, setType, getAccounts, toast, ToastUpdate, useRef, id, useEffect }) {
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
@@ -40,11 +42,24 @@ function MainBarHeader({ setOpen, axios, accounts, setType, getAccounts, toast, 
     useEffect(() => {
         socketRef.current = socketIOClient.connect(`${process.env.REACT_APP_apiAddress}`)
 
-        socketRef.current.on('ChatSendSuccess', data => {
+        socketRef.current.on('ChatStartSuccess', data => {
+            if (localStorage.getItem("tabs") !== "Chat") {
+                ToastSuccess({ message: "1 phòng chat mới được mở!" })
+            }
             getAccounts()
         })
 
-        socketRef.current.on('ChatStartSuccess', data => {
+        socketRef.current.on('AddBookingSuccess', data => {
+            if (localStorage.getItem("tabs") !== "Booking") {
+                ToastSuccess({ message: "1 đơn booking mới!" })
+            }
+            getAccounts()
+        })
+
+        socketRef.current.on('CancelBookingSuccess', data => {
+            if (localStorage.getItem("tabs") !== "Booking") {
+                ToastError({ message: "1 đơn booking bị hủy!" })
+            }
             getAccounts()
         })
 
@@ -53,6 +68,7 @@ function MainBarHeader({ setOpen, axios, accounts, setType, getAccounts, toast, 
         };
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
+
 
     useEffect(() => {
         if (state.openNoti) {
@@ -103,7 +119,7 @@ function MainBarHeader({ setOpen, axios, accounts, setType, getAccounts, toast, 
                                         {accounts?.notification.length < 1 ? (
                                             <h4 className="noNoti">Thông báo trống!</h4>
                                         ) : (
-                                            accounts?.notification.slice(0, state.upSlice * 5).sort((a, b) => a.status - b.status).map((i, indexN) => {
+                                            accounts?.notification.slice(0, state.upSlice * 5).sort((a, b) => b.time - a.time).map((i, indexN) => {
                                                 return (
                                                     <div onClick={() => navigateNoti(i.place)} key={indexN} className={i.status === 1 ? "notiLight notiLightActive" : "notiLight"}>
                                                         <div className="titleNoti">

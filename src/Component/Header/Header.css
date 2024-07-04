@@ -40,8 +40,7 @@
     gap: 5px;
 }
 
-.barsNextToBrand a,
-.barsNextToBrand .avatarUser {
+.barsNextToBrand .cateInHeader {
     font-weight: 400;
     font-size: 15px;
     letter-spacing: 2px;
@@ -54,6 +53,14 @@
     transition: all .4s;
     position: relative;
     cursor: pointer;
+}
+
+.barsNextToBrand .avatarUser {
+    cursor: pointer;
+    position: relative;
+    transition: all .4s;
+    padding: 8px 12px;
+    text-decoration: none;
 }
 
 .barsNextToBrand .active {
@@ -90,12 +97,30 @@
     align-items: center;
     visibility: hidden;
     opacity: 0;
+    right: 0;
+    border-radius: 6px;
+    overflow: hidden;
+    animation: appearDropdown .4s ease forwards;
+    background: #101010;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.countNotiHeader {
+    position: absolute;
+    top: 0;
+    right: 0;
+    color: #fff;
+    font-weight: 400;
+    font-size: 12px;
+    background: tomato;
+    border-radius: 50%;
+    padding: 0 4px;
 }
 
 .barsNextToBrand .avatarUser .dropdownAvatar a,
 .barsNextToBrand .avatarUser .dropdownAvatar button {
-    color: #000;
-    background: #fff;
+    color: #fff;
+    background: none;
     border: none;
     font-size: 15px;
     font-family: "Oswald", sans-serif;
@@ -108,10 +133,7 @@
     width: 100%;
     cursor: pointer;
     transition: all .4s;
-}
-
-.barsNextToBrand .avatarUser:hover .dropdownAvatar {
-    animation: appearDropdown .4s ease forwards;
+    text-decoration: none;
 }
 
 @keyframes appearDropdown {
@@ -129,4 +151,122 @@
 .barsNextToBrand .avatarUser .dropdownAvatar a:hover,
 .barsNextToBrand .avatarUser .dropdownAvatar button:hover {
     background: #904d30;
+}
+
+.avatarUser .notiShow::-webkit-scrollbar {
+    background: none;
+    width: 10px;
+}
+
+.avatarUser .notiShow::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 25px;
+}
+
+.avatarUser .notiShow {
+    cursor: auto;
+    min-width: 352px;
+    max-width: 100%;
+    max-height: 50vh;
+    position: absolute;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 4px 24px 0 rgba(0, 0, 0, 0.1);
+    right: 0;
+    padding: 0;
+    border-radius: 6px;
+    z-index: 6;
+    background: #101010;
+    animation: appearDropdown .4s ease forwards;
+    overflow-y: auto;
+}
+
+.avatarUser .notiShow .moreNotiButton {
+    margin: 0;
+    text-align: center;
+    color: #999;
+    font-family: "Oswald", sans-serif;
+    font-weight: 400;
+    padding: 5px;
+    letter-spacing: 1px;
+    background: rgba(255, 255, 255, 0.1);
+    cursor: pointer;
+    transition: all .4s;
+}
+
+.avatarUser .notiShow .moreNotiButton:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.2);
+}
+
+.avatarUser .notiShow .notiLight {
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    cursor: pointer;
+    padding: 20px;
+    transition: all .4s;
+}
+
+.avatarUser .notiShow .notiLightActive {
+    transition: all .4s;
+    background: rgba(144, 77, 48, 0.3);
+}
+
+.avatarUser .notiShow .notiLightActive:hover {
+    background: rgba(144, 77, 48, 0.5) !important;
+}
+
+.avatarUser .notiShow .notiLight:active {
+    scale: 0.9;
+}
+
+.avatarUser .notiShow .notiLight:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+.avatarUser .notiShow .active:hover {
+    background: rgba(144, 77, 48, 0.3);
+}
+
+.avatarUser .notiShow .notiLight .titleNoti {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-family: "Oswald", sans-serif;
+    margin-bottom: 5px;
+}
+
+.avatarUser .notiShow .notiLight .titleNoti span:first-child {
+    font-size: 16px;
+    font-weight: bold;
+    color: #904d30;
+}
+
+.avatarUser .notiShow .notiLight .titleNoti span:last-child {
+    font-size: 14px;
+    color: #999;
+}
+
+.avatarUser .notiShow .notiLight .messageNoti span {
+    width: 100%;
+    word-break: break-all;
+    color: #cecece;
+    font-family: "Oswald", sans-serif;
+    font-size: 15px;
+}
+
+.avatarUser .notiShow .notiHead {
+    padding: 16px 20px 10px 20px;
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: #fff;
+    font-size: 16px !important;
+}
+
+.avatarUser .notiShow .noNoti {
+    margin: 0;
+    font-family: "Oswald", sans-serif;
+    color: #999;
+    font-weight: 400;
+    letter-spacing: 1px;
+    text-align: center;
 }

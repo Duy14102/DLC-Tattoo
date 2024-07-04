@@ -672,13 +672,14 @@ app.post("/api/v1/UpdateNotificationChatTabs", async (req, res) => {
 // Get Specific Booking
 app.get("/api/v1/GetSpecBooking", async (req, res) => {
     const dataPush = []
-    await getBookings.findOne({ phone: req.query.phone, status: { $in: [1, 2] } }).then(async (resa) => {
+    const resa = await getBookings.findOne({ phone: req.query.phone, status: { $in: [1, 2] } })
+    if (resa) {
         resa.samples.filter((item, index) => item.type === 1 && resa.samples.indexOf(item) === index).reduce((acc2, curr2) => {
             dataPush.push(curr2.id)
         }, 0)
         const samples = await getSamples.find({ _id: dataPush })
         res.status(201).send({ resa, samples })
-    })
+    }
 })
 
 // Update Booking
@@ -993,11 +994,23 @@ socketIo.on("connection", (socket) => {
         await cloudinary.api.delete_resources_by_prefix(`Chat/${data.roomId}`).then(async () => {
             await cloudinary.api.delete_folder(`Chat/${data.roomId}`).then(() => {
                 getChats.deleteOne({ _id: data.roomId }).then(() => {
+                    const dated2 = { title: "Phòng chat bị đóng!", place: "Chat", time: Date.now(), status: 1 }
+                    getAccounts.updateMany({ _id: data.userId }, {
+                        $push: {
+                            notification: dated2
+                        }
+                    }).exec()
                     socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
                 })
             })
         }).catch(() => {
             getChats.deleteOne({ _id: data.roomId }).then(() => {
+                const dated2 = { title: "Phòng chat bị đóng!", place: "Chat", time: Date.now(), status: 1 }
+                getAccounts.updateMany({ _id: data.userId }, {
+                    $push: {
+                        notification: dated2
+                    }
+                }).exec()
                 socketIo.emit("DeleteChatSuccess", { userId: data.userId, adminId: data.adminId });
             })
         })
@@ -1018,7 +1031,13 @@ socketIo.on("connection", (socket) => {
             samples: data.samples,
             status: 1
         })
+        const dated2 = { title: "1 đơn booking mới", place: "Booking", time: Date.now(), status: 1 }
         booking.save().then(() => {
+            getAccounts.updateMany({ role: 2 }, {
+                $push: {
+                    notification: dated2
+                }
+            }).exec()
             socketIo.emit("AddBookingSuccess", { phone: data.tokenId ? dataPhone : data.phone });
         }).catch(() => {
             socketIo.emit("AddBookingFail", { phone: data.phone });
@@ -1045,7 +1064,13 @@ socketIo.on("connection", (socket) => {
             status: 4,
             cancelReason: data.reason
         }).then(() => {
-            socketIo.emit("CancelBookingByAdminSuccess", { adminId: data.adminId });
+            const dated2 = { title: "Booking bị hủy bởi admin!", place: "Booking", time: Date.now(), status: 1 }
+            getAccounts.updateMany({ phonenumber: data.phone }, {
+                $push: {
+                    notification: dated2
+                }
+            }).exec()
+            socketIo.emit("CancelBookingByAdminSuccess", { adminId: data.adminId, phone: data.phone });
         })
     })
 
@@ -1053,7 +1078,13 @@ socketIo.on("connection", (socket) => {
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 2,
         }).then(() => {
-            socketIo.emit("ConfirmBookingSuccess", { adminId: data.adminId });
+            const dated2 = { title: "Booking đã được xác nhận!", place: "Booking", time: Date.now(), status: 1 }
+            getAccounts.updateMany({ phonenumber: data.phone }, {
+                $push: {
+                    notification: dated2
+                }
+            }).exec()
+            socketIo.emit("ConfirmBookingSuccess", { adminId: data.adminId, phone: data.phone });
         })
     })
 
@@ -1061,7 +1092,13 @@ socketIo.on("connection", (socket) => {
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 3,
         }).then(() => {
-            socketIo.emit("DoneBookingSuccess", { adminId: data.adminId });
+            const dated2 = { title: "Booking đã thành công!", place: "Booking", time: Date.now(), status: 1 }
+            getAccounts.updateMany({ phonenumber: data.phone }, {
+                $push: {
+                    notification: dated2
+                }
+            }).exec()
+            socketIo.emit("DoneBookingSuccess", { adminId: data.adminId, phone: data.phone });
         })
     })
 })

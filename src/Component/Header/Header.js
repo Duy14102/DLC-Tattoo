@@ -23,12 +23,12 @@ function Header() {
                     <p>Tattoo Studio</p>
                 </NavLink>
                 <div className="barsNextToBrand">
-                    <NavLink reloadDocument to={"/"}>Trang chủ</NavLink>
-                    <NavLink reloadDocument to={"/TattooSamplePage/Newtoold/All/All"}>Hình Mẫu</NavLink>
-                    <NavLink reloadDocument to={"/GalleryPage"}>Hậu trường</NavLink>
-                    <NavLink reloadDocument to={"/BookingPage"}>Booking</NavLink>
-                    <NavLink reloadDocument to={"/BlogPage"}>Blog</NavLink>
-                    <NavLink reloadDocument to={"/FavouritePage/Newtoold/All/All"}>Yêu thích</NavLink>
+                    <NavLink className={"cateInHeader"} reloadDocument to={"/"}>Trang chủ</NavLink>
+                    <NavLink className={"cateInHeader"} reloadDocument to={"/TattooSamplePage/Newtoold/All/All"}>Hình Mẫu</NavLink>
+                    <NavLink className={"cateInHeader"} reloadDocument to={"/GalleryPage"}>Hậu trường</NavLink>
+                    <NavLink className={"cateInHeader"} reloadDocument to={"/BookingPage"}>Booking</NavLink>
+                    <NavLink className={"cateInHeader"} reloadDocument to={"/BlogPage"}>Blog</NavLink>
+                    <NavLink className={"cateInHeader"} reloadDocument to={"/FavouritePage/Newtoold/All/All"}>Yêu thích</NavLink>
                     {token ? (
                         <GetAccounts token={token} useEffect={useEffect} NavLink={NavLink} cookies={cookies} />
                     ) : (

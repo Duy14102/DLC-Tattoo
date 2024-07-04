@@ -6,7 +6,7 @@ import axios from "axios";
 import socketIOClient from "socket.io-client";
 import AddSamplesUser from "../../Modal/AddSamplesUser";
 
-function UserBookingTabs({ token }) {
+function UserBookingTabs({ token, getAccounts }) {
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         name: "",
         phone: "",
@@ -38,6 +38,24 @@ function UserBookingTabs({ token }) {
                 localStorage.removeItem("bookingSave")
                 setState({ haveBooking: null, wantDeleteBooking: false, cancelReason: "" })
                 ToastUpdate({ type: 1, message: "Hủy booking thành công!", refCur: toastNow.current })
+            }
+        })
+
+        socketRef.current.on('CancelBookingByAdminSuccess', data => {
+            if (token.phone === data.phone) {
+                getAccounts()
+            }
+        })
+
+        socketRef.current.on('ConfirmBookingSuccess', data => {
+            if (token.phone === data.phone) {
+                getAccounts()
+            }
+        })
+
+        socketRef.current.on('DoneBookingSuccess', data => {
+            if (token.phone === data.phone) {
+                getAccounts()
             }
         })
 
