@@ -1,5 +1,4 @@
 import { Zoom, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 function ToastSuccess({ message }) {
     toast.success(message, {

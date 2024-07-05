@@ -1,5 +1,4 @@
 import { Zoom, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
 
 function ToastUpdate({ type, message, refCur }) {
     toast.update(refCur, {

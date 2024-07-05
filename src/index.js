@@ -3,8 +3,9 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from './Layout';
 import "./index.css"
-import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import 'react-responsive-modal/styles.css';
+import { ToastContainer } from 'react-toastify';
 import ScrollToTop from './Component/ScrollToTop';
 const HomePage = React.lazy(() => import("./Page/FrontPage/HomePage"))
 const Blog = React.lazy(() => import("./Page/FrontPage/BlogPage"))

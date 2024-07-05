@@ -129,7 +129,7 @@ app.post("/api/v1/Login", (req, res) => {
 // Get Accounts
 app.get("/api/v1/GetAccounts", async (req, res) => {
     await getAccounts.findOne({ _id: req.query.id }).then((resa) => {
-        const dataToSend = { phone: resa.phonenumber, image: resa.userimage, notification: resa.notification }
+        const dataToSend = { phone: resa.phonenumber, image: resa.userimage, notification: resa.notification, todolist: resa.todolist }
         res.status(201).send(dataToSend)
     }).catch((err) => {
         res.status(404).send(err)
@@ -282,6 +282,32 @@ app.post("/api/v1/UpdateNotificationSide", async (req, res) => {
         notification: dataPush
     }).then(() => {
         res.status(201).send({})
+    })
+})
+
+// Add todoList
+app.post("/api/v1/AddTodoList", (req, res) => {
+    const id = new mongoose.Types.ObjectId().toString()
+    const addThis = { id: id, jobs: req.body.jobs, time: Date.now(), status: 1 }
+    getAccounts.updateOne({ _id: req.body.id }, {
+        $push: {
+            todolist: addThis
+        }
+    }).then(() => {
+        res.status(201).send("Thêm việc cần làm thành công!")
+    }).catch(() => {
+        res.status(500).send("Thêm việc cần làm thất bại!")
+    })
+})
+
+// Update todoList
+app.post("/api/v1/UpdateTodoList", (req, res) => {
+    getAccounts.updateOne({ _id: req.body.id, "todolist.id": req.body.jobsId }, {
+        "todolist.$.status": req.body.status
+    }).then(() => {
+        res.status(201).send("Cập nhật việc thành công!")
+    }).catch(() => {
+        res.status(500).send("Cập nhật việc thất bại!")
     })
 })
 
@@ -891,6 +917,53 @@ app.post("/api/v1/AddSamplesType1Booking", (req, res) => {
         }
     }).exec()
     res.status(201).send("Thêm mẫu thành công!")
+})
+
+// Fetch Dashboard
+app.get("/api/v1/FetchDashboard", async (req, res) => {
+    const dataAccounts = [], dataSamples = [], dataBlogs = [], dataBookingSuccess = [], dataBookingFail = [], dataSamplesPie = []
+    const DateNow = Date.now()
+    await getAccounts.find({}).then((resAccounts) => {
+        resAccounts.reduce((acc, curr) => {
+            if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
+                dataAccounts.push({ month: new Date(curr.createdAt).getMonth() })
+            }
+        }, 0)
+    })
+    await getSamples.find({}).then((resSamples) => {
+        resSamples.reduce((acc, curr) => {
+            if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
+                dataSamples.push({ month: new Date(curr.createdAt).getMonth() })
+            }
+        }, 0)
+    })
+    await getBlogs.find({}).then((resBlogs) => {
+        resBlogs.reduce((acc, curr) => {
+            if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
+                dataBlogs.push({ month: new Date(curr.createdAt).getMonth() })
+            }
+        }, 0)
+    })
+    await getBookings.find({}).then((resBooking) => {
+        resBooking.reduce((acc, curr) => {
+            if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
+                if (curr.status === 3) {
+                    dataBookingSuccess.push({ month: new Date(curr.createdAt).getMonth() })
+                }
+                if (curr.status === 4) {
+                    dataBookingFail.push({ month: new Date(curr.createdAt).getMonth() })
+                }
+            }
+        }, 0)
+    })
+    await getSamples.find({}).then((resSamples) => {
+        resSamples.reduce((acc, curr) => {
+            curr.categories.data.reduce((ac2, cur2) => {
+                dataSamplesPie.push({ cate: cur2 })
+            }, 0)
+        }, 0)
+    })
+    res.send({ dataAccounts, dataBlogs, dataSamples, dataBookingSuccess, dataBookingFail, dataSamplesPie })
 })
 
 

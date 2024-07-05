@@ -21,7 +21,7 @@ function AdminMainBar({ useState, useEffect, accounts, getAccounts, token }) {
             <MainBarHeader setOpen={setOpen} axios={axios} accounts={accounts} setType={setType} getAccounts={getAccounts} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} id={token.userId} useEffect={useEffect} />
             <div className="contentMainBar">
                 {localStorage.getItem("tabs") === "Dashboard" ? (
-                    <DashboardTabs />
+                    <DashboardTabs accounts={accounts} getAccounts={getAccounts} axios={axios} toast={toast} ToastUpdate={ToastUpdate} useRef={useRef} token={token} useEffect={useEffect} />
                 ) : localStorage.getItem("tabs") === "Chat" ? (
                     <ChatTabs useEffect={useEffect} axios={axios} token={token} useRef={useRef} toast={toast} />
                 ) : localStorage.getItem("tabs") === "Booking" ? (

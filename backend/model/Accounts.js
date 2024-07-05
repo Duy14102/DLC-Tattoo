@@ -27,6 +27,10 @@ const UserSchema = new mongoose.Schema({
         default: null
     },
 
+    todolist: {
+        type: Array
+    },
+
     role: {
         type: Number
     },
