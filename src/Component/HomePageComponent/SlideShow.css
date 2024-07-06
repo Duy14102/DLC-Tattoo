@@ -38,9 +38,11 @@
 
 .image-wrap .textInSlide {
     z-index: 2;
+    width: 100%;
     position: absolute;
-    top: 30%;
-    left: 36%;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
     text-align: center;
 }
 
@@ -85,4 +87,10 @@
 .image-wrap .textInSlide a:hover {
     background: #fff;
     color: black;
+}
+
+@media(max-width:991px) {
+    .image-wrap .textInSlide h1 {
+        font-size: 55px;
+    }
 }

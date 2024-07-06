@@ -8,18 +8,21 @@
     width: 100%;
     align-items: center;
     justify-content: space-between;
+}
+
+.insideBox .hoverServicesImage {
+    overflow: hidden;
+    width: 48%;
     height: 400px;
 }
 
-.insideBox a {
-    overflow: hidden;
-}
-
-.insideBox a img {
+.insideBox .hoverServicesImage img {
     transition: all .5s;
+    width: 100%;
+    height: 100%;
 }
 
-.insideBox a:hover img {
+.insideBox .hoverServicesImage:hover img {
     scale: 1.1;
 }
 
@@ -78,4 +81,35 @@
 .insideTextInBox a:hover {
     background: #fff;
     color: black;
+}
+
+@media (max-width:991px) {
+    .mainService {
+        padding: 120px 10px 66px 10px;
+    }
+
+    .insideBox {
+        flex-direction: column;
+    }
+
+    .insideBox .hoverServicesImage {
+        width: 100% !important;
+        height: 300px;
+    }
+
+    .insideBox .textInBox {
+        width: 100%;
+    }
+
+    .insideTextInBox {
+        padding: 15px;
+    }
+
+    .insideTextInBox h1 {
+        display: none;
+    }
+
+    .specialInBox {
+        flex-direction: column-reverse;
+    }
 }

@@ -1,3 +1,10 @@
+.mainTatooSamplePage {
+    display: flex;
+    justify-content: space-between;
+    padding: 120px 20%;
+    background: #101010;
+}
+
 .mainFilter {
     width: 20%;
     height: 100%;
@@ -368,4 +375,98 @@
 .startBooking:active,
 .cancelStartBooking:active {
     scale: 0.9;
+}
+
+.buttonAppearFilter {
+    display: none;
+}
+
+@media (max-width:991px) {
+    .mainTatooSamplePage {
+        padding: 120px 10px;
+        flex-direction: column;
+    }
+
+    .mainSample {
+        width: 100%;
+    }
+
+    .mainFilter {
+        width: 100%;
+    }
+
+    .buttonAppearFilter {
+        position: fixed;
+        left: 0;
+        top: 11%;
+        width: 45px;
+        height: 45px;
+        z-index: 99;
+        display: block;
+    }
+
+    .buttonAppearFilter button {
+        width: 100%;
+        height: 100%;
+        padding: 10px;
+        border: none;
+        background: #101010;
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        transition: all .4s;
+    }
+
+    .buttonAppearFilter button:active {
+        scale: 0.9;
+    }
+
+    .buttonAppearFilter button svg {
+        fill: #fff;
+    }
+
+    .buttonAppearFilter .fixedFilterAppear {
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        position: absolute;
+        top: 0;
+        background: #101010;
+        width: 250px;
+        padding: 15px;
+        animation: appearFixedFilter .4s ease forwards;
+    }
+
+    @keyframes appearFixedFilter {
+        from {
+            left: 250%;
+        }
+
+        to {
+            left: 100%;
+        }
+    }
+
+    .insideSample {
+        width: 49% !important;
+    }
+
+    .mainSample select {
+        width: 49%;
+    }
+
+    .downSample {
+        flex-direction: column;
+        gap: 5px;
+    }
+
+    .insideSample h5 a {
+        text-align: center;
+        width: 100%;
+        display: block;
+    }
+
+    .coverImageX button {
+        opacity: 1;
+    }
+
+    .detailSession {
+        width: 80vw;
+    }
 }

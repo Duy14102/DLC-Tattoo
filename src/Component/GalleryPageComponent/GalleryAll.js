@@ -25,42 +25,50 @@ function GalleryAll() {
     }
     return (
         <div className="mainGallery">
-            <div className="titleImage">
-                Thư viện<span> ảnh</span>
-            </div>
-            <div className="imageFlex">
-                {state.allGallerys?.filter((item) => item.title === "image").slice(0, state.seeMoreImage ? 8 : 5).map((i, index) => {
-                    return (
-                        <div onClick={() => window.location.href = i.data} key={i._id} className="imgInsideFlex" style={index === 3 || index === 4 ? { width: "49%", height: 400 } : { width: "32%", height: 300 }}>
-                            <img alt="" src={i.data} width={"100%"} height={"100%"} />
+            {state.allGallerys?.filter((item) => item.title === "image").length > 0 ? (
+                <>
+                    <div className="titleImage">
+                        Thư viện<span> ảnh</span>
+                    </div>
+                    <div className="imageFlex">
+                        {state.allGallerys?.filter((item) => item.title === "image").slice(0, state.seeMoreImage ? 8 : 5).map((i, index) => {
+                            return (
+                                <div onClick={() => window.location.href = i.data} key={i._id} className="imgInsideFlex" style={index === 3 || index === 4 ? { width: "49%", height: 400 } : { width: "32%", height: 300 }}>
+                                    <img alt="" src={i.data} width={"100%"} height={"100%"} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                    {state.allGallerys?.filter((item) => item.title === "image").length > 5 ? (
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <button onClick={() => state.seeMoreImage ? setState({ seeMoreImage: false }) : setState({ seeMoreImage: true })} className="moreImage">{state.seeMoreImage ? "Thu gọn" : "Xem thêm"}</button>
                         </div>
-                    )
-                })}
-            </div>
-            {state.allGallerys?.filter((item) => item.title === "image").length > 5 ? (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <button onClick={() => state.seeMoreImage ? setState({ seeMoreImage: false }) : setState({ seeMoreImage: true })} className="moreImage">{state.seeMoreImage ? "Thu gọn" : "Xem thêm"}</button>
-                </div>
+                    ) : null}
+                    <div style={{ marginTop: 100, marginBottom: 100 }}>
+                        <hr className="upTimeHr" />
+                    </div>
+                </>
             ) : null}
-            <div style={{ marginTop: 100, marginBottom: 100 }}>
-                <hr className="upTimeHr" />
-            </div>
-            <div className="titleImage">
-                Thư viện<span> video</span>
-            </div>
-            <div className="imageFlex">
-                {state.allGallerys?.filter((item) => item.title === "video").slice(0, state.seeMoreVideo ? 8 : 5).map((i, index) => {
-                    return (
-                        <div key={i._id} className="imgInsideFlex" style={index === 3 || index === 4 ? { width: "49%", height: 400 } : { width: "32%", height: 300 }}>
-                            <iframe title={i.data} src={i.data} width={"100%"} height={"100%"} />
+            {state.allGallerys?.filter((item) => item.title === "video").length > 0 ? (
+                <>
+                    <div className="titleImage">
+                        Thư viện<span> video</span>
+                    </div>
+                    <div className="imageFlex">
+                        {state.allGallerys?.filter((item) => item.title === "video").slice(0, state.seeMoreVideo ? 8 : 5).map((i, index) => {
+                            return (
+                                <div key={i._id} className="imgInsideFlex" style={index === 3 || index === 4 ? { width: "49%", height: 400 } : { width: "32%", height: 300 }}>
+                                    <iframe title={i.data} src={i.data} width={"100%"} height={"100%"} />
+                                </div>
+                            )
+                        })}
+                    </div>
+                    {state.allGallerys?.filter((item) => item.title === "video").length > 5 ? (
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                            <button onClick={() => state.seeMoreVideo ? setState({ seeMoreVideo: false }) : setState({ seeMoreVideo: true })} className="moreImage">{state.seeMoreVideo ? "Thu gọn" : "Xem thêm"}</button>
                         </div>
-                    )
-                })}
-            </div>
-            {state.allGallerys?.filter((item) => item.title === "video").length > 5 ? (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                    <button onClick={() => state.seeMoreVideo ? setState({ seeMoreVideo: false }) : setState({ seeMoreVideo: true })} className="moreImage">{state.seeMoreVideo ? "Thu gọn" : "Xem thêm"}</button>
-                </div>
+                    ) : null}
+                </>
             ) : null}
         </div>
     )

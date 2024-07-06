@@ -196,6 +196,7 @@
 }
 
 .inputPassword input {
+    width: 90%;
     font-size: 15px;
     color: #fff;
     resize: none;
@@ -204,6 +205,7 @@
 }
 
 .inputPassword button {
+    width: 10%;
     border: none;
     background: none;
     height: 100%;
@@ -251,5 +253,31 @@
     100% {
         opacity: 1;
         z-index: 5;
+    }
+}
+
+@media (max-width:991px) {
+    .mainLoginUser {
+        padding: 160px 10px 120px 10px;
+    }
+
+    .container__overlay {
+        width: 25%;
+        left: 0;
+    }
+
+    .container.right-panel-active .container--signup,
+    .container .container--signin {
+        transform: translateX(24%);
+    }
+
+    .container.right-panel-active .container__overlay {
+        overflow: hidden;
+        transform: translateX(0);
+    }
+
+    .container--signup,
+    .container--signin {
+        width: 85%;
     }
 }

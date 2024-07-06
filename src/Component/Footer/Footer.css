@@ -114,3 +114,30 @@
 .copyright p a:hover {
     color: #fff;
 }
+
+.insideMainFooter .children:first-child p {
+    margin-bottom: 0;
+}
+
+@media (max-width:991px) {
+    .mainFooter {
+        padding: 100px 10px;
+    }
+
+    .insideMainFooter {
+        flex-direction: column;
+        gap: 25px;
+    }
+
+    .insideMainFooter .children {
+        width: 100%;
+    }
+
+    .copyright {
+        padding: 32px 0;
+    }
+
+    .copyright p {
+        text-align: center;
+    }
+}

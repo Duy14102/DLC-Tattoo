@@ -26,7 +26,7 @@ function SlideShow() {
                 <h6 className="firstLine">Chào mừng đến với DLC Tattoo</h6>
                 <h1>Một hình xăm <br /><span>Một kỉ niệm</span></h1>
                 <div style={{ marginTop: 30 }}>
-                    <NavLink reloadDocument>Book lịch xăm</NavLink>
+                    <NavLink to={"/BookingPage"} reloadDocument>Book lịch xăm</NavLink>
                 </div>
             </div>
         </div>

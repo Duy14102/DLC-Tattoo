@@ -59,7 +59,7 @@
 
 .blogCarousel .blogImg {
     width: 100%;
-    height: auto;
+    height: 400px;
     display: inline-block;
     overflow: hidden;
 }
@@ -71,4 +71,17 @@
 
 .blogCarousel img:hover {
     scale: 1.1;
+}
+
+.noBlogsExists {
+    font-family: "Barlow", sans-serif;
+    font-weight: 400;
+    color: #999;
+    font-size: 18px;
+}
+
+@media(max-width:991px) {
+    .mainBlogSmall {
+        padding: 66px 10px 50px 10px;
+    }
 }

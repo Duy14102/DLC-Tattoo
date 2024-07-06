@@ -130,7 +130,7 @@ function Booking({ type, state, setState }) {
         type === 1 ? (
             <div className="mainBooking">
                 <div className="insideMainBooking">
-                    <div style={{ marginBottom: 20, width: "48%" }}>
+                    <div className="insideMainBookingChild1">
                         <p className="titleSub">Book lịch xăm</p>
                         <p className="titleMain">Hẹn ngày xăm</p>
                         <p className="content">Hãy chọn và xem xét ngày để chúng tôi sắp xếp cho bạn lịch trình xăm hoàn hảo nhất. Và hãy nhớ rằng sau khi đặt lịch chúng tôi sẽ liên hệ để thảo luận cũng như là tư vấn cho bạn nên hãy chú ý điện thoại!</p>

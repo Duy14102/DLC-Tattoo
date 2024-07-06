@@ -9,6 +9,10 @@
 .mainBlogNews .mainLeft {
     width: 68%;
     height: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 75px;
+    margin-bottom: 25px;
 }
 
 .mainBlogNews .mainRight {
@@ -24,7 +28,7 @@
 }
 
 .mainBlogNews .mainLeft .news .post {
-    padding: 10px 0 75px 0;
+    padding-top: 10px;
     display: flex;
     flex-direction: column;
 }
@@ -212,4 +216,20 @@
     fill: #fff;
     width: 100%;
     height: 100%;
+}
+
+@media (max-width:991px) {
+    .mainBlogNews {
+        padding: 120px 10px 50px 10px;
+        flex-direction: column;
+    }
+
+    .mainBlogNews .mainLeft {
+        width: 100%;
+    }
+
+    .mainBlogNews .mainRight {
+        position: static;
+        width: 100%;
+    }
 }

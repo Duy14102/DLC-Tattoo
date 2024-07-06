@@ -4,6 +4,7 @@ import LineChart from "./Chart/LineChart";
 import DoughnutChart from "./Chart/DoughnutChart";
 import { useReducer } from "react";
 import PlusJobsModal from "../../Modal/PlusJobsModal";
+import GalleryBarChart from './Chart/GalleryBarChart';
 Chart.register(...registerables);
 
 function DashboardTabs({ accounts, getAccounts, axios, toast, ToastUpdate, useRef, token, useEffect }) {
@@ -18,7 +19,8 @@ function DashboardTabs({ accounts, getAccounts, axios, toast, ToastUpdate, useRe
         dataBlogs: null,
         dataBookingSuccess: null,
         dataBookingFail: null,
-        dataSamplesPie: null
+        dataSamplesPie: null,
+        dataGallery: null
     })
 
     useEffect(() => {
@@ -27,7 +29,7 @@ function DashboardTabs({ accounts, getAccounts, axios, toast, ToastUpdate, useRe
             url: `${process.env.REACT_APP_apiAddress}/api/v1/FetchDashboard`,
         }
         axios(configuration).then((res) => {
-            setState({ dataAccounts: res.data.dataAccounts, dataSamples: res.data.dataSamples, dataBlogs: res.data.dataBlogs, dataBookingSuccess: res.data.dataBookingSuccess, dataBookingFail: res.data.dataBookingFail, dataSamplesPie: res.data.dataSamplesPie })
+            setState({ dataAccounts: res.data.dataAccounts, dataSamples: res.data.dataSamples, dataBlogs: res.data.dataBlogs, dataBookingSuccess: res.data.dataBookingSuccess, dataBookingFail: res.data.dataBookingFail, dataSamplesPie: res.data.dataSamplesPie, dataGallery: res.data.dataGallery })
         })
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
@@ -57,13 +59,13 @@ function DashboardTabs({ accounts, getAccounts, axios, toast, ToastUpdate, useRe
                     <BarChart titleLabel={"Tài khoản mới"} data={state.dataAccounts} />
                 </div>
                 <div className="upDashBoardChild">
-                    <BarChart titleLabel={"Liên hệ mới"} data={null} />
-                </div>
-                <div className="upDashBoardChild">
                     <BarChart titleLabel={"Hình mẫu mới"} data={state.dataSamples} />
                 </div>
                 <div className="upDashBoardChild">
                     <BarChart titleLabel={"Blog mới"} data={state.dataBlogs} />
+                </div>
+                <div className="upDashBoardChild">
+                    <GalleryBarChart titleLabel={"Hậu trường"} data={state.dataGallery} />
                 </div>
             </div>
             <div className="midDashBoard">

@@ -23,8 +23,6 @@
 
 .textHeroBanner {
     z-index: 2;
-    width: 35%;
-    margin-left: -25%;
 }
 
 .textHeroBanner .addressBar {
@@ -42,19 +40,21 @@
     text-decoration: none;
 }
 
+.textHeroBanner .coverTitleText {
+    display: inline-block;
+    padding-bottom: 20px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
+}
+
 .textHeroBanner .titleText {
-    text-wrap: nowrap;
-    display: inline;
     font-size: 60px;
     font-family: 'Oswald', sans-serif;
     font-weight: 500;
     color: #fff;
-    padding-bottom: 20px;
-    margin: 0 0 20px 0;
+    margin: 0;
     line-height: 1.2em;
     text-transform: uppercase;
     letter-spacing: 3px;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.25);
 }
 
 .textHeroBanner .titleDescription {
@@ -62,7 +62,8 @@
     font-size: 15px;
     font-weight: 400;
     color: #fff;
-    margin-top: 10%;
+    margin-top: 25px;
+    width: 50%;
 }
 
 .specialAdd {
@@ -84,4 +85,23 @@
     word-break: break-all;
     font-size: 19px;
     width: 100%;
+}
+
+@media (max-width:991px) {
+    .mainHeroBanner {
+        padding: 0 10px;
+        height: 100vh;
+    }
+
+    .textHeroBanner .titleDescription {
+        width: 100%;
+    }
+
+    .textHeroBanner {
+        margin-left: 0;
+    }
+
+    .mainReadBlog {
+        padding: 120px 10px;
+    }
 }

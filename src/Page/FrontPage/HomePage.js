@@ -28,13 +28,14 @@ function HomePage() {
 
             <Booking type={1} state={state} setState={setState} />
 
-            <Service />
-
-            <div style={{ background: "#101010" }}>
-                <hr className="upTimeHr" style={{ margin: "0 auto" }} />
+            <div style={{ display: "flex", flexDirection: "column" }}>
+                <Service />
+                <div style={{ background: "#101010" }}>
+                    <hr className="upTimeHr" style={{ margin: "0 auto" }} />
+                </div>
+                <BlogSmall />
             </div>
 
-            <BlogSmall />
         </>
     )
 }

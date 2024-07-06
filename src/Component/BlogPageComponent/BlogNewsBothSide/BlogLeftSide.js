@@ -1,14 +1,14 @@
 import { NavLink } from "react-router-dom"
 import ReactPaginate from "react-paginate"
 
-function BlogLeftSide({ getBlogs, currentPage, blog, pageCount }) {
+function BlogLeftSide({ getBlogs, currentPage, state }) {
     function handlePageClick(e) {
         currentPage.current = e.selected + 1
         getBlogs();
     }
     return (
         <div className="mainLeft">
-            {blog?.map((i) => {
+            {state.blog?.map((i) => {
                 return (
                     <div key={i._id} className="news">
                         <NavLink to={`/ReadBlogPage/${i._id}`} reloadDocument className="newsImage">
@@ -32,7 +32,7 @@ function BlogLeftSide({ getBlogs, currentPage, blog, pageCount }) {
                 nextLabel=">"
                 onPageChange={handlePageClick}
                 pageRangeDisplayed={5}
-                pageCount={pageCount}
+                pageCount={state.pageCount}
                 previousLabel="<"
                 renderOnZeroPageCount={null}
                 marginPagesDisplayed={2}

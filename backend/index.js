@@ -335,6 +335,16 @@ app.post("/api/v1/AddBlog", (req, res) => {
     })
 })
 
+// Get Blogs For Homepage
+app.get("/api/v1/GetBlogsForHomepage", async (req, res) => {
+    try {
+        const getBlogsOut = await getBlogs.find({}).limit(4)
+        res.status(201).send(getBlogsOut)
+    } catch (e) {
+        console.log(e);
+    }
+})
+
 // Get blogs
 app.get("/api/v1/GetBlogs", async (req, res) => {
     const getOrder = await getBlogs.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
@@ -921,7 +931,7 @@ app.post("/api/v1/AddSamplesType1Booking", (req, res) => {
 
 // Fetch Dashboard
 app.get("/api/v1/FetchDashboard", async (req, res) => {
-    const dataAccounts = [], dataSamples = [], dataBlogs = [], dataBookingSuccess = [], dataBookingFail = [], dataSamplesPie = []
+    const dataAccounts = [], dataSamples = [], dataBlogs = [], dataBookingSuccess = [], dataBookingFail = [], dataSamplesPie = [], dataGallery = []
     const DateNow = Date.now()
     await getAccounts.find({}).then((resAccounts) => {
         resAccounts.reduce((acc, curr) => {
@@ -963,7 +973,12 @@ app.get("/api/v1/FetchDashboard", async (req, res) => {
             }, 0)
         }, 0)
     })
-    res.send({ dataAccounts, dataBlogs, dataSamples, dataBookingSuccess, dataBookingFail, dataSamplesPie })
+    await getGallerys.find({}).then((resSamples) => {
+        resSamples.reduce((acc, curr) => {
+            dataGallery.push({ title: curr.title })
+        }, 0)
+    })
+    res.send({ dataAccounts, dataBlogs, dataSamples, dataBookingSuccess, dataBookingFail, dataSamplesPie, dataGallery })
 })
 
 

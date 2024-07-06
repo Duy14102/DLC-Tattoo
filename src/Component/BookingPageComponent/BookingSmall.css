@@ -255,8 +255,9 @@ input[type="time"]::-webkit-calendar-picker-indicator {
 .loadSamplesFather .loadSamplesChild span {
     font-size: 40px;
     position: absolute;
-    left: 40%;
-    top: 30%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
     color: #09c167;
     border: 2px solid #09c167;
     border-radius: 50%;
@@ -286,4 +287,24 @@ input[type="time"]::-webkit-calendar-picker-indicator {
     -webkit-line-clamp: 1;
     line-clamp: 1;
     -webkit-box-orient: vertical;
+}
+
+@media(max-width:991px) {
+    .mainBookingSmall {
+        padding: 120px 10px;
+        flex-direction: column;
+    }
+
+    .leftDesc {
+        width: 100% !important;
+        margin-bottom: 40px;
+    }
+
+    .rightForm {
+        width: 100% !important;
+    }
+
+    .fatherAddType2 {
+        width: 80vw;
+    }
 }

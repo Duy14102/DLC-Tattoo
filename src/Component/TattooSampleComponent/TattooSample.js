@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom"
-import "./TattooSample.css"
 import ViewSampleModal from "../Modal/ViewSampleModal";
 import Cookies from "universal-cookie";
 import { toast } from "react-toastify";
@@ -202,7 +201,7 @@ function TattooSample({ state, setState, params, useEffect, getSamples, useRef, 
                         )
                     })}
                 </div>
-            </div >
+            </div>
             <ViewSampleModal state={state} setState={setState} />
             <FavouriteBookingModal state={state} setState={setState} />
         </>

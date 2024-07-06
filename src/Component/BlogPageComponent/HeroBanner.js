@@ -10,7 +10,9 @@ function HeroBanner({ page, page2, title, desc, img }) {
                 ) : (
                     <h5 className="addressBar"><NavLink reloadDocument to={"/"}>Home</NavLink> / {page}</h5>
                 )}
-                <h1 className="titleText">{title}</h1>
+                <div className="coverTitleText">
+                    <h1 className="titleText">{title}</h1>
+                </div>
                 <p className="titleDescription">{desc}</p>
             </div>
         </div>

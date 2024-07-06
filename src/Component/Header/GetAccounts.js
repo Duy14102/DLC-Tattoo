@@ -1,9 +1,8 @@
 import axios from "axios"
-import { jwtDecode } from "jwt-decode"
 import { useReducer, useRef } from "react"
 import socketIOClient from "socket.io-client";
 
-function GetAccounts({ token, useEffect, NavLink, cookies }) {
+function GetAccounts({ token, useEffect, NavLink, cookies, jwtDecode, logoutUser }) {
     const socketRef = useRef();
     const [state, setState] = useReducer((prev, next) => ({ ...prev, ...next }), {
         accounts: null,
@@ -83,12 +82,6 @@ function GetAccounts({ token, useEffect, NavLink, cookies }) {
         axios(configuration).then((res) => {
             setState({ accounts: res.data })
         })
-    }
-
-    const logoutUser = () => {
-        cookies.remove("TOKEN", { path: '/' });
-        localStorage.removeItem("tabs")
-        window.location.href = "/"
     }
 
     function navigateNoti(e) {

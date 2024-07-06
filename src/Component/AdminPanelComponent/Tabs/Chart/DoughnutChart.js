@@ -3,7 +3,6 @@ import { Pie } from "react-chartjs-2"
 function DoughnutChart({ data }) {
     const label = ["Bắp tay", "Cẳng tay", "Bàn tay", "Bắp chân", "Cẳng chân", "Bàn chân", "Cổ", "Sườn", "Ngực", "Bụng", "Vai", "Lưng"]
     function getData(e) {
-        console.log(data);
         const dataGot = data?.filter(item => item.cate.cate === e).length
         if (dataGot) {
             return dataGot

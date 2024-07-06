@@ -3,13 +3,12 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "@testing-library/jest-dom": "^5.17.0",
-    "@testing-library/react": "^13.4.0",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/jest-dom": "^6.4.6",
+    "@testing-library/react": "^16.0.0",
+    "@testing-library/user-event": "^14.5.2",
     "axios": "^1.7.2",
     "chart.js": "^4.4.3",
     "emoji-picker-react": "^4.10.0",
-    "html-react-parser": "^5.1.10",
     "jodit-react": "^4.1.2",
     "jwt-decode": "^4.0.0",
     "react": "^18.3.1",
@@ -22,7 +21,7 @@
     "react-toastify": "^10.0.5",
     "socket.io-client": "^4.7.5",
     "universal-cookie": "^7.1.4",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^4.2.1"
   },
   "scripts": {
     "start": "set PORT=5000 && react-scripts start",
