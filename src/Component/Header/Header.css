@@ -54,7 +54,7 @@
     cursor: pointer;
 }
 
-.barsNextToBrand .avatarUser {
+.avatarUser {
     cursor: pointer;
     position: relative;
     transition: all .4s;
@@ -317,24 +317,25 @@
         position: absolute;
         left: 0;
         width: 100%;
-        height: 0;
+        height: auto;
         background: #101010;
         display: flex;
         flex-direction: column;
         gap: 10px;
-        overflow: hidden;
+        visibility: hidden;
+        opacity: 0;
         animation: appearBars .4s ease forwards;
     }
 
     @keyframes appearBars {
-        100% {
-            height: 385px;
+        to {
+            visibility: visible;
+            opacity: 1;
         }
     }
 
     .activeBarsOnBars a,
     .activeBarsOnBars button {
-        background: none;
         border: none;
         text-decoration: none;
         font-family: "Oswald", sans-serif;

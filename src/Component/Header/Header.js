@@ -64,7 +64,7 @@ function Header() {
                     {token ? (
                         <>
                             <NavLink reloadDocument to={jwtDecode(token).userRole === 1 ? "/UserPanel" : "/AdminPanel"}>{jwtDecode(token).userRole === 1 ? "Tài khoản" : "Quản trị"}</NavLink>
-                            <button onClick={() => logoutUser()}></button>
+                            <button onClick={() => logoutUser()}>Đăng xuất</button>
                         </>
                     ) : (
                         <NavLink reloadDocument to={"/LoginUserPage"}>Đăng nhập</NavLink>

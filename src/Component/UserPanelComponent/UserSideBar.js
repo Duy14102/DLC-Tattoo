@@ -1,7 +1,8 @@
 import "./UserPanel.css"
 
-function UserSideBar({ accounts, getAccounts, toast, ToastUpdate, useRef, axios, decode }) {
+function UserSideBar({ accounts, getAccounts, toast, ToastUpdate, useRef, axios, decode, useEffect }) {
     const toastNow = useRef(null)
+    const tabsCon = localStorage.getItem("tabs")
     function changeTabs(e) {
         localStorage.setItem("tabs", e)
         window.location.reload()
@@ -31,6 +32,22 @@ function UserSideBar({ accounts, getAccounts, toast, ToastUpdate, useRef, axios,
             ToastUpdate({ type: 2, message: "Thay avatar thất bại!", refCur: toastNow.current })
         }
     }
+    useEffect(() => {
+        if (accounts?.notification.filter(item => item.place === tabsCon && item.status === 1).length > 0) {
+            const configuration = {
+                method: "post",
+                url: `${process.env.REACT_APP_apiAddress}/api/v1/UpdateNotificationSide`,
+                data: {
+                    id: decode.userId,
+                    update: tabsCon
+                }
+            }
+            axios(configuration).then(() => {
+                getAccounts()
+            })
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [accounts?.notification])
     return (
         <div className="mainAdminSideBar">
             <div className="logoA">
