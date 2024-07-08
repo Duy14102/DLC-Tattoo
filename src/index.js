@@ -23,12 +23,10 @@ const NotFound = React.lazy(() => import("./Component/NotFound404"))
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 document.onreadystatechange = function () {
-  if (document.readyState !== "complete") {
-    root.render(
+  root.render(
+    document.readyState !== "complete" ? (
       <Spinner />
-    )
-  } else {
-    root.render(
+    ) : (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Layout />}>
@@ -49,6 +47,6 @@ document.onreadystatechange = function () {
         <ToastContainer />
         <ScrollToTop />
       </BrowserRouter>
-    );
-  }
+    )
+  )
 };
