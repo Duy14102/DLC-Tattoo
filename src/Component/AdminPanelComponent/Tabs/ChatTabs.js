@@ -106,6 +106,11 @@ function ChatTabs({ useEffect, axios, token, useRef, toast }) {
         window.location.reload()
     }
 
+    function outChatRoom() {
+        localStorage.removeItem("chatRoom")
+        window.location.reload()
+    }
+
     function chatSendAdmin(e, roomId, userId) {
         e.preventDefault()
         setState({ loading: true })
@@ -134,7 +139,7 @@ function ChatTabs({ useEffect, axios, token, useRef, toast }) {
 
     return (
         <div className="coverChatAll">
-            <div className="chatSide">
+            <div style={window.innerWidth > 991 ? null : window.innerWidth <= 991 && localStorage.getItem("chatRoom") ? { display: "none" } : window.innerWidth <= 991 && !localStorage.getItem("chatRoom") ? { width: "100%", display: "block" } : null} className="chatSide">
                 {state?.roomChat?.room.map((i) => {
                     return (
                         <div onClick={() => changeChatRoom(i.createdBy)} key={i._id} className={state.chatStorage?._id === i._id ? "chatSideChild chatSideChildActive" : "chatSideChild"}>
@@ -179,9 +184,12 @@ function ChatTabs({ useEffect, axios, token, useRef, toast }) {
                     )
                 })}
             </div>
-            <div className="chatRoom">
+            <div style={window.innerWidth > 991 ? null : window.innerWidth <= 991 && localStorage.getItem("chatRoom") ? { display: "block", width: "100%", position: "relative" } : window.innerWidth <= 991 && !localStorage.getItem("chatRoom") ? { display: "none" } : null} className="chatRoom">
                 {state?.chatStorage ? (
                     <>
+                        <button onClick={() => outChatRoom()} className="backChatRoomRespon">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512"><path d="M41.4 233.4c-12.5 12.5-12.5 32.8 0 45.3l160 160c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3L109.3 256 246.6 118.6c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0l-160 160z" /></svg>
+                        </button>
                         <div className="chatPlace">
                             <p className="abbortTime">Phòng chat mở lúc {new Date(state?.chatStorage?.createdAt).toLocaleString()}</p>
                             {state?.chatStorage?.data.map((i, index) => {

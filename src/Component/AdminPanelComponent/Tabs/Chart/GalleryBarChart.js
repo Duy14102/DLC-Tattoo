@@ -19,7 +19,7 @@ function GalleryBarChart({ titleLabel, data }) {
                     {
                         label: `${titleLabel}`,
                         backgroundColor: [
-                            "#8e5ea2", "#09c167"
+                            "#8e5ea2", "rgb(48, 213, 200)"
                         ],
                         data: [getData("image"), getData("video")],
                         barPercentage: 0.5,

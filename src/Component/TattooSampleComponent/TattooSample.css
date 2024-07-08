@@ -3,6 +3,7 @@
     justify-content: space-between;
     padding: 120px 20%;
     background: #101010;
+    min-height: 50vh;
 }
 
 .mainFilter {

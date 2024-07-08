@@ -99,7 +99,7 @@ function MainBarHeader({ setOpen, axios, accounts, setType, getAccounts, toast, 
         window.location.reload()
     }
     return (
-        <div style={{ padding: "0 24px" }}>
+        <div style={{ padding: window.innerWidth <= 991 ? "0 10px" : "0 24px" }}>
             <div className="headerMainBar">
                 <div style={{ display: "flex", alignItems: "center", margin: "20px 10px", gap: 15 }}>
                     <button id="collapseBtn" className="collapseBar">

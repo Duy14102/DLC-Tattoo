@@ -103,14 +103,14 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
     return (
         <>
             <div className="topBlobTaps">
-                <SearchBar state={state} setState={setState} useEffect={useEffect} />
+                <SearchBar state={state} setState={setState} useEffect={useEffect} searchWhat={"Nhập số điện thoại..."} />
                 <button onClick={() => state.wantAddAdmin ? setState({ wantAddAdmin: false }) : setState({ wantAddAdmin: true })} className="addNewBlog">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512"><path d={state.wantAddAdmin ? "M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM471 143c9.4-9.4 24.6-9.4 33.9 0l47 47 47-47c9.4-9.4 24.6-9.4 33.9 0s9.4 24.6 0 33.9l-47 47 47 47c9.4 9.4 9.4 24.6 0 33.9s-24.6 9.4-33.9 0l-47-47-47 47c-9.4 9.4-24.6 9.4-33.9 0s-9.4-24.6 0-33.9l47-47-47-47c-9.4-9.4-9.4-24.6 0-33.9z" : "M96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3zM504 312V248H440c-13.3 0-24-10.7-24-24s10.7-24 24-24h64V136c0-13.3 10.7-24 24-24s24 10.7 24 24v64h64c13.3 0 24 10.7 24 24s-10.7 24-24 24H552v64c0 13.3-10.7 24-24 24s-24-10.7-24-24z"} /></svg> {state.wantAddAdmin ? "Bỏ tạo" : "Tạo admin"}
                 </button>
             </div>
             {state.wantAddAdmin ? (
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                    <form onSubmit={(e) => submitSignup(e)} className="formNewBlogs" style={{ width: "60%" }}>
+                    <form onSubmit={(e) => submitSignup(e)} className="formNewBlogs" style={{ width: window.innerWidth <= 991 ? "95vw" : "60%" }}>
                         <p style={{ color: "#fff", fontFamily: "Oswald", margin: 0, textAlign: "end" }}>* Lưu ý : Ảnh nên dưới <b style={{ color: "#904d03" }}>1mb</b> để tối ưu website</p>
                         <div className='separateUp'>
                             <div className="titlePlace" style={{ display: "flex", flexDirection: "column", justifyContent: "space-between" }}>
@@ -154,67 +154,69 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
                     </form>
                 </div>
             ) : null}
-            <table className="accountTable">
-                <thead>
-                    <tr>
-                        {sortPlace.map((u, index) => {
-                            return (
-                                <th key={index}>
-                                    <div onClick={() => handleSorted(u.x, u.y)} className="flexInThead">
-                                        {u.title}
-                                        <div className="sortInThead">
-                                            <span style={{ color: state.sorted === u.x ? "#904d03" : null }}>▲</span>
-                                            <span style={{ color: state.sorted === u.y ? "#904d03" : null }}>▲</span>
+            <div style={{ overflowX: "auto" }}>
+                <table className="accountTable">
+                    <thead>
+                        <tr>
+                            {sortPlace.map((u, index) => {
+                                return (
+                                    <th key={index}>
+                                        <div onClick={() => handleSorted(u.x, u.y)} className="flexInThead">
+                                            {u.title}
+                                            <div className="sortInThead">
+                                                <span style={{ color: state.sorted === u.x ? "#904d03" : null }}>▲</span>
+                                                <span style={{ color: state.sorted === u.y ? "#904d03" : null }}>▲</span>
+                                            </div>
                                         </div>
-                                    </div>
-                                </th>
-                            )
-                        })}
-                        <th>&nbsp;</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {state.accounts?.map((i) => {
-                        return (
-                            <tr key={i._id}>
-                                <td className="coverInTd">
-                                    <div className="tableUserImage">
-                                        {i.userimage ? (
-                                            <img alt="" src={i.userimage} width={"100%"} height={"100%"} />
-                                        ) : (
-                                            <svg style={{ width: "75%", height: "75%", fill: "#fff" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" /></svg>
-                                        )}
-                                    </div>
-                                    <p>{i.phonenumber}</p>
-                                </td>
-                                <td>{new Date(i.createdAt).toLocaleString()}</td>
-                                <td>{i.lastLogin ? new Date(i.lastLogin).toLocaleString() : "Chưa đăng nhập"}</td>
-                                <td>{i.role === 1 ? "Người dùng" : "Admin"}</td>
-                                <td>
-                                    <span style={{ color: i.status.state === 1 ? "#09c167" : "#e13534" }}>{i.status.state === 1 ? "🟢 Hoạt động" : "🔴 Khóa"}</span>
-                                    {i.status.state === 2 ? (
-                                        <><br />{`( ${i.status.reason} )`}</>
-                                    ) : null}
-                                </td>
-                                {i.role === 1 ? (
-                                    <td>
-                                        <div className="buttonFlexInTd">
-                                            {i.status.state === 2 ? (
-                                                <>
-                                                    <button onClick={() => setState({ modal: true, type: 3, dataModalPass: i._id })} title="Mở tài khoản"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.6 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0z" /></svg></button>
-                                                    <button onClick={() => setState({ modal: true, type: 2, dataModalPass: i._id })} title="Xóa tài khoản"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" /></svg></button>
-                                                </>
+                                    </th>
+                                )
+                            })}
+                            <th>&nbsp;</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {state.accounts?.map((i) => {
+                            return (
+                                <tr key={i._id}>
+                                    <td className="coverInTd">
+                                        <div className="tableUserImage">
+                                            {i.userimage ? (
+                                                <img alt="" src={i.userimage} width={"100%"} height={"100%"} />
                                             ) : (
-                                                <button onClick={() => setState({ modal: true, type: 1, dataModalPass: i._id })} title="Khóa tài khoản"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" /></svg></button>
+                                                <svg style={{ width: "75%", height: "75%", fill: "#fff" }} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M224 256A128 128 0 1 0 224 0a128 128 0 1 0 0 256zm-45.7 48C79.8 304 0 383.8 0 482.3C0 498.7 13.3 512 29.7 512H418.3c16.4 0 29.7-13.3 29.7-29.7C448 383.8 368.2 304 269.7 304H178.3z" /></svg>
                                             )}
                                         </div>
+                                        <p>{i.phonenumber}</p>
                                     </td>
-                                ) : null}
-                            </tr>
-                        )
-                    })}
-                </tbody>
-            </table>
+                                    <td>{new Date(i.createdAt).toLocaleString()}</td>
+                                    <td>{i.lastLogin ? new Date(i.lastLogin).toLocaleString() : "Chưa đăng nhập"}</td>
+                                    <td>{i.role === 1 ? "Người dùng" : "Admin"}</td>
+                                    <td>
+                                        <span style={{ color: i.status.state === 1 ? "#09c167" : "#e13534" }}>{i.status.state === 1 ? "🟢 Hoạt động" : "🔴 Khóa"}</span>
+                                        {i.status.state === 2 ? (
+                                            <><br />{`( ${i.status.reason} )`}</>
+                                        ) : null}
+                                    </td>
+                                    {i.role === 1 ? (
+                                        <td>
+                                            <div className="buttonFlexInTd">
+                                                {i.status.state === 2 ? (
+                                                    <>
+                                                        <button onClick={() => setState({ modal: true, type: 3, dataModalPass: i._id })} title="Mở tài khoản"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0c4.6 0 9.2 1 13.4 2.9L457.7 82.8c22 9.3 38.4 31 38.3 57.2c-.5 99.2-41.3 280.7-213.6 363.2c-16.7 8-36.1 8-52.8 0C57.3 420.7 16.5 239.2 16 140c-.1-26.2 16.3-47.9 38.3-57.2L242.7 2.9C246.8 1 251.4 0 256 0z" /></svg></button>
+                                                        <button onClick={() => setState({ modal: true, type: 2, dataModalPass: i._id })} title="Xóa tài khoản"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M135.2 17.7L128 32H32C14.3 32 0 46.3 0 64S14.3 96 32 96H416c17.7 0 32-14.3 32-32s-14.3-32-32-32H320l-7.2-14.3C307.4 6.8 296.3 0 284.2 0H163.8c-12.1 0-23.2 6.8-28.6 17.7zM416 128H32L53.2 467c1.6 25.3 22.6 45 47.9 45H346.9c25.3 0 46.3-19.7 47.9-45L416 128z" /></svg></button>
+                                                    </>
+                                                ) : (
+                                                    <button onClick={() => setState({ modal: true, type: 1, dataModalPass: i._id })} title="Khóa tài khoản"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M367.2 412.5L99.5 144.8C77.1 176.1 64 214.5 64 256c0 106 86 192 192 192c41.5 0 79.9-13.1 111.2-35.5zm45.3-45.3C434.9 335.9 448 297.5 448 256c0-106-86-192-192-192c-41.5 0-79.9 13.1-111.2 35.5L412.5 367.2zM0 256a256 256 0 1 1 512 0A256 256 0 1 1 0 256z" /></svg></button>
+                                                )}
+                                            </div>
+                                        </td>
+                                    ) : null}
+                                </tr>
+                            )
+                        })}
+                    </tbody>
+                </table>
+            </div>
             <ReactPaginate
                 breakLabel="..."
                 nextLabel=">"

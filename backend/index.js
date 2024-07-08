@@ -748,7 +748,7 @@ app.post("/api/v1/UpdateBooking", (req, res) => {
 // Get Booking Admin
 app.get("/api/v1/GetBookingAdmin", async (req, res) => {
     const filterStatus = parseInt(req.query.filter)
-    const getOrder = await getBookings.find(req.query.search ? { name: new RegExp(req.query.search, 'i'), status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } } : { status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } }).sort({ status: 1, createdAt: -1 })
+    const getOrder = await getBookings.find(req.query.search ? { phone: new RegExp(req.query.search, 'i'), status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } } : { status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } }).sort({ status: 1, createdAt: -1 })
     const dataPush = []
     if (getOrder) {
         getOrder.reduce((acc, curr) => {
@@ -931,26 +931,29 @@ app.post("/api/v1/AddSamplesType1Booking", (req, res) => {
 
 // Fetch Dashboard
 app.get("/api/v1/FetchDashboard", async (req, res) => {
-    const dataAccounts = [], dataSamples = [], dataBlogs = [], dataBookingSuccess = [], dataBookingFail = [], dataSamplesPie = [], dataGallery = []
+    const dataAccounts = [], dataSamples = [], dataBlogs = [], dataBookingSuccess = [], dataBookingFail = [], dataSamplesPie = [], dataGallery = [], dataTotalPriceBooking = []
     const DateNow = Date.now()
     await getAccounts.find({}).then((resAccounts) => {
         resAccounts.reduce((acc, curr) => {
             if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
-                dataAccounts.push({ month: new Date(curr.createdAt).getMonth() })
+                dataAccounts.push({ month: new Date(curr.createdAt).getMonth() + 1 })
             }
         }, 0)
     })
     await getSamples.find({}).then((resSamples) => {
         resSamples.reduce((acc, curr) => {
             if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
-                dataSamples.push({ month: new Date(curr.createdAt).getMonth() })
+                dataSamples.push({ month: new Date(curr.createdAt).getMonth() + 1 })
             }
+            curr.categories.data.reduce((ac2, cur2) => {
+                dataSamplesPie.push({ cate: cur2 })
+            }, 0)
         }, 0)
     })
     await getBlogs.find({}).then((resBlogs) => {
         resBlogs.reduce((acc, curr) => {
             if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
-                dataBlogs.push({ month: new Date(curr.createdAt).getMonth() })
+                dataBlogs.push({ month: new Date(curr.createdAt).getMonth() + 1 })
             }
         }, 0)
     })
@@ -958,19 +961,14 @@ app.get("/api/v1/FetchDashboard", async (req, res) => {
         resBooking.reduce((acc, curr) => {
             if (new Date(curr.createdAt).getFullYear() === new Date(DateNow).getFullYear()) {
                 if (curr.status === 3) {
-                    dataBookingSuccess.push({ month: new Date(curr.createdAt).getMonth() })
+                    dataBookingSuccess.push({ month: new Date(curr.createdAt).getMonth() + 1 })
                 }
                 if (curr.status === 4) {
-                    dataBookingFail.push({ month: new Date(curr.createdAt).getMonth() })
+                    dataBookingFail.push({ month: new Date(curr.createdAt).getMonth() + 1 })
                 }
+                dataTotalPriceBooking.push({ money: curr.totalPrice, month: new Date(curr.createdAt).getMonth() + 1 })
             }
-        }, 0)
-    })
-    await getSamples.find({}).then((resSamples) => {
-        resSamples.reduce((acc, curr) => {
-            curr.categories.data.reduce((ac2, cur2) => {
-                dataSamplesPie.push({ cate: cur2 })
-            }, 0)
+
         }, 0)
     })
     await getGallerys.find({}).then((resSamples) => {
@@ -978,7 +976,7 @@ app.get("/api/v1/FetchDashboard", async (req, res) => {
             dataGallery.push({ title: curr.title })
         }, 0)
     })
-    res.send({ dataAccounts, dataBlogs, dataSamples, dataBookingSuccess, dataBookingFail, dataSamplesPie, dataGallery })
+    res.send({ dataAccounts, dataBlogs, dataSamples, dataBookingSuccess, dataBookingFail, dataSamplesPie, dataGallery, dataTotalPriceBooking })
 })
 
 
@@ -1180,6 +1178,7 @@ socketIo.on("connection", (socket) => {
     socket.on("DoneBooking", function (data) {
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 3,
+            totalPrice: parseInt(data.priceDone)
         }).then(() => {
             const dated2 = { title: "Booking đã thành công!", place: "Booking", time: Date.now(), status: 1 }
             getAccounts.updateMany({ phonenumber: data.phone }, {

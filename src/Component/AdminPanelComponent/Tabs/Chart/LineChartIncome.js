@@ -1,18 +1,10 @@
 import { Line } from "react-chartjs-2"
 
-function LineChart({ dataSuccess, dataFail }) {
+function LineChartIncome({ data }) {
     const labelRespone = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"]
     const label = ["Tháng 1", "Tháng 2", "Tháng 3", "Tháng 4", "Tháng 5", "Tháng 6", "Tháng 7", "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
     function getDataSuccess(e) {
-        const dataGot = dataSuccess?.filter(item => item.month === e).length
-        if (dataGot) {
-            return dataGot
-        } else {
-            return 0
-        }
-    }
-    function getDataFail(e) {
-        const dataGot = dataFail?.filter(item => item.month === e).length
+        const dataGot = data?.filter(item => item.month === e).reduce((acc, curr) => { return acc + curr.money }, 0)
         if (dataGot) {
             return dataGot
         } else {
@@ -25,14 +17,9 @@ function LineChart({ dataSuccess, dataFail }) {
                 labels: window.innerWidth > 991 ? label : labelRespone,
                 datasets: [
                     {
-                        label: "Booking thành công",
-                        data: dataSuccess?.length > 0 ? [getDataSuccess(1), getDataSuccess(2), getDataSuccess(3), getDataSuccess(4), getDataSuccess(5), getDataSuccess(6), getDataSuccess(7), getDataSuccess(8), getDataSuccess(9), getDataSuccess(10), getDataSuccess(11), getDataSuccess(12)] : null,
-                        borderColor: "rgb(9,193,103)"
-                    },
-                    {
-                        label: "Booking bị hủy",
-                        data: dataFail?.length > 0 ? [getDataFail(1), getDataFail(2), getDataFail(3), getDataFail(4), getDataFail(5), getDataFail(6), getDataFail(7), getDataFail(8), getDataFail(9), getDataFail(10), getDataFail(11), getDataFail(12)] : null,
-                        borderColor: "#e13534"
+                        label: "Tổng tiền (VND)",
+                        data: data?.length > 0 ? [getDataSuccess(1), getDataSuccess(2), getDataSuccess(3), getDataSuccess(4), getDataSuccess(5), getDataSuccess(6), getDataSuccess(7), getDataSuccess(8), getDataSuccess(9), getDataSuccess(10), getDataSuccess(11), getDataSuccess(12)] : null,
+                        borderColor: "#ffc700"
                     }
                 ]
             }}
@@ -63,7 +50,7 @@ function LineChart({ dataSuccess, dataFail }) {
                     },
                     title: {
                         display: true,
-                        text: "Biểu đổ booking",
+                        text: "Biểu đổ thu nhập",
                         font: {
                             family: "Oswald",
                             weight: 400,
@@ -76,4 +63,4 @@ function LineChart({ dataSuccess, dataFail }) {
         />
     )
 }
-export default LineChart
+export default LineChartIncome

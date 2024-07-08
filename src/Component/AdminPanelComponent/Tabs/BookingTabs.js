@@ -15,7 +15,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         addTitle: "",
         addPrice: "",
         updateTitle: "", updatePrice: "",
-        updateBookingName: "", updateBookingPhone: "", updateBookingDate: "", updateBookingTime: "", updateBookingNote: "",
+        updateBookingName: "", updateBookingPhone: "", updateBookingDate: "", updateBookingTime: "", updateBookingNote: "", priceDone: "",
         mainIndex: null, mainIndex2: null,
         addImage: null,
         allBookings: null,
@@ -23,7 +23,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         samplesForAdd: null,
         contentSearch: null, contentSearch2: null,
         moreSamples: false,
-        wantCancel: false, wantUpdate: false,
+        wantCancel: false, wantUpdate: false, wantDone: false, checkPriceDone: false,
         modalOpen: false, modalData: null, modalData2: null, modalData3: null,
         modalOpen2: false, modalOpen3: false, modalDataX: null,
         payingPrice: null,
@@ -59,6 +59,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         socketRef.current.on('DoneBookingSuccess', data => {
             if (token.userId === data.adminId) {
                 getBooking()
+                setState({ wantDone: false, checkPriceDone: false, priceDone: "", mainIndex: null })
                 ToastUpdate({ type: 1, message: "Hoàn thành thành công!", refCur: toastNow.current })
             }
         })
@@ -146,8 +147,11 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
     }
 
     function doneBooking(id, phone) {
+        if (state.priceDone === "") {
+            return setState({ checkPriceDone: true })
+        }
         toastNow.current = toast.loading("Chờ một chút...")
-        const data = { bookingId: id, adminId: token.userId, phone: phone }
+        const data = { bookingId: id, adminId: token.userId, phone: phone, priceDone: state.priceDone }
         socketRef.current.emit('DoneBooking', data)
     }
 
@@ -156,10 +160,15 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         const data = { bookingId: id, adminId: token.userId, phone: phone, reason: state.cancelReason }
         socketRef.current.emit('CancelBookingByAdmin', data)
     }
+
+    const VND = new Intl.NumberFormat('vi-VN', {
+        style: 'currency',
+        currency: 'VND',
+    });
     return (
         <>
             <div className="topBlobTaps">
-                <SearchBar state={state} setState={setState} useEffect={useEffect} />
+                <SearchBar state={state} setState={setState} useEffect={useEffect} searchWhat={"Nhập số điện thoại..."} />
                 <select onChange={(e) => setState({ filter: e.target.value })}>
                     <option value={null} hidden>Lọc kết quả</option>
                     <option value={1}>Đang chờ</option>
@@ -186,22 +195,37 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
                                     <textarea defaultValue={i.note} onChange={(e) => setState({ updateBookingNote: e.target.value })} typeof="text" style={{ width: "100%", height: 150 }} className="inputOfBooking" />
                                 </div>
                             </div>
-                            {state.wantCancel ? (
+                            {state.wantCancel && index === state.mainIndex ? (
                                 <input value={state.cancelReason} onChange={(e) => setState({ cancelReason: e.target.value })} style={{ width: "100%" }} type="text" className="inputOfBooking" placeholder="Lý do hủy..." />
                             ) : null}
-                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", pointerEvents: state.mainIndex !== null && state.mainIndex !== index ? "none" : null }}>
+                            {state.wantDone && index === state.mainIndex ? (
+                                <input value={state.priceDone} onChange={(e) => setState({ priceDone: e.target.value })} style={{ width: "100%" }} type="number" className="inputOfBooking" placeholder="Nhập số tiền thanh toán..." />
+                            ) : null}
+                            {state.checkPriceDone && index === state.mainIndex ? (
+                                <p style={{ fontFamily: "Oswald", fontWeight: 400, color: "tomato", letterSpacing: 1, margin: 0, paddingLeft: 5 }}>Nhập số tiền thanh toán!</p>
+                            ) : null}
+                            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: window.innerWidth <= 991 ? "column-reverse" : null, gap: window.innerWidth <= 991 ? 10 : null, pointerEvents: state.mainIndex !== null && state.mainIndex !== index ? "none" : null }}>
                                 <button type="button" onClick={() => setState(state.moreSamples && state.mainIndex2 === index ? { moreSamples: false, mainIndex2: null } : { moreSamples: true, mainIndex2: index })} className="openMoreSamples"><span style={state.moreSamples && state.mainIndex2 === index ? { rotate: "90deg" } : null} >➤</span> {i.samples.length} hình mẫu</button>
                                 {i.status === 4 && index === state.mainIndex ? (
                                     <div className="cancelReasonText">Lý do: <span>{i.cancelReason && i.cancelReason !== "" ? i.cancelReason : "Không rõ"}</span></div>
                                 ) : null}
                                 <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-                                    {i.status === 2 && !state.wantCancel && !state.wantUpdate ? (
-                                        <button type="button" onClick={() => doneBooking(i._id, i.phone)} style={{ background: "#ffc700" }} className="yesNoButton">Hoàn thành</button>
+                                    {i.status === 3 ? (
+                                        <div className="totalPriceBooking">Tổng tiền : <span style={{ color: "#fff" }}>{VND.format(i.totalPrice)}</span></div>
+                                    ) : null}
+                                    {state.wantDone && index === state.mainIndex ? (
+                                        <>
+                                            <button type="button" onClick={() => doneBooking(i._id, i.phone)} style={{ background: "#ffc700" }} className="yesNoButton">Xong</button>
+                                            <button type="button" onClick={() => setState({ wantDone: false, mainIndex: null, checkPriceDone: false, priceDone: "" })} style={{ background: "gray" }} className="yesNoButton">Bỏ</button>
+                                        </>
+                                    ) : null}
+                                    {i.status === 2 && !state.wantCancel && !state.wantUpdate && !state.wantDone ? (
+                                        <button type="button" onClick={() => setState({ wantDone: true, mainIndex: index })} style={{ background: "#ffc700" }} className="yesNoButton">Hoàn thành</button>
                                     ) : null}
                                     {i.status === 1 && !state.wantCancel && !state.wantUpdate ? (
                                         <button type="button" onClick={() => confirmBooking(i._id, i.phone)} style={{ background: "#09c167" }} className="yesNoButton">Xác nhận</button>
                                     ) : null}
-                                    {(i.status === 1 || i.status === 2) && !state.wantCancel && !state.wantUpdate ? (
+                                    {(i.status === 1 || i.status === 2) && !state.wantCancel && !state.wantUpdate && !state.wantDone ? (
                                         <>
                                             <button type="button" onClick={() => setState({ wantCancel: true, mainIndex: index })} style={{ background: "#e13534" }} className="yesNoButton">Hủy</button>
                                             <button type="button" onClick={() => setState({ wantUpdate: true, mainIndex: index })} style={{ background: "#096fad" }} className="yesNoButton">Cập nhật</button>

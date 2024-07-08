@@ -220,14 +220,14 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
     return (
         <>
             <div className="topBlobTaps">
-                <SearchBar state={state} setState={setState} useEffect={useEffect} />
+                <SearchBar state={state} setState={setState} useEffect={useEffect} searchWhat={"Nhập tiêu đề..."}/>
                 <button onClick={() => state.wantAddSample ? setState({ wantAddSample: false }) : setState({ wantAddSample: true })} className="addNewBlog">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512"><path d={state.wantAddSample ? "M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384v38.6C310.1 219.5 256 287.4 256 368c0 59.1 29.1 111.3 73.7 143.3c-3.2 .5-6.4 .7-9.7 .7H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zm48 96a144 144 0 1 1 0 288 144 144 0 1 1 0-288zm59.3 107.3c6.2-6.2 6.2-16.4 0-22.6s-16.4-6.2-22.6 0L432 345.4l-36.7-36.7c-6.2-6.2-16.4-6.2-22.6 0s-6.2 16.4 0 22.6L409.4 368l-36.7 36.7c-6.2 6.2-6.2 16.4 0 22.6s16.4 6.2 22.6 0L432 390.6l36.7 36.7c6.2 6.2 16.4 6.2 22.6 0s6.2-16.4 0-22.6L454.6 368l36.7-36.7z" : "M0 64C0 28.7 28.7 0 64 0H224V128c0 17.7 14.3 32 32 32H384v38.6C310.1 219.5 256 287.4 256 368c0 59.1 29.1 111.3 73.7 143.3c-3.2 .5-6.4 .7-9.7 .7H64c-35.3 0-64-28.7-64-64V64zm384 64H256V0L384 128zm48 96a144 144 0 1 1 0 288 144 144 0 1 1 0-288zm16 80c0-8.8-7.2-16-16-16s-16 7.2-16 16v48H368c-8.8 0-16 7.2-16 16s7.2 16 16 16h48v48c0 8.8 7.2 16 16 16s16-7.2 16-16V384h48c8.8 0 16-7.2 16-16s-7.2-16-16-16H448V304z"} /></svg> {state.wantAddSample ? "Bỏ tạo" : "Tạo hình"}
                 </button>
             </div>
             {state.wantAddSample ? (
                 <div style={{ display: "flex", justifyContent: "center" }}>
-                    <form onSubmit={(e) => addNewSample(e)} className="formNewBlogs" style={{ width: "60%" }}>
+                    <form onSubmit={(e) => addNewSample(e)} className="formNewBlogs" style={{ width: window.innerWidth <= 991 ? "95vw" : "60%" }}>
                         <p style={{ color: "#fff", fontFamily: "Oswald", margin: 0, textAlign: "end" }}>* Lưu ý : Ảnh nên dưới <b style={{ color: "#904d03" }}>1mb</b> để tối ưu website</p>
                         <div className='separateUp'>
                             <div className='titlePlace'>

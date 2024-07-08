@@ -32,6 +32,10 @@ function AdminPanel() {
         if (decode && decode.userRole === 2) {
             const collapseBtn = document.getElementById("collapseBtn");
             const container = document.querySelector(".mainAdminSideBar");
+            const callbackButton = document.querySelector(".closeAdminBarRepson")
+            callbackButton.addEventListener("click", () => {
+                container.classList.remove("mainAdminSideBarCollapse");
+            })
             collapseBtn.addEventListener("click", () => {
                 const container2 = document.querySelector(".mainAdminSideBarCollapse");
                 if (container2) {

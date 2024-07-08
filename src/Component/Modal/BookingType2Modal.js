@@ -203,7 +203,7 @@ function BookingType2Modal({ state, setState, axios, getBooking, toast, toastNow
                         {state?.modalDataX?.payingSession.map((i, index) => {
                             return (
                                 <form onSubmit={((e) => updateBookingSessionPrice(e))} key={index} className="detailSession" style={{ marginTop: index > 0 ? 15 : null }}>
-                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 15 }}>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: window.innerWidth <= 991 ? "column" : null, gap: window.innerWidth <= 991 ? 10 : null, marginBottom: 15 }}>
                                         <div className="coverWithHonor">
                                             <label htmlFor="labelTitle">Tiêu đề</label>:
                                             {state.wantChangeSessionPrice && state.indexSessionPrice === index ? (
@@ -221,7 +221,7 @@ function BookingType2Modal({ state, setState, axios, getBooking, toast, toastNow
                                             )}
                                         </div>
                                     </div>
-                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 15 }}>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: window.innerWidth <= 991 ? "column" : null, gap: window.innerWidth <= 991 ? 10 : null, marginBottom: 15 }}>
                                         <div className="coverWithHonor">
                                             <label htmlFor="labelTitle">Nội dung</label>:
                                             {state.wantChangeSessionPrice && state.indexSessionPrice === index ? (
@@ -239,7 +239,7 @@ function BookingType2Modal({ state, setState, axios, getBooking, toast, toastNow
                                             )}
                                         </div>
                                     </div>
-                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                                    <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: window.innerWidth <= 991 ? "column" : null, gap: window.innerWidth <= 991 ? 10 : null, }}>
                                         <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
                                             <b>Đã thanh toán</b> :
                                             {state.wantChangeSessionPrice && state.indexSessionPrice === index ? (

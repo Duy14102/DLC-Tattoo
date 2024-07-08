@@ -1,4 +1,4 @@
-function SearchBar({ setState, state, useEffect }) {
+function SearchBar({ setState, state, useEffect, searchWhat }) {
     useEffect(() => {
         if (state.search !== "") {
             const debounceResult = setTimeout(() => {
@@ -14,7 +14,7 @@ function SearchBar({ setState, state, useEffect }) {
     }, [state.search])
     return (
         <form className="findSomething">
-            <input onChange={(e) => setState({ search: e.target.value })} type="text" placeholder="Tìm kiếm..." required />
+            <input onChange={(e) => setState({ search: e.target.value })} type="text" placeholder={searchWhat} required />
         </form>
     )
 }

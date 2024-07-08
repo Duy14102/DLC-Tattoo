@@ -91,7 +91,7 @@ function BookingType1Modal({ state, setState, axios, getBooking, toast, toastNow
                                 <b>Giá</b> : <p>{i.price ? i.price : "Liên hệ"}</p>
                             </div>
                         </div>
-                        <form onSubmit={((e) => updateBookingSessionPrice(e, i.title, state?.modalData2?.payingSession))} style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+                        <form onSubmit={((e) => updateBookingSessionPrice(e, i.title, state?.modalData2?.payingSession))} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", flexDirection: window.innerWidth <= 991 ? "column" : null, gap: window.innerWidth <= 991 ? 10 : null, }}>
                             <div style={{ display: "flex", gap: 5, alignItems: "center" }}>
                                 <b>Đã thanh toán</b> :
                                 {state?.modalData2?.payingSession?.filter(item => item.sessionTitle === i.title).length > 0 ? (

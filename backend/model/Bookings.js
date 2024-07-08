@@ -26,6 +26,10 @@ const BookingSchema = new mongoose.Schema({
         type: Array
     },
 
+    totalPrice: {
+        type: Number
+    },
+
     cancelReason: {
         type: String
     },

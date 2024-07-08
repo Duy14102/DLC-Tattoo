@@ -7,6 +7,7 @@ import 'react-toastify/dist/ReactToastify.css';
 import 'react-responsive-modal/styles.css';
 import { ToastContainer } from 'react-toastify';
 import ScrollToTop from './Component/ScrollToTop';
+import Spinner from './Component/Spinner';
 const HomePage = React.lazy(() => import("./Page/FrontPage/HomePage"))
 const Blog = React.lazy(() => import("./Page/FrontPage/BlogPage"))
 const ReadBlog = React.lazy(() => import("./Page/SideFrontPage/ReadBlog"))
@@ -21,25 +22,33 @@ const UserPanel = React.lazy(() => import("./Page/PanelPage/UserPanel"))
 const NotFound = React.lazy(() => import("./Component/NotFound404"))
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/" element={<Layout />}>
-        <Route index element={<HomePage />} />
-        <Route path="/BlogPage" element={<Blog />} />
-        <Route path="/ReadBlogPage/:id" element={<ReadBlog />} />
-        <Route path="/GalleryPage" element={<Gallery />} />
-        <Route path="/BookingPage" element={<Booking />} />
-        <Route path="/TattooSamplePage/:sorted/:cate/:star" element={<TattooSample />} />
-        <Route path="/FavouritePage/:sorted/:cate/:star" element={<Favourite />} />
-        <Route path="/LoginUserPage" element={<LoginUser />} />
-        <Route path="/UserPanel" element={<UserPanel />} />
-      </Route>
-      <Route path="/AdminPanel" element={<AdminPanel />} />
-      <Route path="/LoginAdminPage" element={<LoginAdmin />} />
-      <Route path="*" element={<NotFound />} />
-    </Routes>
-    <ToastContainer />
-    <ScrollToTop />
-  </BrowserRouter>
-);
+document.onreadystatechange = function () {
+  if (document.readyState !== "complete") {
+    root.render(
+      <Spinner />
+    )
+  } else {
+    root.render(
+      <BrowserRouter>
+        <Routes>
+          <Route path="/" element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="/BlogPage" element={<Blog />} />
+            <Route path="/ReadBlogPage/:id" element={<ReadBlog />} />
+            <Route path="/GalleryPage" element={<Gallery />} />
+            <Route path="/BookingPage" element={<Booking />} />
+            <Route path="/TattooSamplePage/:sorted/:cate/:star" element={<TattooSample />} />
+            <Route path="/FavouritePage/:sorted/:cate/:star" element={<Favourite />} />
+            <Route path="/LoginUserPage" element={<LoginUser />} />
+            <Route path="/UserPanel" element={<UserPanel />} />
+          </Route>
+          <Route path="/AdminPanel" element={<AdminPanel />} />
+          <Route path="/LoginAdminPage" element={<LoginAdmin />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+        <ToastContainer />
+        <ScrollToTop />
+      </BrowserRouter>
+    );
+  }
+};
