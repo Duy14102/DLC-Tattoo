@@ -2,8 +2,42 @@ import "./Service.css"
 import ServiceImage1 from "../../Assets/Image/Service-1.jpeg"
 import ServiceImage2 from "../../Assets/Image/Service-2.jpeg"
 import ServiceImage3 from "../../Assets/Image/Service-3.jpeg"
+import { useEffect } from "react"
 
 function Service() {
+    const isInViewport = function (elem, anim) {
+        var bounding = elem.getBoundingClientRect();
+        if (window.innerHeight - bounding.top > 150) {
+            elem.classList.remove("animHide")
+            elem.classList.add("animated", anim)
+        }
+    };
+
+    useEffect(() => {
+        let lastKnownScrollPosition = 0;
+        let ticking = false;
+        function doSomething(scrollPos) {
+            isInViewport(document.getElementById("animateRight3"), "fadeInRight")
+            isInViewport(document.getElementById("animateRight4"), "fadeInRight")
+            isInViewport(document.getElementById("animateRight5"), "fadeInRight")
+            isInViewport(document.getElementById("animateLeft3"), "fadeInLeft")
+            isInViewport(document.getElementById("animateLeft4"), "fadeInLeft")
+            isInViewport(document.getElementById("animateLeft5"), "fadeInLeft")
+        }
+
+        document.addEventListener("scroll", (event) => {
+            lastKnownScrollPosition = window.scrollY;
+
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    doSomething(lastKnownScrollPosition);
+                    ticking = false;
+                });
+
+                ticking = true;
+            }
+        });
+    }, [])
     return (
         <div className="mainService">
             <div style={{ marginBottom: 30 }}>
@@ -11,10 +45,10 @@ function Service() {
                 <p className="titleMain">Dịch vụ chính</p>
             </div>
             <div className="insideBox">
-                <div className="hoverServicesImage" >
+                <div id="animateLeft3" className="animHide hoverServicesImage" >
                     <img src={ServiceImage1} alt="" />
                 </div>
-                <div className="textInBox">
+                <div id="animateRight3" className="animHide textInBox">
                     <div className="insideTextInBox">
                         <h1>01</h1>
                         <div>
@@ -25,7 +59,7 @@ function Service() {
                 </div>
             </div>
             <div className="insideBox specialInBox" style={{ marginTop: 30 }}>
-                <div className="textInBox">
+                <div id="animateLeft4" className="animHide textInBox">
                     <div className="insideTextInBox">
                         <h1>02</h1>
                         <div>
@@ -34,15 +68,15 @@ function Service() {
                         </div>
                     </div>
                 </div>
-                <div className="hoverServicesImage" >
+                <div id="animateRight4" className="animHide hoverServicesImage" >
                     <img src={ServiceImage2} alt="" />
                 </div>
             </div>
             <div className="insideBox" style={{ marginTop: 30 }}>
-                <div className="hoverServicesImage" >
+                <div id="animateLeft5" className="animHide hoverServicesImage" >
                     <img src={ServiceImage3} alt="" />
                 </div>
-                <div className="textInBox">
+                <div id="animateRight5" className="animHide textInBox">
                     <div className="insideTextInBox">
                         <h1>03</h1>
                         <div>

@@ -170,6 +170,144 @@ body,
     transition: all 200ms linear;
 }
 
+/* Smoke Preloader */
+.cd-transition-layer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+}
+
+.cd-transition-layer .bg-layer {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    -webkit-transform: translateY(-50%) translateX(-2%);
+    -moz-transform: translateY(-50%) translateX(-2%);
+    -ms-transform: translateY(-50%) translateX(-2%);
+    -o-transform: translateY(-50%) translateX(-2%);
+    transform: translateY(-50%) translateX(-2%);
+    height: 100%;
+    width: 2500%;
+    background: url("../src/Assets/Image/ink2.png") no-repeat 0 0;
+    background-size: 100% 100%;
+}
+
+.cd-transition-layer.visible {
+    opacity: 1;
+    visibility: visible;
+}
+
+.cd-transition-layer.closing .bg-layer {
+    -webkit-animation: cd-sequence-reverse 1.0s steps(24);
+    -moz-animation: cd-sequence-reverse 1.0s steps(24);
+    animation: cd-sequence-reverse 1.0s steps(24);
+    -webkit-animation-fill-mode: forwards;
+    -moz-animation-fill-mode: forwards;
+    animation-fill-mode: forwards;
+}
+
+@-webkit-keyframes cd-sequence-reverse {
+    0% {
+        -webkit-transform: translateY(-50%) translateX(-98%);
+    }
+
+    100% {
+        -webkit-transform: translateY(-50%) translateX(-2%);
+    }
+}
+
+@-moz-keyframes cd-sequence-reverse {
+    0% {
+        -moz-transform: translateY(-50%) translateX(-98%);
+    }
+
+    100% {
+        -moz-transform: translateY(-50%) translateX(-2%);
+    }
+}
+
+@keyframes cd-sequence-reverse {
+    0% {
+        -webkit-transform: translateY(-50%) translateX(-98%);
+        -moz-transform: translateY(-50%) translateX(-98%);
+        -ms-transform: translateY(-50%) translateX(-98%);
+        -o-transform: translateY(-50%) translateX(-98%);
+        transform: translateY(-50%) translateX(-98%);
+    }
+
+    100% {
+        -webkit-transform: translateY(-50%) translateX(-2%);
+        -moz-transform: translateY(-50%) translateX(-2%);
+        -ms-transform: translateY(-50%) translateX(-2%);
+        -o-transform: translateY(-50%) translateX(-2%);
+        transform: translateY(-50%) translateX(-2%);
+    }
+}
+
+/*              animation                */
+.animHide {
+    opacity: 0;
+}
+
+.animated {
+    animation-duration: 1s;
+    animation-fill-mode: both;
+}
+
+.fadeInLeft {
+    animation-name: fadeInLeft;
+}
+
+.fadeInRight {
+    animation-name: fadeInRight;
+}
+
+.fadeInUp {
+    animation-name: fadeInUp;
+}
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translate3d(-50px, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fadeInRight {
+    0% {
+        opacity: 0;
+        transform: translate3d(50px, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
+@keyframes fadeInUp {
+    0% {
+        opacity: 0;
+        transform: translate3d(0, 40px, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: none;
+    }
+}
+
 @media (max-width:991px) {
     .progress-wrap {
         display: none;
