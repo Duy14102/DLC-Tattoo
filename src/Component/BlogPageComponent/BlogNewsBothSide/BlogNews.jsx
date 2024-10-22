@@ -17,7 +17,6 @@ function BlogNews() {
     useEffect(() => {
         currentPage.current = 1;
         getBlogs()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.contentSearch])
 
     function getBlogs() {
@@ -32,7 +31,7 @@ function BlogNews() {
         }
         axios(configuration).then((res) => {
             setState({ blog: res.data.results.result, pageCount: res.data.results.pageCount })
-        })
+        }).catch((err) => console.log(err))
     }
     return (
         <div className="mainBlogNews">

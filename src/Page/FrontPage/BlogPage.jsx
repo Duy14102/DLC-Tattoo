@@ -10,7 +10,7 @@ function BlogPage() {
             <Helmet>
                 <title>DLC Tattoo | Blog | Tin tức, sự kiện và thông báo.</title>
                 <meta name="description" content="DLC Tattoo | Blog | Tin tức, sự kiện và thông báo | Cập nhất tin sốt dẻo từ thế giới xăm hình." />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />

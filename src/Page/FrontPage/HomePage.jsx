@@ -25,7 +25,7 @@ function HomePage() {
             <Helmet>
                 <title>DLC Tattoo | Trang chủ</title>
                 <meta name="description" content="DLC Tattoo | Xăm đẹp và chất lượng | Sửa hình xăm | Nhận học viên đào tạo | Một hình xăm, một kỷ niệm." />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />

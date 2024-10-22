@@ -91,7 +91,7 @@ function Booking({ type, state, setState }) {
             }
             axios(configuration).then((res) => {
                 setState({ phone: res.data.phone })
-            })
+            }).catch((err) => console.log(err))
         }
     }, [token])
 
@@ -105,7 +105,7 @@ function Booking({ type, state, setState }) {
         }
         axios(configuration).then((res) => {
             setState({ haveBooking: res.data.resa, allSamples: res.data.samples })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function addBooking(e) {

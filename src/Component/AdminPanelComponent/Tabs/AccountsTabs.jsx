@@ -31,7 +31,6 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
     useEffect(() => {
         currentPage.current = 1;
         getAccounts()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.contentSearch])
 
     function getAccounts() {
@@ -47,7 +46,7 @@ function AccountsTabs({ toast, useRef, axios, ToastUpdate, useEffect, id }) {
         }
         axios(configuration).then((res) => {
             setState({ accounts: res.data.results.result, pageCount: res.data.results.pageCount });
-        })
+        }).catch((err) => console.log(err))
     }
 
     function handlePageClick(e) {

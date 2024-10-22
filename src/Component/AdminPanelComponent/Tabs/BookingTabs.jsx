@@ -81,7 +81,6 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         return () => {
             socketRef.current.disconnect();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.contentSearch, state.filter])
 
     useEffect(() => {
@@ -95,7 +94,6 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
                 setState({ contentSearch: null })
             }, 750);
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.search])
 
     function handlePageClick(e) {
@@ -116,7 +114,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
         }
         axios(configuration).then((res) => {
             setState({ allBookings: res.data.results.result, pageCount: res.data.results.pageCount, allSamples: res.data.results.samples });
-        })
+        }).catch((err) => console.log(err))
     }
 
     function updateBooking(e, id) {
@@ -138,7 +136,7 @@ function BookingTabs({ axios, toast, ToastUpdate, useRef, useEffect, token }) {
             getBooking()
             setState({ updateBookingName: "", updateBookingPhone: "", updateBookingDate: "", updateBookingTime: "", updateBookingNote: "", wantUpdate: false, mainIndex: null })
             ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function confirmBooking(id, phone) {

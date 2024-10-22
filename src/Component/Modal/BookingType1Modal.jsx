@@ -20,7 +20,7 @@ function BookingType1Modal({ state, setState, axios, getBooking, toast, toastNow
             setState({ modalOpen: false, modalData: null, modalData2: null, modalData3: null, payingPrice: null, wantChangeSessionPrice: false, indexSessionPrice: null })
             getBooking()
             ToastUpdate({ type: 1, message: "Cập nhật giá thành công!", refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function deleteMainDish() {

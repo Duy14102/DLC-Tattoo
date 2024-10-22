@@ -53,7 +53,6 @@ function ChatTabs({ useEffect, axios, token, useRef, toast }) {
         return () => {
             socketRef.current.disconnect();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const chatRoomX = localStorage.getItem("chatRoom")
@@ -70,9 +69,8 @@ function ChatTabs({ useEffect, axios, token, useRef, toast }) {
             axios(configuration).then(() => {
                 getChatRoom()
                 getChatRoomSpecific(chatRoomX)
-            })
+            }).catch((err) => console.log(err))
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [chatRoomX])
 
     function getChatRoomSpecific(e) {

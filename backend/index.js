@@ -1,25 +1,45 @@
 const express = require('express');
+const rateLimit = require('express-rate-limit');
 const http = require("http");
+const https = require("https")
 const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const app = express();
 const server = http.createServer(app);
+const apiLimiter = rateLimit({
+    windowMs: 1000, // 1 second
+    max: 10,
+    handler: function (req, res) {
+        res.status(429).send({
+            status: 500,
+            message: 'Truy vấn thất bại!',
+        });
+    },
+    skip: (req, res) => {
+        if (req.ip === '::ffff:127.0.0.1')
+            return true;
+        return false;
+    }
+});
+
+// Refresh server
+setInterval(() => {
+    https.get(process.env.REACT_APP_apiAddress, () => {
+        console.log("Refresh");
+    })
+}, 600000);
+
+const cors = require('cors');
+const corsOptions = {
+    origin: 'https://dlctattoo.netlify.app',
+    optionsSuccessStatus: 200,
+};
+app.use(cors(corsOptions));
+
 // Connect to MongoDB
 const mongoose = require('mongoose');
 require('dotenv').config({ path: "../.env" })
-mongoose.connect(process.env.REACT_APP_mongoCompass).then(() => console.log('Connected To MongoDB')).catch((err) => { console.error(err); });
-app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader(
-        "Access-Control-Allow-Headers",
-        "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-    );
-    res.setHeader(
-        "Access-Control-Allow-Methods",
-        "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    );
-    next();
-});
+mongoose.connect(process.env.REACT_APP_mongoAtlas).then(() => console.log('Connected To MongoDB')).catch((err) => { console.error(err); });
 
 //Cloudinary
 const cloudinary = require('cloudinary').v2
@@ -29,13 +49,11 @@ cloudinary.config({
     api_secret: process.env.REACT_APP_apiSecret_Cloudinary
 });
 
-const cors = require('cors');
 const bodyParser = require('body-parser');
 app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 app.use(bodyParser.text({ limit: '200mb' }));
 app.use(express.json());
-app.use(cors());
 const socketIo = require("socket.io")(server, {
     cors: {
         origin: "*",
@@ -61,7 +79,7 @@ const getBookings = mongoose.model("Bookings");
 // Api
 
 // Register
-app.post("/api/v1/Register", (req, res) => {
+app.post("/api/v1/Register", apiLimiter, (req, res) => {
     bcrypt.hash(req.body.password, 10).then((hashedPassword) => {
         const user = new Accounts({
             phonenumber: req.body.phone,
@@ -88,7 +106,7 @@ app.post("/api/v1/Register", (req, res) => {
 })
 
 // Login
-app.post("/api/v1/Login", (req, res) => {
+app.post("/api/v1/Login", apiLimiter, (req, res) => {
     Accounts.findOne({ phonenumber: req.body.phone })
         .then((user) => {
             if (req.body.type === "LoginUser") {
@@ -127,7 +145,7 @@ app.post("/api/v1/Login", (req, res) => {
 })
 
 // Get Accounts
-app.get("/api/v1/GetAccounts", async (req, res) => {
+app.get("/api/v1/GetAccounts", apiLimiter, async (req, res) => {
     await getAccounts.findOne({ _id: req.query.id }).then((resa) => {
         const dataToSend = { phone: resa.phonenumber, image: resa.userimage, notification: resa.notification, todolist: resa.todolist }
         res.status(201).send(dataToSend)
@@ -137,7 +155,7 @@ app.get("/api/v1/GetAccounts", async (req, res) => {
 })
 
 // Get All Accounts
-app.get("/api/v1/GetAllAccounts", async (req, res) => {
+app.get("/api/v1/GetAllAccounts", apiLimiter, async (req, res) => {
     const sortedSwitch = parseInt(req.query.sorted)
     const getOrder = await getAccounts.find(req.query.search ? { phonenumber: new RegExp(req.query.search, 'i') } : {}).sort(sortedSwitch === 1 ? { phonenumber: -1 } : sortedSwitch === -1 ? { phonenumber: 1 } : sortedSwitch === 2 ? { createdAt: -1 } : sortedSwitch === -2 ? { createdAt: 1 } : sortedSwitch === 3 ? { lastLogin: -1 } : sortedSwitch === -3 ? { lastLogin: 1 } : sortedSwitch === 4 ? { role: -1 } : sortedSwitch === -4 ? { role: 1 } : sortedSwitch === 5 ? { "status.state": -1 } : sortedSwitch === -5 ? { "status.state": 1 } : { "status.state": 1, role: -1, createdAt: -1 })
     const page = parseInt(req.query.page)
@@ -166,7 +184,7 @@ app.get("/api/v1/GetAllAccounts", async (req, res) => {
 })
 
 // Delete Account
-app.post("/api/v1/DeleteAccount", (req, res) => {
+app.post("/api/v1/DeleteAccount", apiLimiter, (req, res) => {
     getAccounts.deleteOne({ _id: req.body.id }).then(async () => {
         await cloudinary.uploader.destroy(`Avatar/${req.body.id}`).then(() => {
             res.status(201).send("Xóa tài khoản thành công!")
@@ -179,7 +197,7 @@ app.post("/api/v1/DeleteAccount", (req, res) => {
 })
 
 // Ban Account
-app.post("/api/v1/BanAccount", (req, res) => {
+app.post("/api/v1/BanAccount", apiLimiter, (req, res) => {
     getAccounts.updateOne({ _id: req.body.id }, {
         "status.state": 2,
         "status.reason": req.body.reason
@@ -191,7 +209,7 @@ app.post("/api/v1/BanAccount", (req, res) => {
 })
 
 // Unban Account
-app.post("/api/v1/UnbanAccount", (req, res) => {
+app.post("/api/v1/UnbanAccount", apiLimiter, (req, res) => {
     getAccounts.updateOne({ _id: req.body.id }, {
         "status.state": 1,
         "status.reason": null
@@ -203,7 +221,7 @@ app.post("/api/v1/UnbanAccount", (req, res) => {
 })
 
 // Update phone
-app.post("/api/v1/UpdatePhone", async (req, res) => {
+app.post("/api/v1/UpdatePhone", apiLimiter, async (req, res) => {
     const find = await getAccounts.findOne({ phonenumber: req.body.phone })
     if (find) {
         return res.status(404).send("Số điện thoại đã tồn tại!")
@@ -216,7 +234,7 @@ app.post("/api/v1/UpdatePhone", async (req, res) => {
 })
 
 // Update password
-app.post("/api/v1/UpdatePassword", (req, res) => {
+app.post("/api/v1/UpdatePassword", apiLimiter, (req, res) => {
     Accounts.findOne({ _id: req.body.id }).then((user) => {
         bcrypt.compare(req.body.oldPassword, user.password).then((passwordCheck) => {
             if (!passwordCheck) {
@@ -236,7 +254,7 @@ app.post("/api/v1/UpdatePassword", (req, res) => {
 })
 
 // Change Avatar
-app.post("/api/v1/ChangeAvatar", async (req, res) => {
+app.post("/api/v1/ChangeAvatar", apiLimiter, async (req, res) => {
     const { base64 } = req.body
     await cloudinary.uploader.destroy(`Avatar/${req.body.id}`).then(() => {
         cloudinary.uploader.upload(base64, {
@@ -254,7 +272,7 @@ app.post("/api/v1/ChangeAvatar", async (req, res) => {
 })
 
 // Update Notification
-app.post("/api/v1/UpdateNotification", async (req, res) => {
+app.post("/api/v1/UpdateNotification", apiLimiter, async (req, res) => {
     const findEach = await getAccounts.findOne({ _id: req.body.id })
     const dataPush = []
     for (var i = 0; i < findEach.notification.length; i++) {
@@ -269,7 +287,7 @@ app.post("/api/v1/UpdateNotification", async (req, res) => {
 })
 
 // Update Notification Side
-app.post("/api/v1/UpdateNotificationSide", async (req, res) => {
+app.post("/api/v1/UpdateNotificationSide", apiLimiter, async (req, res) => {
     const findEach = await getAccounts.findOne({ _id: req.body.id })
     const dataPush = []
     for (var i = 0; i < findEach.notification.length; i++) {
@@ -286,7 +304,7 @@ app.post("/api/v1/UpdateNotificationSide", async (req, res) => {
 })
 
 // Add todoList
-app.post("/api/v1/AddTodoList", (req, res) => {
+app.post("/api/v1/AddTodoList", apiLimiter, (req, res) => {
     const id = new mongoose.Types.ObjectId().toString()
     const addThis = { id: id, jobs: req.body.jobs, time: Date.now(), status: 1 }
     getAccounts.updateOne({ _id: req.body.id }, {
@@ -301,7 +319,7 @@ app.post("/api/v1/AddTodoList", (req, res) => {
 })
 
 // Update todoList
-app.post("/api/v1/UpdateTodoList", (req, res) => {
+app.post("/api/v1/UpdateTodoList", apiLimiter, (req, res) => {
     getAccounts.updateOne({ _id: req.body.id, "todolist.id": req.body.jobsId }, {
         "todolist.$.status": req.body.status
     }).then(() => {
@@ -312,7 +330,7 @@ app.post("/api/v1/UpdateTodoList", (req, res) => {
 })
 
 // Add blog
-app.post("/api/v1/AddBlog", (req, res) => {
+app.post("/api/v1/AddBlog", apiLimiter, (req, res) => {
     const blog = new Blogs({
         title: req.body.title,
         subtitle: req.body.subtitle,
@@ -336,7 +354,7 @@ app.post("/api/v1/AddBlog", (req, res) => {
 })
 
 // Get Blogs For Homepage
-app.get("/api/v1/GetBlogsForHomepage", async (req, res) => {
+app.get("/api/v1/GetBlogsForHomepage", apiLimiter, async (req, res) => {
     try {
         const getBlogsOut = await getBlogs.find({}).limit(4)
         res.status(201).send(getBlogsOut)
@@ -346,7 +364,7 @@ app.get("/api/v1/GetBlogsForHomepage", async (req, res) => {
 })
 
 // Get blogs
-app.get("/api/v1/GetBlogs", async (req, res) => {
+app.get("/api/v1/GetBlogs", apiLimiter, async (req, res) => {
     const getOrder = await getBlogs.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
     const page = parseInt(req.query.page)
     const limit = parseInt(req.query.limit)
@@ -374,14 +392,14 @@ app.get("/api/v1/GetBlogs", async (req, res) => {
 })
 
 // Get specific blog
-app.get("/api/v1/GetSpecificBlog", async (req, res) => {
+app.get("/api/v1/GetSpecificBlog", apiLimiter, async (req, res) => {
     await getBlogs.findOne({ _id: req.query.id }).then((resa) => {
         res.status(201).send(resa)
     })
 })
 
 // Delete Blog
-app.post("/api/v1/DeleteBlog", async (req, res) => {
+app.post("/api/v1/DeleteBlog", apiLimiter, async (req, res) => {
     await cloudinary.uploader.destroy(`Blog/${req.body.id}`).then(() => {
         getBlogs.deleteOne({ _id: req.body.id }).then(() => {
             res.status(201).send("Xóa blog thành công!")
@@ -394,7 +412,7 @@ app.post("/api/v1/DeleteBlog", async (req, res) => {
 })
 
 // Update Blog
-app.post("/api/v1/UpdateBlog", async (req, res) => {
+app.post("/api/v1/UpdateBlog", apiLimiter, async (req, res) => {
     function updateThis(updateWhat) {
         getBlogs.updateOne({ _id: req.body.id }, updateWhat).exec()
     }
@@ -424,7 +442,7 @@ app.post("/api/v1/UpdateBlog", async (req, res) => {
 })
 
 // add sample
-app.post("/api/v1/AddSample", async (req, res) => {
+app.post("/api/v1/AddSample", apiLimiter, async (req, res) => {
     const blog = new Samples({
         title: req.body.title,
         content: req.body.content,
@@ -453,7 +471,7 @@ app.post("/api/v1/AddSample", async (req, res) => {
 })
 
 // Get all samples
-app.get("/api/v1/GetAllSample", async (req, res) => {
+app.get("/api/v1/GetAllSample", apiLimiter, async (req, res) => {
     var getOrder = null
     if (parseInt(req.query.type) === 2) {
         getOrder = await getSamples.find(req.query.search ? { title: new RegExp(req.query.search, 'i') } : {}).sort({ createdAt: -1 })
@@ -487,7 +505,7 @@ app.get("/api/v1/GetAllSample", async (req, res) => {
 })
 
 // Get Favourite
-app.get("/api/v1/GetFavourites", async (req, res) => {
+app.get("/api/v1/GetFavourites", apiLimiter, async (req, res) => {
     const forSort = req.query.sorted === "Newtoold" ? { createdAt: -1 } : req.query.sorted === "Oldtonew" ? { createdAt: 1 } : req.query.sorted === "Bigsession" ? { "session.count": -1 } : req.query.sorted === "Smallsession" ? { "session.count": 1 } : req.query.sorted === "Highprice" ? { price: -1 } : req.query.sorted === "Lowprice" ? { price: 1 } : null
     const getOrder = await getSamples.find(req.query.cate !== "All" ? { "categories.data.cate": { $in: req.query.cate.split(",").slice(1) }, _id: { $in: JSON.parse(req.query.id) } } : { _id: { $in: JSON.parse(req.query.id) } }).sort(forSort)
     const page = parseInt(req.query.page)
@@ -516,7 +534,7 @@ app.get("/api/v1/GetFavourites", async (req, res) => {
 })
 
 // Delete Sample
-app.post("/api/v1/DeleteSample", async (req, res) => {
+app.post("/api/v1/DeleteSample", apiLimiter, async (req, res) => {
     await cloudinary.uploader.destroy(`Sample/${req.body.id}`).then(() => {
         getSamples.deleteOne({ _id: req.body.id }).then(() => {
             res.status(201).send("Xóa hình thành công!")
@@ -529,7 +547,7 @@ app.post("/api/v1/DeleteSample", async (req, res) => {
 })
 
 // Update Sample
-app.post("/api/v1/UpdateSample", async (req, res) => {
+app.post("/api/v1/UpdateSample", apiLimiter, async (req, res) => {
     function updateThis(updateWhat) {
         getSamples.updateOne({ _id: req.body.id }, updateWhat).exec()
     }
@@ -566,7 +584,7 @@ app.post("/api/v1/UpdateSample", async (req, res) => {
     res.status(201).send("Cập nhật hình thành công!")
 })
 
-app.post("/api/v1/RateStar", (req, res) => {
+app.post("/api/v1/RateStar", apiLimiter, (req, res) => {
     getSamples.updateOne({ _id: req.body.id }, {
         $push: {
             "rate.data": req.body.dataSend
@@ -582,7 +600,7 @@ app.post("/api/v1/RateStar", (req, res) => {
 })
 
 // Add video gallery
-app.post("/api/v1/AddVideoGallery", (req, res) => {
+app.post("/api/v1/AddVideoGallery", apiLimiter, (req, res) => {
     const gallery = new Gallerys({
         title: "video",
         data: req.body.video
@@ -595,7 +613,7 @@ app.post("/api/v1/AddVideoGallery", (req, res) => {
 })
 
 // Update video gallery
-app.post("/api/v1/UpdateVideoGallery", (req, res) => {
+app.post("/api/v1/UpdateVideoGallery", apiLimiter, (req, res) => {
     getGallerys.updateOne({ _id: req.body.id }, {
         data: req.body.video
     }).then(() => {
@@ -606,14 +624,14 @@ app.post("/api/v1/UpdateVideoGallery", (req, res) => {
 })
 
 // Get all gallerys
-app.get("/api/v1/GetGallerys", async (req, res) => {
+app.get("/api/v1/GetGallerys", apiLimiter, async (req, res) => {
     await getGallerys.find({}).then((resa) => {
         res.status(201).send(resa)
     })
 })
 
 // Add image gallery
-app.post("/api/v1/AddImageGallery", (req, res) => {
+app.post("/api/v1/AddImageGallery", apiLimiter, (req, res) => {
     const gallery = new Gallerys({
         title: "image",
         data: req.body.image
@@ -635,7 +653,7 @@ app.post("/api/v1/AddImageGallery", (req, res) => {
 })
 
 // Update image gallery
-app.post("/api/v1/UpdateImageGallery", async (req, res) => {
+app.post("/api/v1/UpdateImageGallery", apiLimiter, async (req, res) => {
     await cloudinary.uploader.destroy(`Gallery/${req.body.id}`).then(() => {
         cloudinary.uploader.upload(req.body.image, {
             public_id: req.body.id, folder: "Gallery"
@@ -653,7 +671,7 @@ app.post("/api/v1/UpdateImageGallery", async (req, res) => {
 })
 
 //Delete image gallery
-app.post("/api/v1/DeleteGallery", async (req, res) => {
+app.post("/api/v1/DeleteGallery", apiLimiter, async (req, res) => {
     if (req.body.type === 1) {
         await cloudinary.uploader.destroy(`Gallery/${req.body.id}`).then(() => {
             getGallerys.deleteOne({ _id: req.body.id }).exec()
@@ -672,14 +690,14 @@ app.post("/api/v1/DeleteGallery", async (req, res) => {
 })
 
 // Get Chat Room
-app.get("/api/v1/GetChatRoom", async (req, res) => {
+app.get("/api/v1/GetChatRoom", apiLimiter, async (req, res) => {
     await getChats.findOne({ createdBy: req.query.userId }).then((resa) => {
         res.status(201).send(resa)
     })
 })
 
 // Get Chat Room For Admin
-app.get("/api/v1/GetChatRoomAdmin", async (req, res) => {
+app.get("/api/v1/GetChatRoomAdmin", apiLimiter, async (req, res) => {
     await getChats.find({}).then(async (room) => {
         const dataPush = []
         room.reduce((acc, curr) => { dataPush.push(curr.createdBy) }, 0)
@@ -690,7 +708,7 @@ app.get("/api/v1/GetChatRoomAdmin", async (req, res) => {
 })
 
 // Update Notification Chat Tabs
-app.post("/api/v1/UpdateNotificationChatTabs", async (req, res) => {
+app.post("/api/v1/UpdateNotificationChatTabs", apiLimiter, async (req, res) => {
     const findEach = await getChats.findOne({ createdBy: req.body.id })
     const dataPush = []
     for (var i = 0; i < findEach.data.length; i++) {
@@ -707,7 +725,7 @@ app.post("/api/v1/UpdateNotificationChatTabs", async (req, res) => {
 })
 
 // Get Specific Booking
-app.get("/api/v1/GetSpecBooking", async (req, res) => {
+app.get("/api/v1/GetSpecBooking", apiLimiter, async (req, res) => {
     const dataPush = []
     const resa = await getBookings.findOne({ phone: req.query.phone, status: { $in: [1, 2] } })
     if (resa) {
@@ -720,7 +738,7 @@ app.get("/api/v1/GetSpecBooking", async (req, res) => {
 })
 
 // Update Booking
-app.post("/api/v1/UpdateBooking", (req, res) => {
+app.post("/api/v1/UpdateBooking", apiLimiter, (req, res) => {
     function updateThis(updateWhat) {
         getBookings.updateOne({ _id: req.body.id }, updateWhat).exec()
     }
@@ -746,7 +764,7 @@ app.post("/api/v1/UpdateBooking", (req, res) => {
 })
 
 // Get Booking Admin
-app.get("/api/v1/GetBookingAdmin", async (req, res) => {
+app.get("/api/v1/GetBookingAdmin", apiLimiter, async (req, res) => {
     const filterStatus = parseInt(req.query.filter)
     const getOrder = await getBookings.find(req.query.search ? { phone: new RegExp(req.query.search, 'i'), status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } } : { status: filterStatus !== 0 ? filterStatus : { $in: [1, 2, 3, 4] } }).sort({ status: 1, createdAt: -1 })
     const dataPush = []
@@ -786,7 +804,7 @@ app.get("/api/v1/GetBookingAdmin", async (req, res) => {
 })
 
 // Add sample booking
-app.post("/api/v1/AddSamplesToBooking", (req, res) => {
+app.post("/api/v1/AddSamplesToBooking", apiLimiter, (req, res) => {
     var id = new mongoose.Types.ObjectId()
     const mainChatId = req.body.id + "_" + id
     cloudinary.uploader.upload(req.body.image, {
@@ -805,7 +823,7 @@ app.post("/api/v1/AddSamplesToBooking", (req, res) => {
 })
 
 // Update price booking session
-app.post("/api/v1/UpdateBookingSessionPrice", async (req, res) => {
+app.post("/api/v1/UpdateBookingSessionPrice", apiLimiter, async (req, res) => {
     const dataPush = []
     const dataPush2 = []
     if (!req.body.realSession || req.body.realSession.length < 1) {
@@ -844,7 +862,7 @@ app.post("/api/v1/UpdateBookingSessionPrice", async (req, res) => {
 })
 
 // Update price booking session 2
-app.post("/api/v1/UpdateBookingSessionPrice2", (req, res) => {
+app.post("/api/v1/UpdateBookingSessionPrice2", apiLimiter, (req, res) => {
     getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, {
         "samples.$.payingSession": req.body.realSession
     }).then(() => {
@@ -853,7 +871,7 @@ app.post("/api/v1/UpdateBookingSessionPrice2", (req, res) => {
 })
 
 // Update Main Dish Of Booking
-app.post("/api/v1/UpdateBookingMainDish", async (req, res) => {
+app.post("/api/v1/UpdateBookingMainDish", apiLimiter, async (req, res) => {
     function updateWhat(e) {
         getBookings.updateOne({ _id: req.body.bookingId, samples: { $elemMatch: { id: req.body.sessionId } } }, e).exec()
     }
@@ -882,7 +900,7 @@ app.post("/api/v1/UpdateBookingMainDish", async (req, res) => {
 })
 
 // Delete Main Dish Of Booking
-app.post("/api/v1/DeleteBookingMainDish", async (req, res) => {
+app.post("/api/v1/DeleteBookingMainDish", apiLimiter, async (req, res) => {
     await cloudinary.uploader.destroy(`Booking/${req.body.sessionId}`).then(() => {
         getBookings.updateOne({ _id: req.body.bookingId }, {
             $pull: {
@@ -897,7 +915,7 @@ app.post("/api/v1/DeleteBookingMainDish", async (req, res) => {
 })
 
 // Update real booking
-app.post("/api/v1/UpdateRealBooking", (req, res) => {
+app.post("/api/v1/UpdateRealBooking", apiLimiter, (req, res) => {
     function updateWhat(e) {
         getBookings.updateOne({ _id: req.body.id }, e).exec()
     }
@@ -920,7 +938,7 @@ app.post("/api/v1/UpdateRealBooking", (req, res) => {
 })
 
 // Add samples type 1
-app.post("/api/v1/AddSamplesType1Booking", (req, res) => {
+app.post("/api/v1/AddSamplesType1Booking", apiLimiter, (req, res) => {
     getBookings.updateOne({ _id: req.body.id }, {
         $push: {
             samples: req.body.samples.reduce((acc, curr) => { return curr }, 0)
@@ -930,7 +948,7 @@ app.post("/api/v1/AddSamplesType1Booking", (req, res) => {
 })
 
 // Fetch Dashboard
-app.get("/api/v1/FetchDashboard", async (req, res) => {
+app.get("/api/v1/FetchDashboard", apiLimiter, async (req, res) => {
     const dataAccounts = [], dataSamples = [], dataBlogs = [], dataBookingSuccess = [], dataBookingFail = [], dataSamplesPie = [], dataGallery = [], dataTotalPriceBooking = []
     const DateNow = Date.now()
     await getAccounts.find({}).then((resAccounts) => {
@@ -986,7 +1004,7 @@ app.get("/api/v1/FetchDashboard", async (req, res) => {
 
 //                                              SOCKET IO
 
-socketIo.on("connection", (socket) => {
+socketIo.on("connection", apiLimiter, (socket) => {
     socket.on("BanAccount", function (data) {
         getAccounts.updateOne({ _id: data.id }, {
             "status.state": 2,
@@ -998,7 +1016,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("ChatStart", function (data) {
+    socket.on("ChatStart", apiLimiter, function (data) {
         const chats = new Chats({
             createdBy: data.userId
         })
@@ -1021,7 +1039,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("ChatSend", function (data) {
+    socket.on("ChatSend", apiLimiter, function (data) {
         var id = new mongoose.Types.ObjectId()
         const mainChatId = data.roomId + "_" + id
         if (data.image) {
@@ -1049,7 +1067,7 @@ socketIo.on("connection", (socket) => {
         }
     })
 
-    socket.on("ChatSendAdmin", function (data) {
+    socket.on("ChatSendAdmin", apiLimiter, function (data) {
         var id = new mongoose.Types.ObjectId()
         const mainChatId = data.roomId + "_" + id
         if (data.image) {
@@ -1077,7 +1095,7 @@ socketIo.on("connection", (socket) => {
         }
     })
 
-    socket.on("DeleteChat", async function (data) {
+    socket.on("DeleteChat", apiLimiter, async function (data) {
         await cloudinary.api.delete_resources_by_prefix(`Chat/${data.roomId}`).then(async () => {
             await cloudinary.api.delete_folder(`Chat/${data.roomId}`).then(() => {
                 getChats.deleteOne({ _id: data.roomId }).then(() => {
@@ -1103,7 +1121,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("AddBooking", async function (data) {
+    socket.on("AddBooking", apiLimiter, async function (data) {
         var dataPhone = null
         if (data.tokenId) {
             const dataFind = await getAccounts.findOne({ _id: data.tokenId })
@@ -1131,7 +1149,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("CancelBooking", function (data) {
+    socket.on("CancelBooking", apiLimiter, function (data) {
         const dated2 = { title: "1 đơn booking bị hủy", place: "Booking", time: Date.now(), status: 1 }
         getBookings.updateOne({ _id: data.id }, {
             status: 4,
@@ -1146,7 +1164,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("CancelBookingByAdmin", function (data) {
+    socket.on("CancelBookingByAdmin", apiLimiter, function (data) {
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 4,
             cancelReason: data.reason
@@ -1161,7 +1179,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("ConfirmBooking", function (data) {
+    socket.on("ConfirmBooking", apiLimiter, function (data) {
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 2,
         }).then(() => {
@@ -1175,7 +1193,7 @@ socketIo.on("connection", (socket) => {
         })
     })
 
-    socket.on("DoneBooking", function (data) {
+    socket.on("DoneBooking", apiLimiter, function (data) {
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 3,
             totalPrice: parseInt(data.priceDone)

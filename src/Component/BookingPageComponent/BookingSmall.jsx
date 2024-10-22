@@ -81,7 +81,6 @@ function BookingSmall() {
         return () => {
             socketRef.current.disconnect();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const bookingPhone = localStorage?.getItem("bookingSave")
@@ -89,7 +88,6 @@ function BookingSmall() {
         if (bookingPhone) {
             getBookingsX(bookingPhone)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookingPhone])
 
     useEffect(() => {
@@ -103,9 +101,8 @@ function BookingSmall() {
             }
             axios(configuration).then((res) => {
                 setState({ phone: res.data.phone })
-            })
+            }).catch((err) => console.log(err))
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [token])
 
     function getBookingsX(e) {
@@ -118,7 +115,7 @@ function BookingSmall() {
         }
         axios(configuration).then((res) => {
             setState({ haveBooking: res.data.resa, allSamples: res.data.samples })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function addBooking(e) {
@@ -161,7 +158,7 @@ function BookingSmall() {
             getBookingsX(localStorage.getItem("bookingSave"))
             setState({ name: "", phone: "", date: "", time: "", note: "", bookingId: [], wantUpdateBooking: false })
             ToastUpdate({ type: 1, message: "Cập nhật booking thành công!", refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function cancelBooking() {

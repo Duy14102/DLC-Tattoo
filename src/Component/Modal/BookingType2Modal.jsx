@@ -32,7 +32,7 @@ function BookingType2Modal({ state, setState, axios, getBooking, toast, toastNow
             setState({ modalOpen3: false, modalData: null, modalData3: null, wantChangeSessionPrice: false, indexSessionPrice: null, sessionFix: [], checkTitle: false, warningOverPrice: false })
             getBooking()
             ToastUpdate({ type: 1, message: "Cập nhật hình mẫu thành công!", refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function updateMainDish(e) {

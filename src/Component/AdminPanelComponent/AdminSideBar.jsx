@@ -22,7 +22,7 @@ function AdminSideBar({ accounts, getAccounts, token, useEffect, axios }) {
             }
             axios(configuration).then(() => {
                 getAccounts()
-            })
+            }).catch((err) => console.log(err))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [accounts?.notification])

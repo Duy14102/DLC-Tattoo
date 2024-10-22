@@ -63,7 +63,6 @@ function UserBookingTabs({ token, getAccounts }) {
         return () => {
             socketRef.current.disconnect();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const bookingPhone = localStorage?.getItem("bookingSave")
@@ -71,7 +70,6 @@ function UserBookingTabs({ token, getAccounts }) {
         if (bookingPhone) {
             getBookingsX(bookingPhone)
         }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [bookingPhone])
 
     function getBookingsX(e) {
@@ -84,7 +82,7 @@ function UserBookingTabs({ token, getAccounts }) {
         }
         axios(configuration).then((res) => {
             setState({ haveBooking: res.data.resa, allSamples: res.data.samples })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function updateBooking(e) {
@@ -110,7 +108,7 @@ function UserBookingTabs({ token, getAccounts }) {
             getBookingsX(localStorage.getItem("bookingSave"))
             setState({ name: "", phone: "", date: "", time: "", note: "", bookingId: [], wantUpdateBooking: false })
             ToastUpdate({ type: 1, message: "Cập nhật booking thành công!", refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function cancelBooking() {

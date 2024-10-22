@@ -67,7 +67,7 @@ function GetAccounts({ token, useEffect, NavLink, cookies, jwtDecode, logoutUser
                 setTimeout(() => {
                     getAccounts()
                 }, 3000);
-            })
+            }).catch((err) => console.log(err))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.openNoti])
@@ -82,7 +82,7 @@ function GetAccounts({ token, useEffect, NavLink, cookies, jwtDecode, logoutUser
         }
         axios(configuration).then((res) => {
             setState({ accounts: res.data })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function navigateNoti(e) {

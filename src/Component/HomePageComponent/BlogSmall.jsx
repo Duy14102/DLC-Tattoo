@@ -22,7 +22,7 @@ function BlogSmall() {
         }
         axios(configuration).then((res) => {
             setState({ blogs: res.data })
-        })
+        }).catch((err) => console.log(err))
     }
     const stateCarousel = {
         responsive: {

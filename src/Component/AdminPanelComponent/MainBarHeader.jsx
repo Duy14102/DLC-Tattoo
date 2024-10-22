@@ -84,7 +84,7 @@ function MainBarHeader({ setOpen, axios, accounts, setType, getAccounts, toast, 
                 setTimeout(() => {
                     getAccounts()
                 }, 3000);
-            })
+            }).catch((err) => console.log(err))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.openNoti])

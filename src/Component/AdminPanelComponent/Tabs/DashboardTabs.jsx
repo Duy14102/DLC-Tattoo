@@ -33,8 +33,7 @@ function DashboardTabs({ accounts, getAccounts, axios, toast, ToastUpdate, useRe
         }
         axios(configuration).then((res) => {
             setState({ dataAccounts: res.data.dataAccounts, dataSamples: res.data.dataSamples, dataBlogs: res.data.dataBlogs, dataBookingSuccess: res.data.dataBookingSuccess, dataBookingFail: res.data.dataBookingFail, dataSamplesPie: res.data.dataSamplesPie, dataGallery: res.data.dataGallery, dataTotalPriceBooking: res.data.dataTotalPriceBooking })
-        })
-        // eslint-disable-next-line react-hooks/exhaustive-deps
+        }).catch((err) => console.log(err))
     }, [])
 
     function handleTodoList(e, idX) {

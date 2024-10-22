@@ -22,7 +22,7 @@ function GalleryAll() {
         }
         axios(configuration).then((res) => {
             setState({ allGallerys: res.data })
-        })
+        }).catch((err) => console.log(err))
     }
     return (
         <div className="mainGallery">

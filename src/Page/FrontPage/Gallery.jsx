@@ -10,7 +10,7 @@ function Gallery() {
             <Helmet>
                 <title>DLC Tattoo | Hậu trường | Khoảnh khắc và kỷ niệm của khách hàng tại DLC Tattoo.</title>
                 <meta name="description" content="DLC Tattoo | Hậu trường | Khoảnh khắc và kỷ niệm của khách hàng tại DLC Tattoo | Chiêm ngưỡng vẻ đẹp của những hình xăm được bàn tay ma thuật của các nghệ nhân DLC Tattoo trình bày." />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />

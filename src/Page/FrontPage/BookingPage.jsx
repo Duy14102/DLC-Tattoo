@@ -10,7 +10,7 @@ function BookingPage() {
             <Helmet>
                 <title>DLC Tattoo | Booking | Đặt lịch xăm mọi lúc mọi nơi.</title>
                 <meta name="description" content="DLC Tattoo | Booking | Đặt lịch xăm mọi lúc mọi nơi | Chọn hình xăm và giao cho chúng tôi, những tay bút nghệ thuật của DLC Tattoo chắc chắn sẽ cho bạn một sản phẩm chất lượng nhất." />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />

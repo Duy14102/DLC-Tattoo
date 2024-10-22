@@ -41,14 +41,14 @@ function TattooSamplePage() {
         }
         axios(configuration).then((res) => {
             setState({ allSamples: res.data.results.result, pageCount: res.data.results.pageCount });
-        })
+        }).catch((err) => console.log(err))
     }
     return (
         <div className="mainTatooSamplePage">
             <Helmet>
                 <title>DLC Tattoo | Hình mẫu | Tổng hợp hình mẫu xăm đẹp nhất.</title>
                 <meta name="description" content="DLC Tattoo | Hình mẫu | Tổng hợp hình mẫu xăm đẹp nhất, chất lượng nhất. Giá cả hợp lý đối với mọi khách hàng đến với chúng tôi." />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />
@@ -68,7 +68,7 @@ function TattooSamplePage() {
                 <Filter params={params} type={1} />
             ) : null}
 
-            <TattooSample state={state} setState={setState} params={params} useEffect={useEffect} getSamples={getSamples} useRef={useRef} axios={axios} type={1} currentPage={currentPage} callBackSamples={getSamples}/>
+            <TattooSample state={state} setState={setState} params={params} useEffect={useEffect} getSamples={getSamples} useRef={useRef} axios={axios} type={1} currentPage={currentPage} callBackSamples={getSamples} />
         </div>
     )
 }

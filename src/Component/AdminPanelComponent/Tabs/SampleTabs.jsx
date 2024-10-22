@@ -35,7 +35,6 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
     useEffect(() => {
         currentPage.current = 1;
         getSamples()
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [state.contentSearch])
 
     useEffect(() => {
@@ -80,7 +79,7 @@ function SampleTabs({ useEffect, axios, toast, ToastUpdate, useRef, }) {
         }
         axios(configuration).then((res) => {
             setState({ allSamples: res.data.results.result, pageCount: res.data.results.pageCount });
-        })
+        }).catch((err) => console.log(err))
     }
 
     function convertToBase64(e, type, index) {

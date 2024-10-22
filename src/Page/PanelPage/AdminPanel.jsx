@@ -26,7 +26,7 @@ function AdminPanel() {
         }
         axios(configuration).then((res) => {
             setAccounts(res.data)
-        })
+        }).catch((err) => console.log(err))
     }
 
     useEffect(() => {

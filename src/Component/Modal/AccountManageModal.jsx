@@ -24,7 +24,6 @@ function AccountManageModal({ open, setOpen, axios, getAccounts, toast, ToastUpd
         return () => {
             socketRef.current.disconnect();
         };
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
     function deleteAccounts() {
         const configuration = {

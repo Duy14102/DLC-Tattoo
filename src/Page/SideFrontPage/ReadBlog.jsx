@@ -21,14 +21,14 @@ function ReadBlog() {
         }
         axios(configuration).then((res) => {
             setState({ blogDetail: res.data })
-        })
+        }).catch((err) => console.log(err))
     }, [params.id])
     return (
         <>
             <Helmet>
                 <title>{`DLC Tattoo | Blog | ${state.blogDetail?.title}`}</title>
                 <meta name="description" content={`DLC Tattoo | Blog | ${state.blogDetail?.title} | ${state.blogDetail?.content}`} />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />

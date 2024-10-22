@@ -27,7 +27,7 @@ function LoadSamples({ axios, useRef, state, setState, useEffect, ReactPaginate,
         }
         axios(configuration).then((res) => {
             setState({ samplesForAdd: res.data.results.result, pageCount2: res.data.results.pageCount });
-        })
+        }).catch((err) => console.log(err))
     }
 
     function pushBookingId(e) {
@@ -68,7 +68,7 @@ function LoadSamples({ axios, useRef, state, setState, useEffect, ReactPaginate,
             }
             setState({ modalOpen2: false, samplesId: [], wantType: null, pageCount2: 6, samplesForAdd: null, wantUpdateBooking: false });
             ToastUpdate({ type: 1, message: res.data, refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
     return (
         <>

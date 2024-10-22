@@ -45,7 +45,7 @@ function UserSideBar({ accounts, getAccounts, toast, ToastUpdate, useRef, axios,
             }
             axios(configuration).then(() => {
                 getAccounts()
-            })
+            }).catch((err) => console.log(err))
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [accounts?.notification])

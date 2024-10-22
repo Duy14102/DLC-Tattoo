@@ -26,7 +26,7 @@ function HaveBooking({ state, setState, axios, toastNow, toast, ToastUpdate, get
             getBookingsX(localStorage.getItem("bookingSave"))
             setState({ name: "", phone: "", date: "", time: "", note: "", bookingId: [], wantUpdateBooking: false })
             ToastUpdate({ type: 1, message: "Cập nhật booking thành công!", refCur: toastNow.current })
-        })
+        }).catch((err) => console.log(err))
     }
 
     function cancelBooking() {

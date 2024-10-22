@@ -53,14 +53,14 @@ function FavouritePage() {
         }
         axios(configuration).then((res) => {
             setState({ allSamples: res.data.results.result, pageCount: res.data.results.pageCount });
-        })
+        }).catch((err) => console.log(err))
     }
     return (
         <div className="mainTatooSamplePage">
             <Helmet>
                 <title>DLC Tattoo | Hình xăm yêu thích</title>
                 <meta name="description" content="DLC Tattoo | Hình xăm yêu thích | Hình xăm mà bạn lựa chọn chắc chắc chúng tôi sẽ hoàn thiện nó một cách hoàn hảo nhất." />
-                <meta property="og:url" content="https://dlc-tattoo.netlify.app" />
+                <meta property="og:url" content="https://dlctattoo.netlify.app" />
                 <meta property="og:site_name" content="DLC Tattoo" />
                 <meta property="og:locale" content="vi_VN" />
                 <meta property="og:type" content="website" />
