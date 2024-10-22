@@ -14,7 +14,7 @@
     position: relative;
 }
 
-.blogDescription h4 {
+.blogDescription a {
     margin: 0 0 15px 0;
     color: #fff;
     font-size: 24px;
@@ -23,11 +23,7 @@
     font-weight: 400;
     letter-spacing: 3px;
     font-family: 'Oswald', sans-serif;
-}
-
-.blogDescription h4 a {
     text-decoration: none;
-    color: inherit;
 }
 
 .BlogHref {

@@ -7,6 +7,7 @@
     position: relative;
     display: grid;
     place-items: center;
+    padding: 10%;
 }
 
 .mainHeroBanner::before {
@@ -78,13 +79,22 @@
 .mainReadBlog {
     padding: 120px 20%;
     background: #101010;
-    color: #999;
+    color: rgba(255, 255, 255, 0.9);
     font-family: "Oswald", sans-serif;
     font-weight: 400;
     letter-spacing: 1px;
     word-break: break-all;
     font-size: 19px;
     width: 100%;
+}
+
+.mainReadBlog img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto;
+    width: 50%;
+    height: 500px;
 }
 
 @media (max-width:991px) {

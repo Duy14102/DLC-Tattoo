@@ -47,7 +47,7 @@
     font-family: 'Oswald', sans-serif;
 }
 
-.insideTextInBox h5 {
+.insideTextInBox span {
     margin: 15px 0;
     font-size: 27px;
     color: #fff;

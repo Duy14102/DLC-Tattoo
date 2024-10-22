@@ -18,13 +18,13 @@
     width: 48%;
 }
 
-.insideMainAbout img {
+.insideMainAbout .coverImgAbout {
     width: 48%;
     height: 400px;
 }
 
 .titleSub {
-    color: #904d30;
+    color: #ABABAB;
     font-size: 13px;
     font-family: 'Oswald', sans-serif;
     font-weight: 400;
@@ -83,16 +83,17 @@
     cursor: pointer;
 }
 
-.titleRightUp h4 {
+.titleRightUp .titleDonk {
     margin: 0;
     text-transform: uppercase;
     font-size: 18px;
     color: #fff;
     letter-spacing: 2px;
     font-family: 'Oswald', sans-serif;
+    font-weight: bold;
 }
 
-.titleRightUp h4 span {
+.titleRightUp .titleDonk span {
     color: #904d30;
 }
 
@@ -123,10 +124,6 @@
         padding: 120px 10px;
     }
 
-    .insideMainAbout img {
-        height: 350px;
-    }
-
     .insideMainAbout {
         flex-direction: column;
     }
@@ -135,7 +132,8 @@
         width: 100% !important;
     }
 
-    .insideMainAbout img {
+    .insideMainAbout .coverImgAbout {
+        height: 350px;
         width: 100% !important;
     }
 

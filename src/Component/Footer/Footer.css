@@ -13,10 +13,9 @@
     width: 30%;
 }
 
-.children h3 {
+.children span {
     font-size: 27px;
     color: #fff;
-    margin: 0 0 15px 0;
     letter-spacing: 3px;
     text-transform: uppercase;
     font-family: 'Oswald', sans-serif;
@@ -107,12 +106,12 @@
 
 .copyright p a {
     text-decoration: none;
-    color: #904d30;
+    color: #fff;
     transition: all .4s;
 }
 
 .copyright p a:hover {
-    color: #fff;
+    color: #904d30;
 }
 
 .insideMainFooter .children:first-child p {

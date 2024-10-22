@@ -142,7 +142,7 @@
 .mainSample .sampleCover {
     display: flex;
     flex-wrap: wrap;
-    gap: 2%;
+    gap: 15px;
 }
 
 .mainSample .sampleCover .insideSample {
