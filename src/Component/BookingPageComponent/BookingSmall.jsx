@@ -236,7 +236,7 @@ function BookingSmall() {
                         ) : null}
                         <textarea key={`note + ${state.haveBooking.note}`} defaultValue={state.haveBooking.note} onChange={(e) => setState({ note: e.target.value })} required placeholder="Ghi chú"></textarea>
                     </div>
-                    <div style={{ marginTop: 20 }} type="button" onClick={() => setState(state.moreSamples ? { moreSamples: false } : { moreSamples: true })} className="openMoreSamples"><span style={state.moreSamples ? { rotate: "90deg" } : null} >➤</span> {state?.haveBooking?.samples.length} hình mẫu</div>
+                    <div style={{ marginTop: 20 }} type="button" onClick={() => setState(state.moreSamples ? { moreSamples: false } : { moreSamples: true })} className="openMoreSamples"><span style={state.moreSamples ? { rotate: "90deg" } : null} >➤</span> {state?.haveBooking?.samples ? state?.haveBooking?.samples.length : "0"} hình mẫu</div>
                     {state.moreSamples ? (
                         <div style={{ marginTop: 10 }}>
                             {state?.haveBooking?.samples?.filter(item => item.type === 1).length > 0 ? (

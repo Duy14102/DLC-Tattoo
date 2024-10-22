@@ -6,6 +6,7 @@ const bcrypt = require("bcrypt");
 const jwt = require('jsonwebtoken');
 const app = express();
 const server = http.createServer(app);
+
 const apiLimiter = rateLimit({
     windowMs: 1000, // 1 second
     max: 10,
@@ -34,6 +35,12 @@ const corsOptions = {
     origin: 'https://dlctattoo.netlify.app',
     optionsSuccessStatus: 200,
 };
+
+const socketIo = require("socket.io")(server, {
+    cors: {
+        origin: "https://dlctattoo.netlify.app",
+    }
+});
 app.use(cors(corsOptions));
 
 // Connect to MongoDB
@@ -54,11 +61,6 @@ app.use(bodyParser.json({ limit: '50mb', extended: true }));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true, parameterLimit: 50000 }));
 app.use(bodyParser.text({ limit: '200mb' }));
 app.use(express.json());
-const socketIo = require("socket.io")(server, {
-    cors: {
-        origin: "*",
-    }
-});
 
 server.listen(3000);
 
@@ -729,7 +731,7 @@ app.get("/api/v1/GetSpecBooking", apiLimiter, async (req, res) => {
     const dataPush = []
     const resa = await getBookings.findOne({ phone: req.query.phone, status: { $in: [1, 2] } })
     if (resa) {
-        resa.samples.filter((item, index) => item.type === 1 && resa.samples.indexOf(item) === index).reduce((acc2, curr2) => {
+        resa.samples?.filter((item, index) => item.type === 1 && resa.samples.indexOf(item) === index).reduce((acc2, curr2) => {
             dataPush.push(curr2.id)
         }, 0)
         const samples = await getSamples.find({ _id: dataPush })
@@ -1004,7 +1006,8 @@ app.get("/api/v1/FetchDashboard", apiLimiter, async (req, res) => {
 
 //                                              SOCKET IO
 
-socketIo.on("connection", apiLimiter, (socket) => {
+socketIo.on("connection", (socket) => {
+    apiLimiter
     socket.on("BanAccount", function (data) {
         getAccounts.updateOne({ _id: data.id }, {
             "status.state": 2,
@@ -1016,7 +1019,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("ChatStart", apiLimiter, function (data) {
+    socket.on("ChatStart", function (data) {
+        apiLimiter
         const chats = new Chats({
             createdBy: data.userId
         })
@@ -1039,7 +1043,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("ChatSend", apiLimiter, function (data) {
+    socket.on("ChatSend", function (data) {
+        apiLimiter
         var id = new mongoose.Types.ObjectId()
         const mainChatId = data.roomId + "_" + id
         if (data.image) {
@@ -1067,7 +1072,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         }
     })
 
-    socket.on("ChatSendAdmin", apiLimiter, function (data) {
+    socket.on("ChatSendAdmin", function (data) {
+        apiLimiter
         var id = new mongoose.Types.ObjectId()
         const mainChatId = data.roomId + "_" + id
         if (data.image) {
@@ -1095,7 +1101,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         }
     })
 
-    socket.on("DeleteChat", apiLimiter, async function (data) {
+    socket.on("DeleteChat", async function (data) {
+        apiLimiter
         await cloudinary.api.delete_resources_by_prefix(`Chat/${data.roomId}`).then(async () => {
             await cloudinary.api.delete_folder(`Chat/${data.roomId}`).then(() => {
                 getChats.deleteOne({ _id: data.roomId }).then(() => {
@@ -1121,7 +1128,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("AddBooking", apiLimiter, async function (data) {
+    socket.on("AddBooking", async function (data) {
+        apiLimiter
         var dataPhone = null
         if (data.tokenId) {
             const dataFind = await getAccounts.findOne({ _id: data.tokenId })
@@ -1149,7 +1157,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("CancelBooking", apiLimiter, function (data) {
+    socket.on("CancelBooking", function (data) {
+        apiLimiter
         const dated2 = { title: "1 đơn booking bị hủy", place: "Booking", time: Date.now(), status: 1 }
         getBookings.updateOne({ _id: data.id }, {
             status: 4,
@@ -1164,7 +1173,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("CancelBookingByAdmin", apiLimiter, function (data) {
+    socket.on("CancelBookingByAdmin", function (data) {
+        apiLimiter
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 4,
             cancelReason: data.reason
@@ -1179,7 +1189,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("ConfirmBooking", apiLimiter, function (data) {
+    socket.on("ConfirmBooking", function (data) {
+        apiLimiter
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 2,
         }).then(() => {
@@ -1193,7 +1204,8 @@ socketIo.on("connection", apiLimiter, (socket) => {
         })
     })
 
-    socket.on("DoneBooking", apiLimiter, function (data) {
+    socket.on("DoneBooking", function (data) {
+        apiLimiter
         getBookings.updateOne({ _id: data.bookingId }, {
             status: 3,
             totalPrice: parseInt(data.priceDone)
